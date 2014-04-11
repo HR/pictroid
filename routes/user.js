@@ -1,4 +1,3 @@
-
 /*
  * GET users listing.
  */
