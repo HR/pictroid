@@ -9,15 +9,26 @@ div.navbar.navbar-default.navbar-fixed-top(role='navigation')
             a.navbar-brand(href="#") Pictroid
         div.navbar-collapse.collapse
             ul.nav.navbar-nav
-                li.active
+                li
                     a(href="/") Home
                 li.browse
-                    a.dropdown-toggle(href="#", data-toggle="browse") Browse 
+                    a.dropdown-toggle(href="#", data-toggle="dropdown") Browse 
                         b.caret
                     ul.dropdown-menu
+                        li
+                            a(href="/browse/popular") Popular
+                        li
+                            a(href="/browse/rated") Highest Rated
+                        li
+                            a(href="/browse/latest") Latest feed
+                        li
+                            a(href="/browse/categories") Categories
+                li
+                    a(href="/about") About
             //form.navbar-form.navbar-right(role="form")
                 //div.form-group
                 //    input.form-control(type="text", placeholder="Email")
                 //div.form-group
                 //    input.form-control(type="password", placeholder="Password")
                 //button.btn.btn-success(type="submit") Sign in
+.navbar-fix

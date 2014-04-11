@@ -15,3 +15,26 @@ html, body {
 a {
   color: #00B7FF;
 }
+
+
+/* Bootstrap hacks */
+.navbar {
+    background-color: #ffffff;
+    color: #A040FF;
+    border-bottom-color: #efefef;
+}
+
+.navbar a {
+    color: #A040FF !important;
+}
+
+.navbar .open > a,
+.navbar a.active,
+.navbar a:hover {
+    background-color: #efefef !important;
+}
+
+.navbar-fix {
+    height: 50px;
+    display: block;
+}
