@@ -1,0 +1,13 @@
+{
+  "name": "Pictroid",
+  "description": "The open-source NEO (Near Earth Objects) sharing system.",
+  "version": "0.0.1",
+  "private": true,
+  "scripts": {
+    "start": "node app.js"
+  },
+  "dependencies": {
+    "express": "3.5.1",
+    "jade": "*"
+  }
+}
