@@ -7,10 +7,11 @@
     "start": "node app.js"
   },
   "dependencies": {
-    "express": "3.5.1",
-    "jade": "*",
     "bower": "*",
-    "sass": "*",
-    "grunt-cli": "*"
+    "express": "3.5.1",
+    "grunt-cli": "*",
+    "jade": "*",
+    "request": "*",
+    "sass": "*"
   }
 }
