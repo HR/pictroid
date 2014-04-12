@@ -11,6 +11,8 @@
     "express": "3.5.1",
     "grunt-cli": "*",
     "jade": "*",
+    "mongodb":"*",
+    "monk": "*",
     "request": "*",
     "sass": "*"
   }

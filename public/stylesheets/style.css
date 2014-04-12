@@ -24,6 +24,10 @@ a {
     border-bottom-color: #efefef;
 }
 
+.navbar-brand > img  {
+    height: 2rem;
+}
+
 .navbar a {
     color: #A040FF !important;
 }
