@@ -19,7 +19,7 @@ a {
 
 /* Bootstrap hacks */
 .navbar {
-    background-color: #ffffff;
+    background-color: rgba(255,255,255,0.95);
     color: #A040FF;
     border-bottom-color: #efefef;
 }
@@ -42,4 +42,16 @@ a {
 .navbar-fix {
     height: 50px;
     display: block;
+}
+
+#footer {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    background-color: #efefef;
+}
+
+.container .text-muted {
+    padding: 20px;
+    margin: 0;
 }
