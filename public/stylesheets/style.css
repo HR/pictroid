@@ -26,6 +26,7 @@ a {
 
 .navbar-brand > img  {
     height: 2rem;
+    margin-top: -5px;
 }
 
 .navbar a {
