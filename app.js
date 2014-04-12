@@ -11,7 +11,7 @@ var monk = require('monk');
 var path = require('path');
 var routes = require('./routes');
 var user = require('./routes/user');
-
+var Parse = require('parse').Parse;
 var app = express();
 
 // all environments

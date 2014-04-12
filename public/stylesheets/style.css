@@ -12,8 +12,9 @@ html, body {
   font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
 }
 
-a {
-  color: #00B7FF;
+a,
+a:hover {
+  color: #A040FF;
 }
 
 
@@ -29,14 +30,22 @@ a {
     margin-top: -5px;
 }
 
-.navbar a {
+.navbar-nav a {
     color: #A040FF !important;
+    border-bottom: 1px solid transparent;
 }
 
-.navbar .open > a,
-.navbar a.active,
-.navbar a:hover {
+.navbar-nav a.active,
+.navbar-nav a:hover {
+    border-color: #A040FF;
+    background-color: transparent !important;
+}
+
+.navbar-nav .open > a,
+.navbar-nav .open a.active,
+.navbar-nav .open a:hover {
     background-color: #efefef !important;
+    border-color: transparent !important;
 }
 
 .navbar-fix {
@@ -49,6 +58,7 @@ a {
     bottom: 0;
     width: 100%;
     background-color: #efefef;
+    text-align: center;
 }
 
 .container .text-muted {
