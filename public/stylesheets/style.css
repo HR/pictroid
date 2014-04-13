@@ -12,6 +12,8 @@ html, body {
 	font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
 	background-attachment: fixed;
 	background-size: cover;
+	background-color: #252525;
+	color: #ffffff;
 }
 
 a,
@@ -19,15 +21,35 @@ a:hover {
 	color: #a67c52;
 }
 
-/* Header */
-.navbar {
-    background-color: rgba(255,255,255,0.95);
-    color: #a67c52;
-    border-color: transparent;
-    border-bottom-color: #efefef;
+.btn {
+	border-color: inherit;
+	color: inherit;
+	padding: 5px 10px 7px;
+	margin: 9px;
+	background-color: rgba(255, 255, 255, 0.05);
 }
 
-.navbar .container,
+.btn:hover {
+	color: #ffffff;
+    border-color: #a67c52;
+}
+
+.page {
+	background-color: #ffffff;
+	color: #000000;
+	padding-bottom: 20px;
+}
+
+/* Header */
+.navbar {
+    background-color: #252525;
+    color: #ffffff;
+    border: none;
+    border-radius: 0;
+    margin-bottom: 0;
+    padding-left: 15px;
+}
+
 .navbar-collapse {
 	padding-right: 0;
 }
@@ -38,7 +60,7 @@ a:hover {
 
 .navbar-brand  {
     width: 160px;
-    background-image: url(/images/logo/dark.png);
+    background-image: url(/images/logo/light.png);
     background-size: contain;
     background-repeat: no-repeat;
     background-position: center;
@@ -55,11 +77,24 @@ a:hover {
     background-color: transparent !important;
 }
 
+.navbar-nav .open > a {
+    border: none;
+}
+
+.navbar-nav .open ul a:hover {
+    background-color: #000000 !important;
+}
+
 .navbar-nav .open > a,
 .navbar-nav .open a.active,
 .navbar-nav .open a:hover {
-    background-color: #efefef !important;
-    border-color: transparent !important;
+    background-color: #111111 !important;
+    border-color: transparent;
+}
+
+.dropdown-menu {
+    background-color: #111111 !important;
+    border: none;
 }
 
 .navbar-fix {
@@ -68,13 +103,8 @@ a:hover {
 }
 
 .navbar-nav .btn {
-	padding: 5px 10px 7px;
-	margin: 9px;
 	border-color: inherit;
-}
-
-.navbar-nav.navbar-right:last-child {
-	margin-right: 0;
+	padding: 5px 10px 7px;
 }
 
 /* Absolute header */
@@ -106,20 +136,14 @@ a:hover {
     background-image: url(/images/logo/light.png);
 }
 
-.navbar-transparent .navbar-nav .open > a {
-    border: none;
-}
-
 .navbar-transparent .navbar-nav .open > a,
 .navbar-transparent .navbar-nav .open a.active,
 .navbar-transparent .navbar-nav .open a:hover {
     background-color: rgba(0, 0, 0, 0.7) !important;
-    border-color: transparent;
 }
 
 .navbar-transparent .dropdown-menu {
     background-color: rgba(0, 0, 0, 0.7) !important;
-    border: none;
 }
 
 .navbar-transparent + .jumbotron {
@@ -131,6 +155,7 @@ a:hover {
 	background-color: #000000;
 	color: #ffffff;
     text-shadow: 0 0 5px #000;
+    margin: 0;
 }
 
 .jumbotron.center {

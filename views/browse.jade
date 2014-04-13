@@ -1,0 +1,14 @@
+extends layout
+
+block head
+	title Browse | Pictroid
+	
+block variables
+	- var headerClasses = 'navbar-absolute'
+
+block content
+	.jumbotron.dark.center.fixed-background(style="background-image: url(/images/wallpaper.jpg); padding-top: 70px; padding-bottom: 10px;")
+		.container
+			| The sky is falling, but you can help!  Post a pic to help us track Near-Earth Objects and save the chickens from destruction.
+			a.btn(href="/upload") Upload
+	include components/images
