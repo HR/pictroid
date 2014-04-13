@@ -1,0 +1,14 @@
+extends layout
+
+block head
+	title Upload | Pictroid
+
+block variables
+	- var bodyStyle = "background-image: url(/images/wallpaper.jpg); background-color: #000000;"
+	- var headerClasses = 'navbar-fixed-top navbar-transparent'
+
+block content
+	.jumbotron.dark.center(style="background: transparent;")
+		form.form-transparent(role="form", action="", method="POST")
+			input.form-control(type="file", name="image")
+			button.btn.btn-lg.btn-primary.btn-block(type="submit") Upload

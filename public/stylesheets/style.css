@@ -210,6 +210,7 @@ form.form-transparent button:hover,
 form.form-transparent button:focus {
 	background-color: #a67c52;
 	border: none;
+	margin: 0;
 }
 
 form.form-transparent button:active {
