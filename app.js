@@ -38,6 +38,10 @@ app.get('/:view', function(req, res) {
 app.get('/user/:name', function(req, res) {
     res.render('user', { username: req.params.name });
 });
+app.get('/user/:name/settings', function(req, res) {
+	// Code to authorize
+    res.render('settings', { });
+});
 
 http.createServer(app).listen(app.get('port'), function(){
   console.log('Express server listening on port ' + app.get('port'));
