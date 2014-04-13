@@ -12,7 +12,7 @@ html, body {
 	font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
 	background-attachment: fixed;
 	background-size: cover;
-	background-color: #252525;
+	background-color: #eee;
 	color: #ffffff;
 }
 
@@ -222,8 +222,8 @@ form.form-transparent button:active {
 	border: none;
 }
 
-/* #footer */
-#footer {
+/* footer */
+footer {
     width: 100%;
     background-color: #252525;
     color: #ffffff;
@@ -234,14 +234,16 @@ form.form-transparent button:active {
     left: 0px;
 }
 
-#footer .column-container {
+footer .column-container {
 	height: 200px; 
 	margin: 0 auto;
 	padding-top: 20px;
 	display: inline-block;
+	bottom: 0px;
+
 }
   
-#footer .column {
+footer .column {
 	float: left;
 	margin: 0;
 	padding: 0 30px;
@@ -252,31 +254,31 @@ form.form-transparent button:active {
 	box-sizing: border-box;
 }
 
-#footer h2 {
+footer h2 {
     font-size: 18px;
     margin: 0 0 10px;
 }
 
-#footer ul {
+footer ul {
   list-style: none;
   font-size: 14px;
   margin: 0;
   padding: 0;
 }
 
-#footer ul li {
+footer ul li {
   margin: 7px 0;
 }
   
-#footer .footer-logo {
+footer .footer-logo {
   width: 14rem;
 }
 
 @media (max-width: 850px) {
-	#footer .column-container {
+	footer .column-container {
 		height: 250px;      
 	}
-	#footer .top {
+	footer .top {
 		display: block;
 		width: 100%;
 		margin: 0 0 20px;
@@ -286,18 +288,18 @@ form.form-transparent button:active {
 }
 
 @media (max-width: 510px) {
-	#footer .column-container {
+	footer .column-container {
     	margin: 0;
     	display: block;
     	height: auto;
   	}
-	#footer .column {
+	footer .column {
     	float: none;
     	width: 100%;
     	display: block;
     	margin: 0 0 30px;
 	}   
-  	#footer .top {
+  	footer .top {
     	text-align: center;  
   	}
 }
