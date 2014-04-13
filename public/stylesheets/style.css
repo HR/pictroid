@@ -27,13 +27,22 @@ a:hover {
     border-bottom-color: #efefef;
 }
 
+.navbar .container,
+.navbar-collapse {
+	padding-right: 0;
+}
+
 .navbar a {
     color: inherit !important;
 }
 
-.navbar-brand > img  {
-    height: 2rem;
-    margin-top: -5px;
+.navbar-brand  {
+    width: 160px;
+    background-image: url(/images/logo/dark.png);
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    margin-left: 0 !important;
 }
 
 .navbar-nav a {
@@ -64,6 +73,10 @@ a:hover {
 	border-color: inherit;
 }
 
+.navbar-nav.navbar-right:last-child {
+	margin-right: 0;
+}
+
 /* Absolute header */
 .navbar-absolute {
 	position: absolute;
@@ -87,6 +100,10 @@ a:hover {
 	background: -ms-linear-gradient(top, rgba(0,0,0,0.5) 75%,rgba(0,0,0,0) 100%); /* IE10+ */
 	background: linear-gradient(to bottom, rgba(0,0,0,0.5) 75%,rgba(0,0,0,0) 100%); /* W3C */
 	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#80000000', endColorstr='#00000000',GradientType=0 ); /* IE6-9 */
+}
+
+.navbar-transparent .navbar-brand  {
+    background-image: url(/images/logo/light.png);
 }
 
 .navbar-transparent .navbar-nav .open > a {
@@ -129,10 +146,9 @@ a:hover {
 form.form-transparent {
 	max-width: 400px;
 	padding: 15px;
-	margin: 0 auto;
-	margin-top: 10%;
-	background-color: rgba(255, 255, 255, 0.5);
-	border-radius: 10px;
+	margin: 5% auto;
+	background-color: rgba(255, 255, 255, 0.3);
+	border-radius: 5px;
 	box-shadow: 0 0 50px #000000;
 	font-size: 12px;
 }
@@ -236,12 +252,6 @@ form.form-transparent button:active {
 		float: none;
 		text-align: center;
 	}
-}
-
-@media (max-width: 550px) {
-    #footer .top ~ .column {
-        padding: 0 10px;
-    }
 }
 
 @media (max-width: 510px) {
