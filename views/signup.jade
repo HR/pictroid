@@ -1,7 +1,7 @@
 extends layout
 
 block head
-	title Sign In | Pictroid
+	title Sign Up | Pictroid
 
 block variables
 	- var header = { transparent: true, dark: true }	
@@ -13,11 +13,9 @@ block content
 			img(src="/images/logo/icon.png", alt="Pictroid", height="75")
 			hr
 			input.form-control(type="text", name="username", placeholder="Username")
-			input.form-control(type="password", name="password", placeholder="Password")			
-			p
-				| Forgot password?  Then <a href="/signin/reset">Reset Password</a>
-			br
-			button.btn.btn-lg.btn-primary.btn-block(type="submit") Sign In
+			input.form-control(type="email", name="email", placeholder="Email")
+			input.form-control(type="password", name="password", placeholder="Password")
+			button.btn.btn-lg.btn-primary.btn-block(type="submit") Sign Up
 			br
 			p(style="text-align: center;")
-				| Don't have an account?  Then <a href="/signup">Sign Up</a>
+				| Already have an account?  Then <a href="/signin">Sign In</a>

@@ -1,5 +1,31 @@
 div#footer
-    div.container
-        p.text-muted Copyright &copy; 2014 Codexa and its individual contributors.&nbsp;
-            span Licensed under the MIT.&nbsp;
-            a(href="https://github.com/codexa/pictroid") View the source!
+	.container
+		.column-container
+			.column.top
+				img.footer-logo(src="images/logo/light.png", alt="Pictroid")
+			.column
+				h2 About
+				ul
+					li
+						a(href="/about") About us
+			.column
+				h2 Account
+				ul
+					li
+						a(href="/signin") Sign In
+					li
+						a(href="/signup") Sign Up
+			.column
+				h2 Browse
+				ul
+					li
+						a(href="/browse?sort=trending") Trending pics
+					li
+						a(href="/browse?sort=rated") Highest rated
+					li
+						a(href="/browse?sort=latest") Latest feed
+					li
+						a(href="/browse?sort=categories") Categories
+		p.text-muted 
+			| Code licensed under the MIT License v2.&nbsp;
+			a(href="https://github.com/codexa/pictroid") View on GitHub!

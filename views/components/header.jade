@@ -21,7 +21,7 @@ mixin headerItems
 						b.caret
 					ul.dropdown-menu
 						li
-							a(href="/browse?sort=popular") Popular
+							a(href="/browse?sort=trending") Trending
 						li
 							a(href="/browse?sort=rated") Highest Rated
 						li
@@ -31,14 +31,14 @@ mixin headerItems
 				li
 					a(href="/about") About
 				li
-					a.btn(href="/signin") Sign in
+					a.btn(href="/signin") Sign In
 				
 if header && header.transparent
 	if header.dark
-		div.navbar.navbar-default.navbar-absolute.navbar-transparent(role='navigation')
+		div.navbar.navbar-default.navbar-fixed-top.navbar-transparent(role='navigation')
 			+headerItems()
 	else 
-		div.navbar.navbar-default.navbar-absolute.navbar-transparent-light(role='navigation')
+		div.navbar.navbar-default.navbar-fixed-top.navbar-transparent-light(role='navigation')
 			+headerItems()		
 else 
 	div.navbar.navbar-default.navbar-fixed-top(role='navigation')
