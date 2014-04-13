@@ -1,7 +1,7 @@
 .sass-cache/
 node_modules/
 private/
-.env
+*.env
 
 .DS_Store
 ._.DS_Store
