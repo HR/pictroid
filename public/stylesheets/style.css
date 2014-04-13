@@ -22,22 +22,53 @@ a:hover {
 }
 
 .btn {
+	padding: 5px 10px 7px;
+	background-color: #a67c52;
+	border: none;
+	color: #ffffff;
+	border-radius: 2px;
+    text-shadow: none !important;
+}
+
+.btn:hover,
+.btn:focus,
+.btn:active:focus {
+	outline: none;
+	background-color: #a67c52;
+	color: #ffffff;
+}
+
+.btn:active {
+	box-shadow: inner 0 0 15px #000000;
+	background-color: #a67c52;
+	border: none;
+	outline: none;
+	color: #ffffff;
+}
+
+.btn.clear {
+	border: 1px solid;
 	border-color: inherit;
 	color: inherit;
-	padding: 5px 10px 7px;
-	margin: 9px;
-	background-color: rgba(255, 255, 255, 0.05);
+	background-color: transparent;
+	border-radius: 4px;
+    text-shadow: 0 0 2px #000;
 }
 
-.btn:hover {
+.btn.clear:hover,
+.btn.clear:focus,
+.btn.clear:active:focus {
 	color: #ffffff;
     border-color: #a67c52;
+	outline: none;
 }
 
-.page {
-	background-color: #ffffff;
-	color: #000000;
-	padding-bottom: 20px;
+.btn.clear:active {
+	background-color: rgba(255, 255, 255, 0.2);
+}
+
+.btn + .btn {	
+	margin-left: 9px;
 }
 
 /* Header */
@@ -105,6 +136,7 @@ a:hover {
 .navbar-nav .btn {
 	border-color: inherit;
 	padding: 5px 10px 7px;
+	margin: 9px;
 }
 
 /* Absolute header */
@@ -150,6 +182,13 @@ a:hover {
 	padding-top: 68px;
 }
 
+/* Page */
+.page {
+	background-color: #ffffff;
+	color: #000000;
+	padding-bottom: 20px;
+}
+
 /* Jumbotron */
 .jumbotron.dark {
 	background-color: #000000;
@@ -167,7 +206,7 @@ a:hover {
 	background-size: cover;
 }
 
-/* Sign in */
+/* Forms */
 form.form-transparent {
 	max-width: 400px;
 	padding: 30px;
@@ -208,6 +247,7 @@ form.form-transparent input:focus {
 	border-color: #a67c52;
 }
 
+<<<<<<< HEAD
 form.form-transparent button,
 form.form-transparent button:hover,
 form.form-transparent button:focus {
@@ -224,6 +264,10 @@ form.form-transparent button:active {
 
 /* footer */
 footer {
+=======
+/* #footer */
+#footer {
+>>>>>>> c65476ac32cc4de2ae02eb35cb9cbe586c4d2747
     width: 100%;
     background-color: #252525;
     color: #ffffff;
