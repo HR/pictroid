@@ -13,6 +13,7 @@ var routes = require('./routes');
 var user = require('./routes/user');
 var Parse = require('parse').Parse;
 var app = express();
+var resources = require('./scripts/resources');
 
 // all environments
 app.set('port', process.env.PORT || 3000);
