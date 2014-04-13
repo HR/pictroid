@@ -18,11 +18,16 @@ a:hover {
 }
 
 
-/* Bootstrap hacks */
+/* Header */
 .navbar {
     background-color: rgba(255,255,255,0.95);
     color: #A040FF;
+    border-color: transparent;
     border-bottom-color: #efefef;
+}
+
+.navbar a {
+    color: inherit !important;
 }
 
 .navbar-brand > img  {
@@ -31,7 +36,6 @@ a:hover {
 }
 
 .navbar-nav a {
-    color: #A040FF !important;
     border-bottom: 1px solid transparent;
 }
 
@@ -53,6 +57,37 @@ a:hover {
     display: block;
 }
 
+.navbar-nav .btn {
+	padding: 5px 10px 7px;
+	margin: 9px;
+	border-color: inherit;
+}
+
+/* Transparent header */
+.navbar-transparent {
+    background-color: transparent;
+    color: #ffffff;
+    border-color: transparent;
+    text-shadow: 0 0 2px #000;
+}
+
+.navbar-transparent .navbar-nav .open > a {
+    border: none;
+}
+
+.navbar-transparent .navbar-nav .open > a,
+.navbar-transparent .navbar-nav .open a.active,
+.navbar-transparent .navbar-nav .open a:hover {
+    background-color: rgba(65, 74, 76, 0.5) !important;
+    border-color: transparent;
+}
+
+.navbar-transparent .dropdown-menu {
+    background-color: rgba(65, 74, 76, 0.5) !important;
+    border: none;
+}
+
+/* Footer */
 #footer {
     position: absolute;
     bottom: 0;
