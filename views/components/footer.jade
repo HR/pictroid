@@ -2,7 +2,7 @@ div#footer
 	.container
 		.column-container
 			.column.top
-				img.footer-logo(src="images/logo/light.png", alt="Pictroid")
+				img.footer-logo(src="/images/logo/light.png", alt="Pictroid")
 			.column
 				h2 About
 				ul
@@ -11,12 +11,20 @@ div#footer
 			.column
 				h2 Account
 				ul
-					li
-						a(href="/signin") Sign In
-					li
-						a(href="/signup") Sign Up
-					li
-						a(href="/upload") Upload
+					if authed && user
+						li
+							a(href='/'+user.name) Profile
+						li
+							a(href='/'+user.name+'/settings') Settings
+						li
+							a(href="/signout") Sign Out
+						li
+							a(href="/upload") Upload
+					else
+						li
+							a(href="/signin") Sign In
+						li
+							a(href="/signup") Sign Up
 			.column
 				h2 Browse
 				ul

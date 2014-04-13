@@ -35,6 +35,9 @@ app.get('/', routes.index);
 app.get('/:view', function(req, res) {
     res.render(req.params.view, { title: 'Pictroid' });
 });
+app.get('/user/:name', function(req, res) {
+    res.render('user', { username: req.params.name });
+});
 
 http.createServer(app).listen(app.get('port'), function(){
   console.log('Express server listening on port ' + app.get('port'));
