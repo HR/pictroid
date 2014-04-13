@@ -1,0 +1,19 @@
+extends layout
+
+block head
+	title Sign in | Pictroid
+
+block variables
+	- var header = { transparent: true, dark: true }	
+	- var bodyStyle = "background-image: url(/images/wallpaper.jpg);"
+
+block content
+	.jumbotron.dark.center(style="background: transparent;")
+		.container
+			form.form-signin.form-transparent(role="form", action="", method="POST")
+				img(src="/images/logo/icon.png", alt="Pictroid", height="100")
+				hr
+				input.form-control(type="text", name="username", placeholder="Username")
+				input.form-control(type="password", name="password", placeholder="Password")
+				br
+				button.btn.btn-lg.btn-primary.btn-block(type="submit") Sign in

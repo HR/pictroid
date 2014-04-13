@@ -1,8 +1,9 @@
 block variables
+	- var bodyStyle = ""
 doctype html
 html
 	head
-		block header
+		block head
 		title= title
 		
 		// Meta
@@ -15,7 +16,7 @@ html
 		// Stylesheets
 		link(rel='stylesheet', href='/bootstrap/bootstrap.min.css')
 		link(rel='stylesheet', href='/stylesheets/style.css')
-	body
+	body(style=bodyStyle)
 		script(type='text/javascript')
 			//
 				var Parse = require('parse').Parse;

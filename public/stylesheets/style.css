@@ -7,21 +7,23 @@
 
 /* Common */
 html, body {
-  padding: 0;
-  margin: 0;
-  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+	padding: 0;
+	margin: 0;
+	font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+	background-attachment: fixed;
+	background-size: cover;
 }
 
 a,
 a:hover {
-  color: #A040FF;
+	color: #a67c52;
 }
 
 
 /* Header */
 .navbar {
     background-color: rgba(255,255,255,0.95);
-    color: #A040FF;
+    color: #a67c52;
     border-color: transparent;
     border-bottom-color: #efefef;
 }
@@ -41,7 +43,7 @@ a:hover {
 
 .navbar-nav a.active,
 .navbar-nav a:hover {
-    border-color: #A040FF;
+    border-color: #a67c52;
     background-color: transparent !important;
 }
 
@@ -87,12 +89,12 @@ a:hover {
 .navbar-transparent .navbar-nav .open > a,
 .navbar-transparent .navbar-nav .open a.active,
 .navbar-transparent .navbar-nav .open a:hover {
-    background-color: rgba(65, 74, 76, 0.7) !important;
+    background-color: rgba(0, 0, 0, 0.7) !important;
     border-color: transparent;
 }
 
 .navbar-transparent .dropdown-menu {
-    background-color: rgba(65, 74, 76, 0.7) !important;
+    background-color: rgba(0, 0, 0, 0.7) !important;
     border: none;
 }
 
@@ -114,6 +116,46 @@ a:hover {
 .jumbotron.fixed-background {
 	background-attachment: fixed;
 	background-size: cover;
+}
+
+/* Sign in */
+form.form-transparent {
+	max-width: 330px;
+	padding: 15px;
+	margin: 20px auto;
+	margin-top: 10%;
+	background-color: rgba(255, 255, 255, 0.5);
+	border-radius: 10px;
+	box-shadow: 0 0 50px #000000;
+}
+
+form.form-transparent hr {
+	border-color: rgba(255, 255, 255, 0.7);
+}
+
+form.form-transparent input {
+	background-color: rgba(255, 255, 255, 0.7);
+	margin: 5px 0;
+	box-shadow: none;
+	border: 2px solid transparent;
+}
+
+form.form-transparent input:focus {
+	box-shadow: none;
+	border-color: #a67c52;
+}
+
+form.form-transparent button,
+form.form-transparent button:hover,
+form.form-transparent button:focus {
+	background-color: #a67c52;
+	border: none;
+}
+
+form.form-transparent button:active {
+	box-shadow: 0 0 15px #000000 inner;
+	background-color: #a67c52;
+	border: none;
 }
 
 /* Footer */
