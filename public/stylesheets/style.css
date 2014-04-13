@@ -50,7 +50,7 @@ a:hover {
 	border: 1px solid;
 	border-color: inherit;
 	color: inherit;
-	background-color: rgba(255, 255, 255, 0.05);
+	background-color: transparent;
 	border-radius: 4px;
     text-shadow: 0 0 2px #000;
 }
@@ -255,6 +255,8 @@ form.form-transparent input:focus {
     text-align: center;
     margin: 0;
     font-size: 12px;
+    bottom: 0px;
+    left: 0px;
 }
 
 #footer .column-container {
@@ -328,25 +330,27 @@ form.form-transparent input:focus {
 /* Profile */
 .profile-page {
 	padding-bottom: 0;
+	color: #6f6f6f !important;
 }
 
 .profile-container {
-	background-color: rgba(255,255,255,0.2);
-	width: 1000px;
+	background-color: #eee;
+	width: 70%;
 	margin: 0 auto;
 	margin-top: 80px;
 	min-height: 400px;
 	position: relative;
-	box-shadow: 0 -50px 50px #000000;
+	box-shadow: 0px -2px 10px #222;
 	text-shadow: none;
 }
 
 .profile-info {
-	background-color: rgba(255,255,255,0.2);
+	background-color: #f6f6f6;
 	float: left;
 	display: block;
 	width: 200px;
 	position: absolute;
+	border-right: 1px solid #c2c2c2;
 	left: 0;
 	top: 0;
 	bottom: 0;
@@ -366,7 +370,7 @@ form.form-transparent input:focus {
 }
 
 .profile-page hr {
-	border-color: rgba(255, 255, 255, 0.7);
+	border-color: #c2c2c2;
 	margin: 5px 0;
 }
 
