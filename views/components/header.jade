@@ -35,10 +35,10 @@ mixin headerItems
 				
 if header && header.transparent
 	if header.dark
-		div.navbar.navbar-default.navbar-transparent(role='navigation')
+		div.navbar.navbar-default.navbar-absolute.navbar-transparent(role='navigation')
 			+headerItems()
 	else 
-		div.navbar.navbar-default.navbar-transparent-light(role='navigation')
+		div.navbar.navbar-default.navbar-absolute.navbar-transparent-light(role='navigation')
 			+headerItems()		
 else 
 	div.navbar.navbar-default.navbar-fixed-top(role='navigation')

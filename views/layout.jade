@@ -1,43 +1,42 @@
 block variables
 doctype html
 html
-    head
-        block header
-        title= title
-        
-        // Meta
-        meta(charset='utf-8')
-        meta(name='viewport', content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no')
-        
-        // Favicon
-        link(rel="icon", type="image/png", href="/images/favicon/64.png")
+	head
+		block header
+		title= title
+		
+		// Meta
+		meta(charset='utf-8')
+		meta(name='viewport', content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no')
+		
+		// Favicon
+		link(rel="icon", type="image/png", href="/images/favicon/64.png")
 
-        // Stylesheets
-        link(rel='stylesheet', href='/bootstrap/bootstrap.min.css')
-        link(rel='stylesheet', href='/stylesheets/style.css')
-    body
-        script(type='text/javascript')
-            //
-                var Parse = require('parse').Parse;
-                    window.onload = function(){
-                    Parse.initialize(,);
-                    var query = new Parse.Query(Parse.User);
-                    query.find({
-                      success: function(users) {
-                        for (var i = 0; i < users.length; ++i) {
-                          console.log(users[i].get('username'));
-                        }
-                      }
-                    });
-                    }
-        include components/header
-        div.container
-            block content
-        include components/footer
-            
-        
-        // Bootstrap core JavaScript
-        // Placed at the end of the document so the pages load faster
-        script(src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js")
-        script(src="/bootstrap/bootstrap.min.js")
-        script(src="//www.parsecdn.com/js/parse-1.2.18.min.js")
+		// Stylesheets
+		link(rel='stylesheet', href='/bootstrap/bootstrap.min.css')
+		link(rel='stylesheet', href='/stylesheets/style.css')
+	body
+		script(type='text/javascript')
+			//
+				var Parse = require('parse').Parse;
+					window.onload = function(){
+						Parse.initialize(,);
+						var query = new Parse.Query(Parse.User);
+						query.find({
+							success: function(users) {
+								for (var i = 0; i < users.length; ++i) {
+									console.log(users[i].get('username'));
+								}
+							}
+						});
+					}
+		include components/header
+		block content
+		include components/footer
+			
+		
+		// Bootstrap core JavaScript
+		// Placed at the end of the document so the pages load faster
+		script(src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js")
+		script(src="/bootstrap/bootstrap.min.js")
+		script(src="//www.parsecdn.com/js/parse-1.2.18.min.js")

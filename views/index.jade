@@ -4,5 +4,7 @@ block variables
 	- var header = { transparent: true, dark: true }	
 
 block content
-	h1= title
-	p Welcome to #{title}
+	.jumbotron.dark.center.fixed-background(style="background-image: url(/images/home.jpg);")
+		.container
+			img(src="/images/logo/icon.png", alt="Pictroid", height="200")
+			h2 Welcome to Pictroid!

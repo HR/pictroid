@@ -63,6 +63,15 @@ a:hover {
 	border-color: inherit;
 }
 
+/* Absolute header */
+.navbar-absolute {
+	position: absolute;
+	top: 0;
+    right: 0px;
+    left: 0px;
+    z-index: 1030;
+}
+
 /* Transparent header */
 .navbar-transparent {
     background-color: transparent;
@@ -78,13 +87,33 @@ a:hover {
 .navbar-transparent .navbar-nav .open > a,
 .navbar-transparent .navbar-nav .open a.active,
 .navbar-transparent .navbar-nav .open a:hover {
-    background-color: rgba(65, 74, 76, 0.5) !important;
+    background-color: rgba(65, 74, 76, 0.7) !important;
     border-color: transparent;
 }
 
 .navbar-transparent .dropdown-menu {
-    background-color: rgba(65, 74, 76, 0.5) !important;
+    background-color: rgba(65, 74, 76, 0.7) !important;
     border: none;
+}
+
+.navbar-transparent + .jumbotron {
+	padding-top: 68px;
+}
+
+/* Jumbotron */
+.jumbotron.dark {
+	background-color: #000000;
+	color: #ffffff;
+    text-shadow: 0 0 5px #000;
+}
+
+.jumbotron.center {
+	text-align: center;
+}
+
+.jumbotron.fixed-background {
+	background-attachment: fixed;
+	background-size: cover;
 }
 
 /* Footer */
