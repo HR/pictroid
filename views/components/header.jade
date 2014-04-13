@@ -11,7 +11,7 @@ div.navbar.navbar-default(role='navigation', class=headerClasses)
 			ul.nav.navbar-nav.navbar-right
 				li
 					a(href="/") Home
-				li.browse
+				li
 					a.dropdown-toggle(href="#", data-toggle="dropdown") Browse 
 						b.caret
 					ul.dropdown-menu
@@ -23,9 +23,23 @@ div.navbar.navbar-default(role='navigation', class=headerClasses)
 							a(href="/browse?sort=latest") Latest feed
 						li
 							a(href="/browse?sort=categories") Categories
-				li
-					a(href="/upload") Upload
+				if authed
+					li
+						a(href="/upload") Upload
 				li
 					a(href="/about") About
-				li
-					a.btn(href="/signin") Sign In
+				if authed && user
+					li
+						!= '<a class="dropdown-toggle" href="#" data-toggle="dropdown">'
+						!= user.first+' '+user.last
+						!= '<b class="caret"></b></a>'
+						ul.dropdown-menu
+							li
+								a(href='/'+user.name) Profile
+							li
+								a(href='/'+user.name+'/settings') Settings
+							li
+								a(href='/signout') Sign Out
+				else
+					li
+						a.btn(href="/signin") Sign In

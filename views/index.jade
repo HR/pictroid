@@ -8,5 +8,8 @@ block content
 		.container
 			img(src="/images/logo/icon.png", alt="Pictroid", height="200")
 			h2 Welcome to Pictroid!
-			a.btn(href="/signin") Sign In
-			a.btn(href="/signup") Sign Up
+			if authed
+				a.btn(href="/upload") Upload			
+			else
+				a.btn(href="/signin") Sign In
+				a.btn(href="/signup") Sign Up
