@@ -43,8 +43,10 @@ asteroids.upload = function(name, src, desc, type) {
 }
 
 asteroids.query = {}
-asteroids.query.getLatest = function(num) {
-
+asteroids.query.getLatest = function() {
+	var imgQuery = new Parse.Query(Image);
+	imgQuery.ascending("createdAt");
+	return imgQuery.find();
 }
 
 exports.user = {};

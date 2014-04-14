@@ -44,7 +44,7 @@ flickrOAuth(function(flickr) {
         }
         updateDB(finalResults);
     });
-})
+});
 
 // kimono
 var req = http.request({

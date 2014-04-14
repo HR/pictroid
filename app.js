@@ -11,10 +11,13 @@ var monk = require('monk');
 var path = require('path');
 var routes = require('./routes');
 var user = require('./routes/user');
-var Parse = require('parse').Parse;
 var app = express();
-var resources = require('./scripts/resources');
 var auth = require('./scripts/auth');
+var db = require('./scripts/data');
+
+db.asteroids.query.getLatest().then(function(results) {
+	console.log(results);
+});
 
 // all environments
 app.set('port', process.env.PORT || 3000);
