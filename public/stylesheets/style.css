@@ -586,10 +586,19 @@ footer .footer-logo {
 }
 
 /* headings */
+.container h3 {
+	margin-left: 2rem;
+	display: inline;
+}
+
+.container h3:first-child {
+	margin-left: 0rem !important;
+}
+
 .container h3 a {
 	text-decoration: none;
-	
 }
+
 .container hr {
 	margin-top: 2px;
 	height: 2px;
