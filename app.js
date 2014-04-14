@@ -14,6 +14,7 @@ var user = require('./routes/user');
 var Parse = require('parse').Parse;
 var app = express();
 var resources = require('./scripts/resources');
+var auth = require('./scripts/auth');
 
 // all environments
 app.set('port', process.env.PORT || 3000);
@@ -45,6 +46,10 @@ app.get('/user/:name', function(req, res) {
 app.get('/user/:name/settings', function(req, res) {
 	// Code to authorize
     res.render('settings', { });
+});
+
+app.post('/signup', function(req, res) {
+	//var SignUp = new signup(req.body.username, req.body.password, req.body.email);
 });
 
 http.createServer(app).listen(app.get('port'), function(){
