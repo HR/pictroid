@@ -540,13 +540,6 @@ footer .footer-logo {
 	flex-flow: row wrap;
 }
 
-.feed hr {
-	margin-top: 2px;
-	height: 2px;
-    border: 0; 
-    border-top: 2px solid #c2c2c2;
-}
-
 .feed-item {
 	margin: 10px 1.5%;
 	width: 30%;
@@ -590,4 +583,16 @@ footer .footer-logo {
 	.feed-item {
    		width: 100%;
   	}
+}
+
+/* headings */
+.container h3 a {
+	text-decoration: none;
+	
+}
+.container hr {
+	margin-top: 2px;
+	height: 2px;
+    border: 0; 
+    border-top: 2px solid #c2c2c2;
 }
