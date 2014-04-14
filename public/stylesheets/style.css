@@ -224,19 +224,6 @@ a:hover {
 	background-size: cover;
 }
 
-/* Feed */
-.feed {
-	width: 60%;
-	margin: 0 auto 0 auto;
-}
-
-.feed hr {
-	margin-top: 2px;
-	height: 2px;
-    border: 0; 
-    border-top: 2px solid #c2c2c2;
-}
-
 /* Forms */
 form.form-transparent {
 	max-width: 400px;
@@ -547,11 +534,17 @@ footer .footer-logo {
 /* Feed */
 .feed {
 	margin: 0px auto;
-	background-color: #ffffff;
 	font-family: 'Open Sans', sans-serif;
 	font-weight: 200;
 	display: flex;
 	flex-flow: row wrap;
+}
+
+.feed hr {
+	margin-top: 2px;
+	height: 2px;
+    border: 0; 
+    border-top: 2px solid #c2c2c2;
 }
 
 .feed-item {
