@@ -15,9 +15,6 @@ var app = express();
 var auth = require('./scripts/auth');
 var db = require('./scripts/data');
 
-db.asteroids.query.getLatest().then(function(results) {
-	console.log(results);
-});
 
 // all environments
 app.set('port', process.env.PORT || 3000);
@@ -55,6 +52,9 @@ app.post('/signup', function(req, res) {
 	var SignUp = new auth.signup(req.body.username, req.body.password, req.body.email, res);
 });
 
-http.createServer(app).listen(app.get('port'), function(){
-  console.log('Express server listening on port ' + app.get('port'));
+db.asteroids.query.getLatest().then(function(results) {
+	global.results = results;
+	http.createServer(app).listen(app.get('port'), function(){
+	  console.log('Express server listening on port ' + app.get('port'));
+	});
 });
