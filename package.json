@@ -11,10 +11,11 @@
     "express": "3.5.1",
     "grunt-cli": "*",
     "jade": "*",
-    "mongodb":"*",
+    "mongodb": "*",
     "monk": "*",
     "parse": "*",
     "request": "*",
-    "sass": "*"
+    "sass": "*",
+    "flickrapi": "~0.3.14"
   }
 }
