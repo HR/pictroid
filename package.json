@@ -9,6 +9,7 @@
   "dependencies": {
     "bower": "*",
     "express": "3.5.1",
+    "flickrapi": "*",
     "grunt-cli": "*",
     "jade": "*",
     "mongodb":"*",
