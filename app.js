@@ -48,7 +48,7 @@ app.get('/user/:name/settings', function(req, res) {
     res.render('settings', { });
 });
 
-app.post('/signup', function(req, res) {
+app.post('/user_signup', function(req, res) {
 	//var SignUp = new signup(req.body.username, req.body.password, req.body.email);
 });
 
