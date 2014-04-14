@@ -10,10 +10,10 @@ html, body {
 	padding: 0;
 	margin: 0;
 	font: 14px "Open Sans", Helvetica, Arial, sans-serif;
-	height: 100%;
+	background-color: #eee;
 	background-attachment: fixed;
 	background-size: cover;
-	background-color: #eee;
+	height: 100%;
 	color: #000000;
 }
 
@@ -569,6 +569,13 @@ footer .footer-logo {
 	margin: 0 0 5px;
 	font-size: 115%;
 	font-weight: 400;
+}
+
+.feed hr {
+	margin-top: 2px;
+	height: 2px;
+	border: 0; 
+	border-top: 2px solid #c2c2c2;
 }
 
 .feed p {
