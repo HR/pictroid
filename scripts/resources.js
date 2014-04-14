@@ -1,13 +1,53 @@
 var db = require('./data');
 var http = require("http");
+var Flickr = require("flickrapi");
 
-function updateDB(data) {
-	var results = data.results.collection1;
-	for(var i = 0; i < results.length; i++) {
-		db.asteroids.upload(results[i].Title.text, results[i].Thumbnail.src, results[i].Description.text);
-	}
+function updateDB(results) {
+    for(var i = 0; i < results.length; i++) {
+        db.asteroids.upload(results[i].title, results[i].src, results[i].desc)
+    }
 }
 
+// flickr
+function flickrOAuth(callback) {
+    Flickr.authenticate({
+        api_key: process.env.flikrKey,
+        secret: process.env.flikrSecret,
+        user_id: process.env.FLICKR_USER_ID,
+        access_token: process.env.FLICKR_ACCESS_TOKEN,
+        access_token_secret: process.env.FLICKR_ACCESS_TOKEN_SECRET
+    }, function(err, flickr){
+        if(err) {
+            console.log(err);
+            callback(err);
+        } else {
+            callback(flickr);
+        }
+    });
+}
+
+flickrOAuth(function(flickr) {
+    flickr.people.getPublicPhotos({
+        user_id: flickr.options.user_id
+    }, function(err, result) {
+        if(err) {
+            console.log(err);
+        }
+        photos = result.photos.photo;
+        console.log(photos);
+        var finalResults = [];
+        for(var i = 0; i < photos.length; i++) {
+            finalResults.push({
+                title: photos[i].title,
+                src: "http://farm"+ photos[i].farm +".staticflickr.com/" + photos[i].server + "/" + photos[i].id + "_" + photos[i].secret + ".jpg",
+                desc: ""
+            });
+        }
+        updateDB(finalResults);
+    });
+})
+
+// kimono
 var req = http.request({
 	host: "www.kimonolabs.com",
 	port: 80,
@@ -28,7 +68,15 @@ var req = http.request({
     res.on('end', function() {
         var obj = JSON.parse(output);
         if(res.statusCode === 200) {
-        	updateDB(obj);
+            var results = obj.results.collection1
+            var finalResults = [];
+            for(var i = 0; i < resutls.length; i++) {
+                finalResults.push({
+                    title: results[i].Title.text,
+                    src: results[i].Thumbnail.src,
+                    desc: results[i].Description.text
+                });
+            }
         }
     });
 });
