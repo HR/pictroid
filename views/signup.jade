@@ -9,13 +9,24 @@ block variables
 
 block content
 	.jumbotron.dark.center(style="background: transparent;")
-		form.form-signin.form-transparent(role="form", action="", method="POST")
+		form.form-signin.form-transparent(role="form", action="/signup", method="POST", onsubmit="return validateForm()")
 			img(src="/images/logo/icon.png", alt="Pictroid", height="75")
 			hr
 			input.form-control(type="text", name="username", placeholder="Username")
 			input.form-control(type="email", name="email", placeholder="Email")
 			input.form-control(type="password", name="password", placeholder="Password")
+			p(id="emsg")
 			button.btn.btn-lg.btn-primary.btn-block(type="submit") Sign Up
 			br
 			p(style="text-align: center;")
 				| Already have an account?  Then <a href="/signin">Sign In</a>
+			script
+				var valid = false,
+					form = document.forms[0],
+					emsg = document.querySelectorAll("#emsg")[0];
+				valid = ((/^[a-z0-9_-]{6,10}$/).test(form.username) && (/^([a-z0-9_\.-]+)@([\da-z\.-]+)\.([a-z\.]{2,6})$/).test(form.email) && (/^[a-z0-9_-]{6,14}$/).test(form.email)) ? true : false;
+				if (valid)
+					return true;
+				else
+					emsg.textContent = "Invalid credentials supplied";
+					return false;

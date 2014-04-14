@@ -9,12 +9,13 @@ block variables
 block content
 	+chickenLittle()
 	.page
+		br
 		.container
 			h3
-				a(href="/browse?sort=trending") Popular
+				a(href="/browse?sort=popular") Popular
 			h3
-				a(href="/browse?sort=trending") Most Recent
+				a(href="/browse?sort=rated") Highest Rated
 			h3
-				a(href="/browse?sort=trending") Highest Rated
+				a(href="/browse?sort=latest") Latest
 			hr
 		+feed()

@@ -52,7 +52,7 @@ app.get('/user/:name/settings', function(req, res) {
 });
 
 app.post('/signup', function(req, res) {
-	//var SignUp = new signup(req.body.username, req.body.password, req.body.email);
+	var SignUp = new auth.signup(req.body.username, req.body.password, req.body.email, res);
 });
 
 http.createServer(app).listen(app.get('port'), function(){
