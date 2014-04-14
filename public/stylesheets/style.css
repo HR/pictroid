@@ -184,9 +184,17 @@ a:hover {
 
 /* Page */
 .page {
-	background-color: #ffffff;
+	background-color: #eeeeee;
 	color: #000000;
+}
+
+.page .container {
 	padding-bottom: 20px;
+}
+
+.page hr {
+	border-color: #B7B7B7;
+	margin: 10px 0;
 }
 
 /* Jumbotron */
@@ -247,7 +255,6 @@ form.form-transparent input:focus {
 	border-color: #a67c52;
 }
 
-<<<<<<< HEAD
 form.form-transparent button,
 form.form-transparent button:hover,
 form.form-transparent button:focus {
@@ -417,4 +424,92 @@ footer .footer-logo {
 .settings-sidebar {
 	margin-left: 115px;
 	min-height: 100px;
+}
+
+/* Details */
+.image-page {
+	margin-bottom: 0;
+	padding: 0 !important;
+}
+
+.image-title {
+	color: #a67c52;
+	font-size: 20px;
+}
+
+.image-image {
+	width: 100%;
+}
+
+.image-stats {
+	padding: 10px 15px 15px;
+}
+
+.image-stats div {
+	display: inline-block;
+}
+
+.image-tags {
+	margin-left: 20px;
+}
+
+.image-tags div + div:before {
+	content: ', ';
+}
+
+.image-social {
+	float: right;
+}
+
+.image-social div + div {
+	margin-left: 15px;
+}
+
+.image-view-count:before {
+	content: 'Views: ';
+}
+
+.image-comment-count:before {
+	content: 'Comments: ';
+}
+
+.image-share-count:before {
+	content: 'Shares: ';
+}
+
+.image-details {
+	padding: 10px 15px;
+	background-color: #ffffff;
+}
+
+.image-description {
+	font-size: 16px;
+}
+
+.image-details h2 {
+	border-bottom: 1px solid #b7b7b7;
+	font-size: 18px;
+	padding-bottom: 5px;
+}
+
+.image-comments {
+	padding: 60px 30px;
+}
+
+.image-comments-notice {
+	padding: 10px 10px 50px;
+}
+
+.comment {
+	border-top: 1px solid #b7b7b7;
+	padding: 10px 0 2px;
+	margin: 10px;
+}
+
+.comment-user {
+	font-size: 16px;
+}
+
+.comment-text {
+	margin-top: 5px;
 }

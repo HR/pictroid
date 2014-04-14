@@ -1,0 +1,48 @@
+extends layout
+
+block head
+	title= picID+' | Pictroid'
+	
+block variables
+	- var headerClasses = 'navbar-absolute'
+
+block content
+	+chickenLittle()
+	.page
+		.container.image-page
+			h1.image-title= picID
+			hr
+			img.image-image(src="", alt=picID)
+			.image-stats
+				.image-by
+					i by&nbsp;
+					a(href="#") username
+				.image-tags
+					.tag #foo
+					.tag #bar
+				.image-social
+					.image-view-count 0
+					.image-comment-count 0
+					.image-share-count 0
+			.image-details
+				.image-description No description provided
+				.image-comments
+					h2 Comment on this pic
+					if !authed
+						p.image-comments-notice Please <a href="/signin">Sign In</a> or 
+							<a href="/signup">Sign Up</a> to comment.
+					.comment
+						a.comment-user(href="#") Foo User
+						.comment-text Bar baz qux
+					.comment
+						a.comment-user(href="#") Foo User
+						.comment-text Bar baz qux
+					.comment
+						a.comment-user(href="#") Foo User
+						.comment-text Bar baz qux
+					.comment
+						a.comment-user(href="#") Foo User
+						.comment-text Bar baz qux
+					.comment
+						a.comment-user(href="#") Foo User
+						.comment-text Bar baz qux

@@ -36,6 +36,9 @@ app.get('/', routes.index);
 app.get('/:view', function(req, res) {
     res.render(req.params.view, { title: 'Pictroid' });
 });
+app.get('/pic/:id', function(req, res) {
+    res.render('details', { picID: req.params.id });
+});
 app.get('/user/:name', function(req, res) {
     res.render('user', { username: req.params.name });
 });
