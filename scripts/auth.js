@@ -1,5 +1,5 @@
 // Sign up
-exports.signup = function (username, password, email) {
+exports.signup = function (username, password, email, res) {
 	var Parse = require('parse').Parse;
 	Parse.initialize(process.env.parseID, process.env.parseJavascriptKey, process.env.parseMasterKey);
 
@@ -16,7 +16,7 @@ exports.signup = function (username, password, email) {
 		},
 		error: function(user, error) {
 			// Show the error message somewhere and let the user try again.
-			alert("Error: " + error.code + " " + error.message);
+			console.log("Error: " + error.code + " " + error.message);
 		}
 	});
 };
