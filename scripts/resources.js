@@ -70,7 +70,7 @@ var req = http.request({
         if(res.statusCode === 200) {
             var results = obj.results.collection1
             var finalResults = [];
-            for(var i = 0; i < resutls.length; i++) {
+            for(var i = 0; i < results.length; i++) {
                 finalResults.push({
                     title: results[i].Title.text,
                     src: results[i].Thumbnail.src,
