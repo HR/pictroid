@@ -2,7 +2,7 @@ var db = require('./data');
 var http = require("http");
 
 function updateDB(data) {
-	var results = data.results.Article;
+	var results = data.results.collection1;
 	for(var i = 0; i < results.length; i++) {
 		db.asteroids.upload(results[i].Title.text, results[i].Thumbnail.src, results[i].Description.text);
 	}
@@ -11,7 +11,7 @@ function updateDB(data) {
 var req = http.request({
 	host: "www.kimonolabs.com",
 	port: 80,
-	path: "/api/bgocgl00?apikey="+process.env.kimonoKey,
+	path: "/api/753j59mk?apikey="+process.env.kimonoKey,
 	method: "GET",
 	headers: {
 		"Content-Type": "application/json"
