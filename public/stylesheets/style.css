@@ -9,7 +9,7 @@
 html, body {
 	padding: 0;
 	margin: 0;
-	font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+	font: 14px "Open Sans", Helvetica, Arial, sans-serif;
 	background-attachment: fixed;
 	background-size: cover;
 	background-color: #eee;
@@ -512,4 +512,52 @@ footer .footer-logo {
 
 .comment-text {
 	margin-top: 5px;
+}
+
+/* Feed */
+.feed {
+	margin: 0px auto;
+	background-color: #ffffff;
+	font-family: 'Open Sans', sans-serif;
+	font-weight: 200;
+	display: flex;
+	flex-flow: row wrap;
+}
+
+.feed-item {
+	margin: 10px 1.5%;
+	width: 30%;
+	background-color: #fff;
+	column-rule: #333;
+	border: 1px solid #eee;
+	border-radius: 5px;
+}
+
+.feed-item:hover {
+	box-shadow: 0px 2px #ccc;
+}
+
+.feed img {
+	width: 100%;
+	margin: auto;
+}
+
+.feed h4 {
+	margin: 0 0 5px;
+	font-size: 115%;
+	font-weight: 400;
+}
+
+.feed p {
+	font-size: 85%;
+}
+
+.feed-item .text {
+	padding: 7% 5% 0% 5%;
+}
+
+@media all and (max-width: 800px) {
+	.feed-item {
+   		width: 100%;
+  	}
 }
