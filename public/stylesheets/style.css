@@ -9,11 +9,21 @@
 html, body {
 	padding: 0;
 	margin: 0;
+	height: 100%;
 	font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
 	background-attachment: fixed;
 	background-size: cover;
 	background-color: #eee;
 	color: #ffffff;
+}
+
+#wrapper {
+	min-height: 100%;
+	height: auto;
+	/* Negative indent footer by its height */
+	margin: 0 auto -200px;
+	/* Pad bottom by footer height */
+	padding: 0 0 200px;
 }
 
 a,
@@ -271,6 +281,7 @@ form.form-transparent button:active {
 
 /* footer */
 footer {
+	height: 200px;
     width: 100%;
     background-color: #252525;
     color: #ffffff;
