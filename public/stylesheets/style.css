@@ -10,10 +10,10 @@ html, body {
 	padding: 0;
 	margin: 0;
 	font: 14px "Open Sans", Helvetica, Arial, sans-serif;
-	height: 100%;
+	background-color: #eee;
 	background-attachment: fixed;
 	background-size: cover;
-	background-color: #eee;
+	height: 100%;
 	color: #000000;
 }
 
@@ -222,19 +222,6 @@ a:hover {
 .jumbotron.fixed-background {
 	background-attachment: fixed;
 	background-size: cover;
-}
-
-/* Feed */
-.feed {
-	width: 60%;
-	margin: 0 auto 0 auto;
-}
-
-.feed hr {
-	margin-top: 2px;
-	height: 2px;
-    border: 0; 
-    border-top: 2px solid #c2c2c2;
 }
 
 /* Forms */
@@ -547,7 +534,6 @@ footer .footer-logo {
 /* Feed */
 .feed {
 	margin: 0px auto;
-	background-color: #ffffff;
 	font-family: 'Open Sans', sans-serif;
 	font-weight: 200;
 	display: flex;
@@ -578,6 +564,13 @@ footer .footer-logo {
 	font-weight: 400;
 }
 
+.feed hr {
+	margin-top: 2px;
+	height: 2px;
+	border: 0; 
+	border-top: 2px solid #c2c2c2;
+}
+
 .feed p {
 	font-size: 85%;
 }
@@ -590,4 +583,25 @@ footer .footer-logo {
 	.feed-item {
    		width: 100%;
   	}
+}
+
+/* headings */
+.container h3 {
+	margin-left: 2rem;
+	display: inline;
+}
+
+.container h3:first-child {
+	margin-left: 0rem !important;
+}
+
+.container h3 a {
+	text-decoration: none;
+}
+
+.container hr {
+	margin-top: 2px;
+	height: 2px;
+    border: 0; 
+    border-top: 2px solid #c2c2c2;
 }
