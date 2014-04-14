@@ -11,8 +11,8 @@ function updateDB(results) {
 // flickr
 function flickrOAuth(callback) {
     Flickr.authenticate({
-        api_key: process.env.flikrKey,
-        secret: process.env.flikrSecret,
+        api_key: process.env.flickrKey,
+        secret: process.env.flickrSecret,
         user_id: process.env.FLICKR_USER_ID,
         access_token: process.env.FLICKR_ACCESS_TOKEN,
         access_token_secret: process.env.FLICKR_ACCESS_TOKEN_SECRET
@@ -34,7 +34,6 @@ flickrOAuth(function(flickr) {
             console.log(err);
         }
         photos = result.photos.photo;
-        console.log(photos);
         var finalResults = [];
         for(var i = 0; i < photos.length; i++) {
             finalResults.push({
@@ -77,6 +76,7 @@ var req = http.request({
                     desc: results[i].Description.text
                 });
             }
+            updateDB(finalResults);
         }
     });
 });
