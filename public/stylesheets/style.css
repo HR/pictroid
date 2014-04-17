@@ -307,7 +307,7 @@ form.form-transparent a {
 	text-shadow: 0 0 5px #000000;
 }
 
-form.form-transparent input {
+form.form-transparent input, form.form-transparent textarea {
 	background-color: rgba(255, 255, 255, 0.2);
 	margin: 5px 0;
 	box-shadow: none;
@@ -316,7 +316,7 @@ form.form-transparent input {
 	border-radius: 2px;
 }
 
-form.form-transparent input:focus {
+form.form-transparent input:focus, form.form-transparent textarea:focus {
 	box-shadow: none;
 	border-color: #a67c52;
 }
