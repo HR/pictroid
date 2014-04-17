@@ -212,10 +212,16 @@ a:hover {
 	color: #fefefe;
     text-shadow: 0 0 5px #000;
     margin: 0;
+    background-color: #000000;
 }
 
 .jumbotron.center {
 	text-align: center;
+}
+
+.jumbotron.fixed-background {
+	background-attachment: fixed;
+	background-size: cover;
 }
 
 /* Profile */
