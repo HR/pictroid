@@ -20,3 +20,18 @@ exports.signup = function (username, password, email, res) {
 		}
 	});
 };
+
+exports.signin = function (username, password, res) {
+	var Parse = require('parse').Parse;
+	Parse.initialize(process.env.parseID, process.env.parseJavascriptKey, process.env.parseMasterKey);
+	Parse.User.logIn(username, password, {
+	  success: function(user) {
+	    // Do stuff after successful login.
+	    res.setHeader('Location', '/');
+	  },
+	  error: function(user, error) {
+	    // The login failed. Check error to see why.
+	    console.log("Error: " + error.code + " " + error.message);
+	  }
+	});
+}

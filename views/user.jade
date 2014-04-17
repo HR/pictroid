@@ -4,19 +4,19 @@ block head
 	title= username+'\'s Profile | Pictroid'
 
 block variables
-	- var bodyStyle = "background-image: url(/images/wallpaper.jpg); background-color: #000000;"
-	- var headerClasses = 'navbar-fixed-top navbar-transparent'
+	- var headerClasses = 'navbar-absolute'
 
 block content
-	.jumbotron.profile-page.dark(style="background: transparent;")
-		.profile-container
-			.profile-info
-				img.profile-info-picture(src="", alt="Profile Picture")
-				.profile-info-text
-					.profile-name= '@'+username
-					hr
-					p Joined on: 
-					p Asteroids submitted: 
-					p Total views: 
-			.profile-pics
-				+feed()
+	.page
+		.jumbotron.profile-page.dark
+			.profile-container
+				.profile-info
+					img.profile-info-picture(src="", alt="Profile Picture")
+					.profile-info-text
+						.profile-name= '@'+username
+						hr
+						p Joined on: 
+						p Asteroids submitted: 
+						p Total views: 
+				.profile-pics
+					+feed()

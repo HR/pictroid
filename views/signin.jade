@@ -9,11 +9,12 @@ block variables
 
 block content
 	.jumbotron.dark.center(style="background: transparent;")
-		form.form-signin.form-transparent(role="form", action="", method="POST")
+		form.form-signin.form-transparent(role="form", action="", method="POST", onsubmit="return(validate());")
 			img(src="/images/logo/icon.png", alt="Pictroid", height="75")
 			hr
 			input.form-control(type="text", name="username", placeholder="Username")
-			input.form-control(type="password", name="password", placeholder="Password")			
+			input.form-control(type="password", name="password", placeholder="Password")
+			p(id="emsg" style="color:#DD7674;")			
 			//
 				p
 					| Forgot password?  Then <a href="/signin/reset">Reset Password</a>
@@ -22,3 +23,17 @@ block content
 			br
 			p(style="text-align: center;")
 				| Don't have an account?  Then <a href="/signup">Sign Up</a>
+			script.
+				function validate(){
+					var valid = false,
+						form = window.document.forms[0],
+						emsg = window.document.querySelectorAll("#emsg")[0];
+					valid = ((/^[a-z0-9_-]{6,10}$/i).test(form.username.value) && (/^([a-z0-9_\.-]+)@([\da-z\.-]+)\.([a-z\.]{2,6})$/g).test(form.email.value) && (/^[a-z0-9_-]{6,14}$/g).test(form.password.value)) ? true : false;
+					if (valid) {
+						emsg.innerHTML = "";
+						return valid;
+					} else {
+						emsg.innerHTML = "Invalid credentials supplied";
+						return valid;
+					}
+				}
