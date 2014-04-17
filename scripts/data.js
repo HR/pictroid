@@ -7,7 +7,7 @@ var asteroids = {};
 asteroids.upload = function(name, src, desc, type) {
 	var saveImage = function(file) {
 		var imgQuery = new Parse.Query(Image);
-		imgQuery.equalTo("src", "http://www.spitzer.caltech.edu/uploaded_files/graphics/square_graphics/0009/6850/sig13-010b_Tn_three.jpg?1378848106");
+		imgQuery.equalTo("src", src);
 		return imgQuery.find().then(function(results){
 			if(results.length) {
 				return "Image already exists"
