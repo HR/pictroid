@@ -13,7 +13,7 @@ var routes = require('./routes');
 var user = require('./routes/user');
 var app = express();
 var auth = require('./scripts/auth');
-var db = require('./scripts/data');
+require('./scripts/resources')
 
 
 // all environments
@@ -52,9 +52,9 @@ app.post('/signup', function(req, res) {
 	var SignUp = new auth.signup(req.body.username, req.body.password, req.body.email, res);
 });
 
-db.asteroids.query.getLatest().then(function(results) {
-	global.results = results;
+/*db.asteroids.query.getLatest().then(function(results) {
+	global.results = results;*/
 	http.createServer(app).listen(app.get('port'), function(){
 	  console.log('Express server listening on port ' + app.get('port'));
 	});
-});
+//});

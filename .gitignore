@@ -2,6 +2,7 @@ data/
 .sass-cache/
 node_modules/
 private/
+out/
 *.env
 
 .DS_Store

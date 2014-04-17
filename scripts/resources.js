@@ -35,10 +35,37 @@ flickrOAuth(function(flickr) {
         }
         photos = result.photos.photo;
         var finalResults = [];
+        sizes = [
+            {
+                name: "t",
+                size: 100
+            },
+            {
+                name: "n",
+                size: 320
+            },
+            {
+                name: "z",
+                size: 640
+            },
+            {
+                name: "b",
+                size: 1024
+            }
+        ];
         for(var i = 0; i < photos.length; i++) {
+            var files = [];
+            for(var y = 0; y < sizes.length; y++) {
+                files.push({
+                    src: "http://farm"+ photos[i].farm +".staticflickr.com/" + photos[i].server + "/" + photos[i].id + "_" + photos[i].secret + "_" + sizes[y].name + ".jpg",
+                    resolution: {
+                        x: sizes[y].size
+                    }
+                });
+            }
             finalResults.push({
                 title: photos[i].title,
-                src: "http://farm"+ photos[i].farm +".staticflickr.com/" + photos[i].server + "/" + photos[i].id + "_" + photos[i].secret + ".jpg",
+                src: files,
                 desc: ""
             });
         }
@@ -50,13 +77,12 @@ flickrOAuth(function(flickr) {
 var req = http.request({
 	host: "www.kimonolabs.com",
 	port: 80,
-	path: "/api/753j59mk?apikey="+process.env.kimonoKey,
+	path: "/api/51mcm5qm?apikey="+process.env.kimonoKey,
 	method: "GET",
 	headers: {
 		"Content-Type": "application/json"
 	}
-}, function(res)
-{
+}, function(res) {
     var output = '';
     res.setEncoding('utf8');
 
@@ -67,13 +93,32 @@ var req = http.request({
     res.on('end', function() {
         var obj = JSON.parse(output);
         if(res.statusCode === 200) {
-            var results = obj.results.collection1
+            var results = obj.results
             var finalResults = [];
-            for(var i = 0; i < results.length; i++) {
+            var counter = 0;
+            for(var i = 0; i < results.collection1.length; i++) {
+                var files = [];
+                var resolution;
+                var urlRegex = /^.+?(_[a-zA-Z]+)?\.jpg$/
+                var next = false;
+                do {
+                    resolution = results.collection2[counter].resolution;
+                    var size = resolution.text.match(/^(\d+) x (\d+) • (\d+(?:\.\d+)?) ([KM])B$/);
+                    size[3] = size[4] === "M" ? 1024 * size[3] : size[3]
+                    files.push({
+                        src: resolution.href,
+                        resolution: {
+                            x: size[1],
+                            y: size[2],
+                            size: size[3]
+                        }
+                    });
+                    counter++;
+                } while(resolution.href.match(urlRegex)[1]);
                 finalResults.push({
-                    title: results[i].Title.text,
-                    src: results[i].Thumbnail.src,
-                    desc: results[i].Description.text
+                    title: results["collection" + (4 + i)][0].Title.text,
+                    src: files,
+                    desc: results.collection3[i].text
                 });
             }
             updateDB(finalResults);
