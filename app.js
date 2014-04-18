@@ -14,7 +14,7 @@ var user = require('./routes/user');
 var app = express();
 var auth = require('./scripts/auth');
 var db = require('./scripts/data');
-//require('./scripts/resources');
+var resources = require('./scripts/resources');
 
 // all environments
 app.set('port', process.env.PORT || 3000);
@@ -52,8 +52,12 @@ app.post('/signup', function(req, res) {
 	var SignUp = new auth.signup(req.body.username, req.body.password, req.body.email, res);
 });
 app.post('/kimono_spitzer', function(req, res) {
-	console.log(req.body);
-	res.send("");
+	resources.updateKimono(req.body).then(function(){
+		res.send(arguments);
+	}, function() {
+		console.error(arguments);
+		res.send(500, arguments);
+	});
 });
 
 db.asteroids.query.getLatest(600).then(function() {

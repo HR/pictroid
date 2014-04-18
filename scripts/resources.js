@@ -1,15 +1,56 @@
 var db = require('./data');
 var http = require("http");
 var Flickr = require("flickrapi");
+var Parse = require("parse").Parse;
 
 function updateDB(results) {
+    var uploaded = [];
     for(var i = 0; i < results.length; i++) {
-        db.asteroids.upload(results[i].title, results[i].src, results[i].desc)
+        uploaded.push(db.asteroids.upload(results[i].title, results[i].src, results[i].desc).fail(function(err) {
+            if(err === "Image already exists") {
+                return Parse.Promise.as("Image already exists");
+            } else {
+                return err;
+            }
+        }));
     }
+    return Parse.Promise.when(uploaded)
+}
+
+exports.updateKimono = function(obj) {
+    var results = obj.results
+    var finalResults = [];
+    var counter = 0;
+    for(var i = 0; i < results.collection1.length; i++) {
+        var files = [];
+        var resolution;
+        var urlRegex = /^.+?(_[a-zA-Z]+)?\.jpg$/
+        var next = false;
+        do {
+            resolution = results.collection2[counter].resolution;
+            var size = resolution.text.match(/^(\d+) x (\d+) • (\d+(?:\.\d+)?) ([KM])B$/);
+            size[3] = size[4] === "M" ? 1024 * size[3] : size[3]
+            files.push({
+                src: resolution.href,
+                resolution: {
+                    width: parseFloat(size[1]),
+                    height: parseFloat(size[2]),
+                    size: parseFloat(size[3])
+                }
+            });
+            counter++;
+        } while(resolution.href.match(urlRegex)[1]);
+        finalResults.push({
+            title: results["collection" + (4 + i)][0].Title.text,
+            src: files,
+            desc: results.collection3[i].text
+        });
+    }
+    return updateDB(finalResults);
 }
 
 // flickr
-function flickrOAuth(callback) {
+/*function flickrOAuth(callback) {
     Flickr.authenticate({
         api_key: process.env.flickrKey,
         secret: process.env.flickrSecret,
@@ -71,7 +112,7 @@ flickrOAuth(function(flickr) {
         }
         updateDB(finalResults);
     });
-});
+});*/
 
 // kimono
 var req = http.request({
@@ -93,35 +134,13 @@ var req = http.request({
     res.on('end', function() {
         var obj = JSON.parse(output);
         if(res.statusCode === 200) {
-            var results = obj.results
-            var finalResults = [];
-            var counter = 0;
-            for(var i = 0; i < results.collection1.length; i++) {
-                var files = [];
-                var resolution;
-                var urlRegex = /^.+?(_[a-zA-Z]+)?\.jpg$/
-                var next = false;
-                do {
-                    resolution = results.collection2[counter].resolution;
-                    var size = resolution.text.match(/^(\d+) x (\d+) • (\d+(?:\.\d+)?) ([KM])B$/);
-                    size[3] = size[4] === "M" ? 1024 * size[3] : size[3]
-                    files.push({
-                        src: resolution.href,
-                        resolution: {
-                            width: parseFloat(size[1]),
-                            height: parseFloat(size[2]),
-                            size: parseFloat(size[3])
-                        }
-                    });
-                    counter++;
-                } while(resolution.href.match(urlRegex)[1]);
-                finalResults.push({
-                    title: results["collection" + (4 + i)][0].Title.text,
-                    src: files,
-                    desc: results.collection3[i].text
-                });
-            }
-            updateDB(finalResults);
+            /*exports.updateKimono(obj).then(function() {
+                console.log("success:");
+                console.log(arguments);
+            }, function() {
+                console.log("error:");
+                console.log(arguments);
+            });*/
         }
     });
 });
