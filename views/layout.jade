@@ -35,7 +35,7 @@ html
 		link(rel='icon', type='image/png', href='/images/favicon/favicon-32x32.png', sizes='32x32')
 		meta(name='Pictroid', content='#eee')
 		meta(name='Pictroid', content='/images/favicon/mstile-144x144.png')
-	body(style=bodyStyle)
+	body
 		//
 			script(type='text/javascript')
 				var Parse = require('parse').Parse;
@@ -50,7 +50,7 @@ html
 							}
 						});
 					}
-		div(id="wrapper")
+		div(id="wrapper", style=bodyStyle)
 			include components/header
 			block content
 		include components/footer		

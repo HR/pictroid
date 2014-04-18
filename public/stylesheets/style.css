@@ -10,9 +10,7 @@ html, body {
 	padding: 0;
 	margin: 0;
 	font: 14px "Open Sans", Helvetica, Arial, sans-serif;
-	background-color: #eee;
-	background-attachment: fixed;
-	background-size: cover;
+	background-color: #eeeeee;
 	height: 100%;
 	color: #000000;
 }
@@ -24,6 +22,8 @@ html, body {
 	margin: 0 auto -200px;
 	/* Pad bottom by footer height */
 	padding: 0 0 200px;
+	background-attachment: fixed;
+	background-size: cover;
 }
 
 a,
@@ -122,8 +122,15 @@ a:hover {
     border: none;
 }
 
-.navbar-nav .open ul a:hover {
+.navbar-nav .open ul a {
+	border-left: 2px solid transparent;
+	border-bottom: none;
+}
+
+.navbar-nav .open ul a:hover,
+.navbar-nav .open ul a:active {
     background-color: #000000 !important;
+	border-color: #a67c52;
 }
 
 .navbar-nav .open > a,
@@ -147,6 +154,42 @@ a:hover {
 	border-color: inherit;
 	padding: 5px 10px 7px;
 	margin: 9px;
+}
+
+@media (max-width: 767px) {
+	.navbar .container {
+		padding: 0;
+		margin: 0;
+	}
+	.navbar-header {
+		padding: 0 15px;
+	}
+	.navbar-collapse {
+		background-color: #252525;
+		position: absolute;
+		left: 0;
+		right: 0;
+		margin: 0 !important;
+		border: none;
+		border-bottom: 1px solid #ffffff;
+		padding: 0;
+	}
+	.navbar-nav {
+		margin: 0;
+	}
+	.navbar-nav a {
+		border-bottom: none;
+		border-left: 2px solid transparent;
+	}
+	.navbar-nav .open > a {
+		border-left: 2px solid transparent;	
+	}
+	.navbar-transparent {		
+		background: rgba(0,0,0,0.75) !important;
+	}
+	.navbar-transparent .navbar-collapse {		
+		background-color: rgba(0,0,0,0.75);
+	}
 }
 
 /* Absolute header */
@@ -333,6 +376,48 @@ form.form-transparent button:active {
 	box-shadow: 0 0 15px #000000 inner;
 	background-color: #a67c52;
 	border: none;
+}
+
+form #or {
+	text-align:center; 
+	margin: 0px; 
+	padding: 0; 
+	font-size: 1.2rem; 
+	color: #a67c52; 
+	text-shadow: 1px 0px 0px #a67c52;
+}
+
+#emsg {
+	color:#DD7674;
+}
+
+/* Dropbox Element */
+#dropbox{
+    background-color: rgba(255, 255, 255, 0.1);
+    border: 2px dashed rgba(255, 255, 255, 0.2);
+	width: 100%;
+    border-radius:2px;
+    position: relative;
+    min-height: 60px;
+    overflow: hidden;
+}
+
+#dropbox .message{
+    font-size: 11px;
+    text-align: center;
+    display: block;
+}
+
+#dropbox .message i{
+	vertical-align: center;
+    color:#ccc;
+    font-size:10px;
+}
+
+@media (max-width: 510px) {
+	#dropbox, form #or {
+		display: none;
+	}
 }
 
 /* footer */
@@ -544,11 +629,11 @@ footer .footer-logo {
 	background-color: #fff;
 	column-rule: #333;
 	border: 1px solid #eee;
-	border-radius: 5px;
+	border-radius: 3px;
 }
 
 .feed-item:hover {
-	box-shadow: 0px 2px 2px #cfcfcf;
+	box-shadow: 0px 2px 1px rgba(0,0,0,0.3);
 }
 
 .feed img {
