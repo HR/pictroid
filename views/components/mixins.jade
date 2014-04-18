@@ -12,8 +12,9 @@ mixin chickenLittle
 mixin feed()
 	.container.feed
 		each val in results
-			.feed-item
-				img(src=val.get("src"), alt='')
-				.text
-					h4=val.get("name")
-					p=val.get("description")
+			//
+				.feed-item
+					img(src=val.get("src"), alt='')
+					.text
+						h4=val.get("name")
+						p=val.get("description")
