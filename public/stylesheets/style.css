@@ -171,7 +171,6 @@ a:hover {
 		right: 0;
 		margin: 0 !important;
 		border: none;
-		border-bottom: 1px solid #ffffff;
 		padding: 0;
 	}
 	.navbar-nav {
@@ -659,7 +658,7 @@ footer .footer-logo {
 }
 
 .feed-item .text {
-	padding: 7% 5% 0% 5%;
+	padding: 4% 5% 3% 5%;
 	margin: 0px;
 }
 
@@ -688,4 +687,11 @@ footer .footer-logo {
 	height: 2px;
     border: 0; 
     border-top: 2px solid #c2c2c2;
+}
+
+@media (max-width: 450px) {
+	.container h3 {
+		margin-left: 0rem;
+		display: block;
+	}
 }
