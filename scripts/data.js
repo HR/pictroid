@@ -46,7 +46,9 @@ asteroids.upload = function(name, src, desc) {
 		for(var i = 0; i < src.length; i++) {
 			var srcReady;
 			var imgSrc = new ImageSrc();
-			imgSrc.set("resolution", JSON.stringify(src[i].resolution));
+			imgSrc.set("width", src[i].resolution.width);
+			imgSrc.set("height", src[i].resolution.height);
+			imgSrc.set("size", src[i].resolution.size);
 			imgSrc.setACL(imageACL);
 
 			if(src[i].isFile) {
@@ -77,10 +79,34 @@ asteroids.upload = function(name, src, desc) {
 }
 
 asteroids.query = {}
-asteroids.query.getLatest = function() {
+asteroids.query.getLatest = function(width) {
 	var imgQuery = new Parse.Query(Image);
 	imgQuery.ascending("createdAt");
-	return imgQuery.find();
+	return imgQuery.find().then(function(results){
+		var fileQuery;
+		var images = [];
+		for (var i = 0; i < results.length; i++) {
+			fileQuery = results[i].relation("src").query();
+			fileQuery.lessThanOrEqualTo("width", width);
+			fileQuery.descending("width");
+			(function(image) {
+				images.push(fileQuery.first().then(function(result){
+					if(!result) {
+						var fileQuery = image.relation("src").query();
+						fileQuery.ascending("width");
+						return fileQuery.first();
+					}
+					return result;
+				}).then(function(result) {
+					return {
+						image: image,
+						src: result
+					}
+				}));
+			})(results[i]);
+		};
+		return Parse.Promise.when(images);
+	});
 }
 
 exports.user = {};

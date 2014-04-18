@@ -13,8 +13,8 @@ var routes = require('./routes');
 var user = require('./routes/user');
 var app = express();
 var auth = require('./scripts/auth');
-//require('./scripts/resources')
-
+var db = require('./scripts/data');
+//require('./scripts/resources');
 
 // all environments
 app.set('port', process.env.PORT || 3000);
@@ -56,9 +56,9 @@ app.post('/kimono_spitzer', function(req, res) {
 	res.send("");
 });
 
-/*db.asteroids.query.getLatest().then(function(results) {
-	global.results = results;*/
+db.asteroids.query.getLatest(600).then(function() {
+	global.results = arguments;
 	http.createServer(app).listen(app.get('port'), function(){
 	  console.log('Express server listening on port ' + app.get('port'));
 	});
-//});
+});

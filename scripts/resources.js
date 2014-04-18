@@ -108,9 +108,9 @@ var req = http.request({
                     files.push({
                         src: resolution.href,
                         resolution: {
-                            x: size[1],
-                            y: size[2],
-                            size: size[3]
+                            width: parseFloat(size[1]),
+                            height: parseFloat(size[2]),
+                            size: parseFloat(size[3])
                         }
                     });
                     counter++;
