@@ -13,7 +13,7 @@ var routes = require('./routes');
 var user = require('./routes/user');
 var app = express();
 var auth = require('./scripts/auth');
-require('./scripts/resources')
+//require('./scripts/resources')
 
 
 // all environments
@@ -50,6 +50,10 @@ app.get('/user/:name/settings', function(req, res) {
 
 app.post('/signup', function(req, res) {
 	var SignUp = new auth.signup(req.body.username, req.body.password, req.body.email, res);
+});
+app.post('/kimono_spitzer', function(req, res) {
+	console.log(req.body);
+	res.send("");
 });
 
 /*db.asteroids.query.getLatest().then(function(results) {
