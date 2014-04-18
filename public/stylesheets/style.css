@@ -10,9 +10,7 @@ html, body {
 	padding: 0;
 	margin: 0;
 	font: 14px "Open Sans", Helvetica, Arial, sans-serif;
-	background-color: #eee;
-	background-attachment: fixed;
-	background-size: cover;
+	background-color: #eeeeee;
 	height: 100%;
 	color: #000000;
 }
@@ -24,6 +22,8 @@ html, body {
 	margin: 0 auto -200px;
 	/* Pad bottom by footer height */
 	padding: 0 0 200px;
+	background-attachment: fixed;
+	background-size: cover;
 }
 
 a,
@@ -122,8 +122,15 @@ a:hover {
     border: none;
 }
 
-.navbar-nav .open ul a:hover {
+.navbar-nav .open ul a {
+	border-left: 2px solid transparent;
+	border-bottom: none;
+}
+
+.navbar-nav .open ul a:hover,
+.navbar-nav .open ul a:active {
     background-color: #000000 !important;
+	border-color: #a67c52;
 }
 
 .navbar-nav .open > a,
@@ -147,6 +154,42 @@ a:hover {
 	border-color: inherit;
 	padding: 5px 10px 7px;
 	margin: 9px;
+}
+
+@media (max-width: 767px) {
+	.navbar .container {
+		padding: 0;
+		margin: 0;
+	}
+	.navbar-header {
+		padding: 0 15px;
+	}
+	.navbar-collapse {
+		background-color: #252525;
+		position: absolute;
+		left: 0;
+		right: 0;
+		margin: 0 !important;
+		border: none;
+		border-bottom: 1px solid #ffffff;
+		padding: 0;
+	}
+	.navbar-nav {
+		margin: 0;
+	}
+	.navbar-nav a {
+		border-bottom: none;
+		border-left: 2px solid transparent;
+	}
+	.navbar-nav .open > a {
+		border-left: 2px solid transparent;	
+	}
+	.navbar-transparent {		
+		background: rgba(0,0,0,0.75) !important;
+	}
+	.navbar-transparent .navbar-collapse {		
+		background-color: rgba(0,0,0,0.75);
+	}
 }
 
 /* Absolute header */
@@ -646,4 +689,3 @@ footer .footer-logo {
     border: 0; 
     border-top: 2px solid #c2c2c2;
 }
-
