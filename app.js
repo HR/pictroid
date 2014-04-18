@@ -37,6 +37,7 @@ app.get('/', routes.index);
 app.get('/:view', function(req, res) {
     res.render(req.params.view, { title: 'Pictroid' });
 });
+
 app.get('/pic/:id', function(req, res) {
     res.render('details', { picID: req.params.id });
 });
@@ -46,6 +47,13 @@ app.get('/user/:name', function(req, res) {
 app.get('/user/:name/settings', function(req, res) {
 	// Code to authorize
     res.render('settings', { });
+});
+
+app.post('/upload', function(req, res) {
+    // Code to handle upload
+    res.writeHead(200,{"content-type":"text/plain;charset=UTF8;"});
+    res.end("POST");
+    console.log(request.body); 
 });
 
 app.post('/signup', function(req, res) {
