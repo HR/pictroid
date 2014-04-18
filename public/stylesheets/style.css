@@ -350,7 +350,8 @@ form #or {
 
 /* Dropbox Element */
 #dropbox{
-    background-color: rgba(255, 255, 255, 0.2);
+    background-color: rgba(255, 255, 255, 0.1);
+    border: 2px dashed rgba(255, 255, 255, 0.2);
 	width: 100%;
     border-radius:2px;
     position: relative;
@@ -370,6 +371,11 @@ form #or {
     font-size:10px;
 }
 
+@media (max-width: 510px) {
+	#dropbox, form #or {
+		display: none;
+	}
+}
 
 /* footer */
 footer {
