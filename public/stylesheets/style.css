@@ -7,6 +7,7 @@
 
 /* Common */
 html, body {
+	width: 100%;
 	padding: 0;
 	margin: 0;
 	font: 14px "Open Sans", Helvetica, Arial, sans-serif;
@@ -660,6 +661,50 @@ footer .footer-logo {
 .feed-item .text {
 	padding: 4% 5% 3% 5%;
 	margin: 0px;
+}
+
+div.stats {
+	padding: 0% 5% 0% 5%;
+	margin: 0px;
+}
+
+ul.details {
+	list-style: none;
+	display: inline;
+}
+
+li.user > a:hover {
+	text-decoration: none !important;
+	font-weight: 500;
+}
+
+li.user {
+	width: 15%;
+}
+
+li.views, li.comments {
+	height: auto;
+	float: right;
+	position: relative;
+	width: auto;
+	margin-left: 12px;
+	display: inline;
+	line-height: 1;
+	color: #aaa;
+}
+
+li.views {
+	padding-left: 18px;
+	background-image: url(../images/svg/views.svg);
+	background-repeat: no-repeat;
+	background-size: 16px auto;
+}
+
+li.comments {
+	padding-left: 18px;
+	background-image: url(../images/svg/comments.svg);
+	background-repeat: no-repeat;
+	background-size: 16px auto;
 }
 
 @media all and (max-width: 800px) {
