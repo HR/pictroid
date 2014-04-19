@@ -81,7 +81,7 @@ asteroids.upload = function(name, src, desc) {
 asteroids.query = {}
 asteroids.query.getLatest = function(width) {
 	var imgQuery = new Parse.Query(Image);
-	imgQuery.ascending("createdAt");
+	imgQuery.descending("createdAt");
 	return imgQuery.find().then(function(results){
 		var fileQuery;
 		var images = [];

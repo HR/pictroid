@@ -50,29 +50,27 @@ exports.updateKimono = function(obj) {
 }
 
 // flickr
-/*function flickrOAuth(callback) {
+function flickrOAuth(callback) {
     Flickr.authenticate({
         api_key: process.env.flickrKey,
         secret: process.env.flickrSecret,
         user_id: process.env.FLICKR_USER_ID,
         access_token: process.env.FLICKR_ACCESS_TOKEN,
         access_token_secret: process.env.FLICKR_ACCESS_TOKEN_SECRET
-    }, function(err, flickr){
-        if(err) {
-            console.log(err);
-            callback(err);
-        } else {
-            callback(flickr);
-        }
-    });
+    }, callback);
 }
 
-flickrOAuth(function(flickr) {
+flickrOAuth(function(err, flickr) {
+    if(err) {
+        console.log("Flickr authentication error: " + err);
+        return;
+    }
     flickr.people.getPublicPhotos({
         user_id: flickr.options.user_id
     }, function(err, result) {
         if(err) {
-            console.log(err);
+            console.log("Error getting photos from user: " + err);
+            return;
         }
         photos = result.photos.photo;
         var finalResults = [];
@@ -100,7 +98,7 @@ flickrOAuth(function(flickr) {
                 files.push({
                     src: "http://farm"+ photos[i].farm +".staticflickr.com/" + photos[i].server + "/" + photos[i].id + "_" + photos[i].secret + "_" + sizes[y].name + ".jpg",
                     resolution: {
-                        x: sizes[y].size
+                        width: sizes[y].size
                     }
                 });
             }
@@ -112,7 +110,7 @@ flickrOAuth(function(flickr) {
         }
         updateDB(finalResults);
     });
-});*/
+});
 
 // kimono
 var req = http.request({
