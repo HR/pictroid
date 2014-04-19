@@ -162,7 +162,7 @@ a:hover {
 		margin: 0;
 	}
 	.navbar-header {
-		padding: 0 15px;
+		margin: 0 !important;
 	}
 	.navbar-collapse {
 		background-color: #252525;
