@@ -15,6 +15,7 @@ var app = express();
 var auth = require('./scripts/auth');
 var db = require('./scripts/data');
 var resources = require('./scripts/resources');
+var newrelic = require('newrelic');
 
 // all environments
 app.set('port', process.env.PORT || 3000);

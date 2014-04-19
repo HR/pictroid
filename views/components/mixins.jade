@@ -14,6 +14,15 @@ mixin feed()
 		each val in results
 			.feed-item
 				img(src=val.src.get("src"), alt='')
+				.stats
+					ul(class="details")
+						li(class="user")
+							a(href="#")
+								| User01
+						li(class="views")
+							| 532
+						li(class="comments")
+							| 23
 				.text
 					h4=val.image.get("name")
 					p=val.image.get("description")
