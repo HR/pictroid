@@ -23,8 +23,6 @@ html, body {
 	margin: 0 auto -200px;
 	/* Pad bottom by footer height */
 	padding: 0 0 200px;
-	background-attachment: fixed;
-	background-size: cover;
 }
 
 a,
@@ -82,6 +80,13 @@ a:hover {
 	margin-left: 9px;
 }
 
+.background-wallpaper {
+	background-image: url(/images/wallpapers/default.jpg);
+	background-repeat: no-repeat;
+	background-size: cover;
+	background-attachment: fixed;
+}
+
 /* Header */
 .navbar {
     background-color: #252525;
@@ -89,7 +94,6 @@ a:hover {
     border: none;
     border-radius: 0;
     margin-bottom: 0;
-    padding-left: 15px;
 }
 
 .navbar-collapse {
@@ -157,11 +161,11 @@ a:hover {
 	margin: 9px;
 }
 
+.navbar-toggle {
+	margin-right: 0;
+}
+
 @media (max-width: 767px) {
-	.navbar .container {
-		padding: 0;
-		margin: 0;
-	}
 	.navbar-header {
 		margin: 0 !important;
 	}
@@ -260,11 +264,6 @@ a:hover {
 
 .jumbotron.center {
 	text-align: center;
-}
-
-.jumbotron.fixed-background {
-	background-attachment: fixed;
-	background-size: cover;
 }
 
 /* Profile */
@@ -681,20 +680,18 @@ li.views, li.comments {
 	display: inline;
 	line-height: 1;
 	color: #666;
+	background-position: left center;
+	padding-left: 20px;
+	background-repeat: no-repeat;
+	background-size: 16px auto;
 }
 
 li.views {
-	padding-left: 18px;
 	background-image: url(../images/svg/views.svg);
-	background-repeat: no-repeat;
-	background-size: 16px auto;
 }
 
 li.comments {
-	padding-left: 18px;
 	background-image: url(../images/svg/comments.svg);
-	background-repeat: no-repeat;
-	background-size: 16px auto;
 }
 
 @media all and (max-width: 800px) {

@@ -12,17 +12,17 @@ div.navbar.navbar-default(role='navigation', class=headerClasses)
 				li
 					a(href="/") Home
 				li
-					a.dropdown-toggle(href="#", data-toggle="dropdown") Browse 
+					a.dropdown-toggle(href="#", data-toggle="dropdown") Explore 
 						b.caret
 					ul.dropdown-menu
 						li
-							a(href="/browse?sort=popular") Popular
+							a(href="/explore?sort=popular") Popular
 						li
-							a(href="/browse?sort=rated") Highest Rated
+							a(href="/explore?sort=rated") Highest Rated
 						li
-							a(href="/browse?sort=latest") Latest feed
+							a(href="/explore?sort=latest") Latest feed
 						li
-							a(href="/browse?sort=categories") Categories
+							a(href="/explore?sort=categories") Categories
 				if authed
 					li
 						a(href="/upload") Upload

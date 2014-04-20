@@ -1,7 +1,7 @@
 extends layout
 
 block head
-	title Browse | Pictroid
+	title Explore | Pictroid
 	
 block variables
 	- var headerClasses = 'navbar-absolute'
@@ -12,10 +12,10 @@ block content
 		br
 		.container
 			h3
-				a(href="/browse?sort=popular") Popular
+				a(href="/explore?sort=popular") Popular
 			h3
-				a(href="/browse?sort=rated") Highest Rated
+				a(href="/explore?sort=rated") Highest Rated
 			h3
-				a(href="/browse?sort=latest") Latest
+				a(href="/explore?sort=latest") Latest
 			hr
 		+feed()
