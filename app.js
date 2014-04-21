@@ -35,10 +35,9 @@ if ('development' == app.get('env')) {
 }
 
 app.get('/', routes.index);
-app.get('/:view', function(req, res) {
-    res.render(req.params.view, { title: 'Pictroid' });
+app.get('/explore/:filter?', function(req, res) {
+    res.render('explore', { filter: req.params.filter });
 });
-
 app.get('/pic/:id', function(req, res) {
     res.render('details', { picID: req.params.id });
 });
@@ -49,17 +48,10 @@ app.get('/user/:name/settings', function(req, res) {
 	// Code to authorize
     res.render('settings', { });
 });
-
-app.post('/upload', function(req, res) {
-    // Code to handle upload
-    res.writeHead(200,{"content-type":"text/plain;charset=UTF8;"});
-    res.end("POST");
-    console.log(request.body); 
+app.get('/:view', function(req, res) {
+    res.render(req.params.view, { title: 'Pictroid' });
 });
 
-app.post('/signup', function(req, res) {
-	var SignUp = new auth.signup(req.body.username, req.body.password, req.body.email, res);
-});
 app.post('/kimono_spitzer', function(req, res) {
 	resources.updateKimono(req.body).then(function(){
 		res.send(arguments);
@@ -67,6 +59,15 @@ app.post('/kimono_spitzer', function(req, res) {
 		console.error(arguments);
 		res.send(500, arguments);
 	});
+});
+app.post('/signup', function(req, res) {
+	var SignUp = new auth.signup(req.body.username, req.body.password, req.body.email, res);
+});
+app.post('/upload', function(req, res) {
+    // Code to handle upload
+    res.writeHead(200,{"content-type":"text/plain;charset=UTF8;"});
+    res.end("POST");
+    console.log(request.body); 
 });
 
 db.asteroids.query.getLatest(600).then(function() {

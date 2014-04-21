@@ -85,6 +85,7 @@ a:hover {
 	background-repeat: no-repeat;
 	background-size: cover;
 	background-attachment: fixed;
+	background-position: top center;
 }
 
 /* Header */
