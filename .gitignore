@@ -5,6 +5,7 @@ private/
 out/
 *.env
 *.log
+*.codio
 .DS_Store
 ._.DS_Store
 .db

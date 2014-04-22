@@ -60,9 +60,15 @@ app.post('/kimono_spitzer', function(req, res) {
 		res.send(500, arguments);
 	});
 });
+
 app.post('/signup', function(req, res) {
 	var SignUp = new auth.signup(req.body.username, req.body.password, req.body.email, res);
 });
+
+app.get('/verify_email', function(req, res) {
+	res.render('user', { user_email: req.params.email });
+});
+
 app.post('/upload', function(req, res) {
     // Code to handle upload
     res.writeHead(200,{"content-type":"text/plain;charset=UTF8;"});
