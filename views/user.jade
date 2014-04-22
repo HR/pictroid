@@ -3,20 +3,20 @@ extends layout
 block head
 	title= username+'\'s Profile | Pictroid'
 
-block variables
-	- var headerClasses = 'navbar-absolute'
-
 block content
+	+chickenLittle()
 	.page
-		.jumbotron.profile-page.dark
-			.profile-container
-				.profile-info
-					img.profile-info-picture(src="", alt="Profile Picture")
-					.profile-info-text
-						.profile-name= '@'+username
-						hr
-						p Joined on: 
-						p Asteroids submitted: 
-						p Total views: 
-				.profile-pics
-					+feed()
+		.container.profile-container
+			.profile-info
+				img.profile-info-picture(src="", alt="")
+				.profile-info-text
+					.profile-name= username
+					p Arizona, USA
+					p Pics: 12
+					p Profile Views: 432
+					p Joined 2 years ago
+			.profile-pics
+				h3
+					a(href="#") Pics
+				hr
+				+feed()

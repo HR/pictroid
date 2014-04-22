@@ -1,10 +1,11 @@
 extends layout
 
 block variables
+	- var bodyClasses = 'background-wallpaper'
 	- var headerClasses = 'navbar-absolute navbar-transparent'
 
 block content
-	.jumbotron.dark.center.background-wallpaper
+	.jumbotron.transparent.center
 		.container
 			img(src="/images/logo/icon.png", alt="Pictroid", height="200")
 			h2 Welcome to Pictroid!
@@ -19,4 +20,4 @@ block content
 			h3
 				a(href="/explore/popular") Popular
 			hr
-		+feed()
+			+feed()

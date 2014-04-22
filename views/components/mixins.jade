@@ -1,5 +1,5 @@
 mixin chickenLittle
-	.jumbotron.dark.center.background-wallpaper(style="padding-top: 60px; padding-bottom: 10px;")
+	.banner.background-wallpaper
 		.container
 			| The sky is falling, but you can help!  Post a pic to help us track Near-Earth Objects and save the chickens from destruction.&nbsp;&nbsp;
 			if authed
@@ -10,7 +10,7 @@ mixin chickenLittle
 				a.btn.clear(href="/signup") Sign Up
 			
 mixin feed()
-	.container.feed
+	.feed
 		each val in results
 			.feed-item
 				img(src=val.src.get("src"), alt='')
