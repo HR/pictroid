@@ -86,6 +86,7 @@ a:hover {
 	background-size: cover;
 	background-attachment: fixed;
 	background-position: top center;
+	background-color: #000000;
 }
 
 .banner {
