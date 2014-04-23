@@ -8,16 +8,16 @@ block variables
 	- var headerClasses = 'navbar-fixed-top navbar-transparent'
 
 block content
-	form.form-signin.form-transparent(role="form", action="", method="POST", onsubmit="return(validate());")
+	form.form-signin.form-transparent(role="form", action="/signin", method="POST", onsubmit="return(validate());")
 		img(src="/images/logo/icon.png", alt="Pictroid", height="75")
 		hr
-		input.form-control(type="hidden", name="_csrf", value="#{csrftoken}")
+		//- input.form-control(type="hidden", name="_csrf", value="#{csrftoken}")
 		input.form-control(type="text", name="username", placeholder="Username")
 		input.form-control(type="password", name="password", placeholder="Password")
 		p(id="emsg" style="color:#DD7674;")			
-		//
+		//-
 			p
-				| Forgot password?	Then <a href="/signin/reset">Reset Password</a>
+				| Forgot password?  Then <a href="/signin/reset">Reset Password</a>
 			br
 		button.btn.btn-lg.btn-primary.btn-block(type="submit") Sign In
 		br

@@ -6,6 +6,13 @@ block head
 block content
 	.page
 		.container
-			h1 Thanks for confirming your email #{username}
+			h1 Thanks for confirming your email <span style="color:#a67c52"> #{username} </span>
 			hr(style="height:1px;")
-			p Please <a href="/signin">Sign In</a> now
+			p You will be now redirected to <a href="/signin">Sign In</a> automatically...
+			p If this doesn't work then please follow this <a href="/signin">Sign In Link</a>
+	script.
+		setTimeout(function(){
+			window.location.replace("/signin");
+			},
+			3000
+		);
