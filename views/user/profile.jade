@@ -1,0 +1,22 @@
+extends layout
+
+block head
+	title= username+'\'s Profile | Pictroid'
+
+block content
+	+chickenLittle()
+	.page
+		.container.profile-container
+			.profile-info
+				img.profile-info-picture(src="", alt="")
+				.profile-info-text
+					.profile-name= username
+					p Arizona, USA
+					p Explorer
+					p 12 Pictroids
+					p 432 Views
+			.profile-pics
+				h3
+					a(href="#") Pics
+				hr
+				+feed()
