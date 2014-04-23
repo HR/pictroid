@@ -4,17 +4,18 @@
  */
 
 //var db =  monk('localhost:27017/test');
-var express = require('express');
-var http = require('http');
-var mongo = require('mongodb');
-var monk = require('monk');
-var path = require('path');
-var routes = require('./routes');
-var app = express();
-var auth = require('./scripts/auth');
-var db = require('./scripts/data');
-var resources = require('./scripts/resources');
-var newrelic = require('newrelic');
+var express = require('express'),
+    http = require('http'),
+    mongo = require('mongodb'),
+    monk = require('monk'),
+    path = require('path'),
+    routes = require('./routes'),
+    app = express(),
+    auth = require('./scripts/auth'),
+    db = require('./scripts/data'),
+    resources = require('./scripts/resources'),
+    newrelic = require('newrelic'),
+    helmet = require('helmet');
 
 // all environments
 app.set('port', process.env.PORT || 3000);
@@ -24,10 +25,23 @@ app.use(express.favicon());
 app.use(express.logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded());
+app.use(helmet.xframe());
+app.use(helmet.iexss());
+app.use(helmet.contentTypeOptions());
+app.use(helmet.cacheControl());
 app.use(express.methodOverride());
-app.use(app.router);
-app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.cookieParser(process.env.cpsKey));
+app.use(express.session({
+  secret: process.env.sKey,
+  key: 'sid',
+    cookie: {httpOnly: true, secure: true}
+}));
 
+app.use(express.csrf());
+app.use(function (req, res, next) {
+  res.locals.csrftoken = req.csrfToken();
+  next();
+});
 // development only
 if ('development' == app.get('env')) {
   app.use(express.errorHandler());

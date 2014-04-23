@@ -18,6 +18,7 @@
     "parse": "*",
     "request": "*",
     "sass": "*",
-    "flickrapi": "~0.3.14"
+    "flickrapi": "~0.3.14",
+    "helmet": "*"
   }
 }

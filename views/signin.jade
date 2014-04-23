@@ -12,6 +12,7 @@ block content
 		form.form-signin.form-transparent(role="form", action="", method="POST", onsubmit="return(validate());")
 			img(src="/images/logo/icon.png", alt="Pictroid", height="75")
 			hr
+            input.form-control(type="hidden", name="_csrf", value="#{csrftoken}")
 			input.form-control(type="text", name="username", placeholder="Username")
 			input.form-control(type="password", name="password", placeholder="Password")
 			p(id="emsg" style="color:#DD7674;")			
