@@ -19,29 +19,30 @@ var express = require('express'),
 
 // all environments
 app.set('port', process.env.PORT || 3000);
-app.set('views', path.join(__dirname, 'views'));
+app.use(express.static(path.join(__dirname, 'public')));
 app.set('view engine', 'jade');
+app.use(app.router);
 app.use(express.favicon());
 app.use(express.logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded());
-app.use(helmet.xframe());
-app.use(helmet.iexss());
-app.use(helmet.contentTypeOptions());
-app.use(helmet.cacheControl());
 app.use(express.methodOverride());
-app.use(express.cookieParser(process.env.cpsKey));
-app.use(express.session({
-  secret: process.env.sKey,
-  key: 'sid',
-    cookie: {httpOnly: true, secure: true}
-}));
+// app.use(helmet.xframe());
+// app.use(helmet.iexss());
+// app.use(helmet.contentTypeOptions());
+// app.use(helmet.cacheControl());
+// app.use(express.cookieParser(process.env.cpsKey));
+// app.use(express.session({
+//   secret: process.env.sKey,
+//   key: 'sid',
+//     cookie: {httpOnly: true, secure: true}
+// }));
 
-app.use(express.csrf());
-app.use(function (req, res, next) {
-  res.locals.csrftoken = req.csrfToken();
-  next();
-});
+// app.use(express.csrf());
+// app.use(function (req, res, next) {
+//   res.locals.csrftoken = req.csrfToken();
+//   next();
+// });
 // development only
 if ('development' == app.get('env')) {
   app.use(express.errorHandler());
