@@ -15,7 +15,8 @@ var express = require('express'),
     db = require('./scripts/data'),
     resources = require('./scripts/resources'),
     newrelic = require('newrelic'),
-    helmet = require('helmet');
+    helmet = require('helmet'),
+    url = require('url');
 
 // all environments
 app.set('port', process.env.PORT || 3000);
@@ -62,6 +63,15 @@ app.get('/user/:name/settings', function(req, res) {
 	// Code to authorize
     res.render('settings', { });
 });
+
+app.get('/email_confirmed', function(req, res) {
+    if(req.query.username){
+	    res.render('email_confirmed', { username : req.query.username });
+    } else {
+    	res.redirect('/');
+    }
+});
+
 app.get('/:view', function(req, res) {
     res.render(req.params.view, { title: 'Pictroid' });
 });
@@ -99,16 +109,6 @@ app.post('/signup', function(req, res) {
 			}
 		}
 	});
-});
-
-
-app.get('/email_confirmed', function(req, res) {
-    if(req.headers['referer'].substr(0, document.referrer.indexOf("com")+3)==="https//wwww.parse.com"){
-	    res.render('email_confirmed', { username : req.query.username });
-        setTimeout(res.redirect('/get-started'), 5000);
-    } else {
-        res.redirect('/get-started');
-    }
 });
 
 app.post('/upload', function(req, res) {
