@@ -1,4 +1,4 @@
-extends layout
+extends ../layout
 
 block head
 	title Settings | Pictroid
@@ -8,17 +8,16 @@ block variables
 	- var headerClasses = 'navbar-fixed-top navbar-transparent'
 
 block content
-	.jumbotron.transparent.center
-		form.form-settings.form-transparent(role="form", action="", method="POST")
-			img(src="/images/logo/icon.png", alt="Pictroid", height="75")
-			hr
-			.settings-combo
-				img.settings-picture(src="", alt="Profile Picture")
-				.settings-sidebar
-					input.form-control(type="text", name="username", placeholder="Username")
-					input.form-control(type="email", name="email", placeholder="Email")
-					a.btn.btn-block#settings-picture-change Change Picture
-			hr
-			input.form-control(type="password", name="password", placeholder="New Password")
-			input.form-control(type="password", name="password-confirm", placeholder="Confirm Password")
-			button.btn.btn-lg.btn-block(type="submit") Update
+	form.form-settings.form-transparent(role="form", action="", method="POST")
+		img(src="/images/logo/icon.png", alt="Pictroid", height="75")
+		hr
+		.settings-combo
+			img.settings-picture(src="", alt="")
+			.settings-sidebar
+				input.form-control(type="text", name="username", placeholder="Username")
+				input.form-control(type="email", name="email", placeholder="Email")
+				a.btn.btn-block#settings-picture-change Change Picture
+		hr
+		input.form-control(type="password", name="password", placeholder="New Password")
+		input.form-control(type="password", name="password-confirm", placeholder="Confirm Password")
+		button.btn.btn-lg.btn-block(type="submit") Update

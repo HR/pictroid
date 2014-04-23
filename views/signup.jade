@@ -8,34 +8,33 @@ block variables
 	- var headerClasses = 'navbar-fixed-top navbar-transparent'
 
 block content
-	.jumbotron.transparent.center
-		form.form-signin.form-transparent(role="form", action="/signup", method="POST", onsubmit="return(validate());")
-			img(src="/images/logo/icon.png", alt="Pictroid", height="75")
-			hr
-			input.form-control(type="text", name="username", placeholder="Username")
-			input.form-control(type="email", name="email", placeholder="Email")
-			input.form-control(type="password", name="password", placeholder="Password")
-			input.form-control(type="password", name="passwordconfirm", placeholder="Confirm password")
-			p(id="emsg" style="color:#DD7674;")
-			button.btn.btn-lg.btn-primary.btn-block(type="submit") Sign Up
-			br
-			p(style="text-align: center;")
-				| Already have an account?  Then <a href="/signin">Sign In</a>
-			script.
-				function validate(){
-					var valid = false,
-						form = window.document.forms[0],
-						emsg = window.document.querySelectorAll("#emsg")[0];
-					if ((/^[a-z0-9_-]{6,10}$/i).test(form.username.value) && (/^([a-z0-9_\.-]+)@([\da-z\.-]+)\.([a-z\.]{2,6})$/g).test(form.email.value) && (/^[a-z0-9_-]{6,14}$/g).test(form.password.value)) {
-						valid = (form.password.value === form.passwordconfirm.value) ? true : false;
-					} else {
-						valid = false;
-					}
-					if (valid) {
-						emsg.innerHTML = "";
-						return valid;
-					} else {
-						emsg.innerHTML = "Invalid credentials supplied";
-						return valid;
-					}
+	form.form-signin.form-transparent(role="form", action="/signup", method="POST", onsubmit="return(validate());")
+		img(src="/images/logo/icon.png", alt="Pictroid", height="75")
+		hr
+		input.form-control(type="text", name="username", placeholder="Username")
+		input.form-control(type="email", name="email", placeholder="Email")
+		input.form-control(type="password", name="password", placeholder="Password")
+		input.form-control(type="password", name="passwordconfirm", placeholder="Confirm password")
+		p(id="emsg" style="color:#DD7674;")
+		button.btn.btn-lg.btn-primary.btn-block(type="submit") Sign Up
+		br
+		p(style="text-align: center;")
+			| Already have an account?  Then <a href="/signin">Sign In</a>
+		script.
+			function validate(){
+				var valid = false,
+					form = window.document.forms[0],
+					emsg = window.document.querySelectorAll("#emsg")[0];
+				if ((/^[a-z0-9_-]{6,10}$/i).test(form.username.value) && (/^([a-z0-9_\.-]+)@([\da-z\.-]+)\.([a-z\.]{2,6})$/g).test(form.email.value) && (/^[a-z0-9_-]{6,14}$/g).test(form.password.value)) {
+					valid = (form.password.value === form.passwordconfirm.value) ? true : false;
+				} else {
+					valid = false;
 				}
+				if (valid) {
+					emsg.innerHTML = "";
+					return valid;
+				} else {
+					emsg.innerHTML = "Invalid credentials supplied";
+					return valid;
+				}
+			}

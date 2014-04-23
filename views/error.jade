@@ -1,0 +1,19 @@
+extends layout
+
+block head
+	title= error+" Error | Pictroid"
+
+block variables
+	- var bodyClasses = "background-wallpaper"
+	- var headerClasses = 'navbar-fixed-top navbar-transparent'
+
+block content
+	.jumbotron.transparent.center
+		h1(style="font-size: 100px;") 
+			| 4
+			img(src="/images/logo/icon.png", alt="0", height="100", style="vertical-align: -15px; margin: 0 5px;")
+			| 4
+		if error == 404
+			p The universe does not contain the page you were looking for.  Please 
+				a(href="/") return to our home base
+				| .

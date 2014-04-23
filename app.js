@@ -48,24 +48,38 @@ if ('development' == app.get('env')) {
   app.use(express.errorHandler());
 }
 
+// Get
 app.get('/', routes.index);
+app.get('/about', function(req, res) {
+    res.render('about');
+});
 app.get('/explore/:filter?', function(req, res) {
     res.render('explore', { filter: req.params.filter });
 });
 app.get('/pic/:id', function(req, res) {
     res.render('details', { picID: req.params.id });
 });
+app.get('/signin', function(req, res) {
+    res.render('signin');
+});
+app.get('/signup', function(req, res) {
+    res.render('signup');
+});
+app.get('/upload', function(req, res) {
+    res.render('user/upload');
+});
 app.get('/user/:name', function(req, res) {
-    res.render('user', { username: req.params.name });
+    res.render('user/profile', { username: req.params.name });
 });
 app.get('/user/:name/settings', function(req, res) {
 	// Code to authorize
-    res.render('settings', { });
+    res.render('user/settings', { });
 });
-app.get('/:view', function(req, res) {
-    res.render(req.params.view, { title: 'Pictroid' });
+app.get('/*', function(req, res) {
+    res.render('error', { error: '404' });
 });
 
+// Post
 app.post('/kimono_spitzer', function(req, res) {
 	resources.updateKimono(req.body).then(function(){
 		res.send(arguments);

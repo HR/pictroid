@@ -1,4 +1,4 @@
-extends layout
+extends ../layout
 
 block head
 	title Upload | Pictroid
@@ -9,53 +9,52 @@ block variables
 	- var charCount = 1000
 
 block content
-	.jumbotron.transparent.center
-		form.form-transparent(role="form", action="/upload", method="POST", onsubmit="return(validate());")
-			img(src="/images/logo/icon.png", alt="Pictroid", height="75")
-			hr
-			#dropbox
-				span.message
-					| Drop images here to upload.
-					br
-					i (they will only be visible to you)
-			p(id="or")
-				| OR
-			input.form-control(type="file", id="image", name="image")
-			textarea.form-control(type="text", name="description", placeholder="Description" row="20")
-			p(style="text-align:right; padding: 0px;")
-				| You have #{charCount} characters left
-			input.form-control(type="text", name="tags", placeholder="#Tags")
-			p(id="emsg")
-			button.btn.btn-lg.btn-primary.btn-block(type="submit") Upload
-			script.
-				function validate(){
-					var valid = false,
-						form = window.document.forms[0],
-						emsg = window.document.querySelectorAll("#emsg")[0],
-						fileName = $(form.image).val(),
-						imgSize = (imgSize) ? readImage($("#image")[0].files[0]) : false; 
-					if((/^.{0,1000}$/g).test(form.description.value) && ( /^([A-Z0-9]{2,9},{1}(\s{1})?)+([A-Z0-9]{2,9})$/ig).test(form.tags.value)){
-						switch(fileName.length-3) {
-							case fileName.lastIndexOf("gif"): 
-								valid = true;
-								break;
-							case fileName.lastIndexOf("png"): 
-								valid = true;
-								break;
-							case fileName.lastIndexOf("jpeg"): 
-								valid = true;
-								break;
-							case fileName.lastIndexOf("jpg"): 
-								valid = true;
-								break;
-							default:
-								valid = false;
-					}
-					if (valid) {
-						emsg.innerHTML = "";
-						return valid;
-					} else {
-						emsg.innerHTML = "Invalid credentials supplied";
-						return valid;
-					}
+	form.form-transparent(role="form", action="/upload", method="POST", onsubmit="return(validate());")
+		img(src="/images/logo/icon.png", alt="Pictroid", height="75")
+		hr
+		#dropbox
+			span.message
+				| Drop images here to upload.
+				br
+				i (they will only be visible to you)
+		p(id="or")
+			| OR
+		input.form-control(type="file", id="image", name="image")
+		textarea.form-control(type="text", name="description", placeholder="Description" row="20")
+		p(style="text-align:right; padding: 0px;")
+			| You have #{charCount} characters left
+		input.form-control(type="text", name="tags", placeholder="#Tags")
+		p(id="emsg")
+		button.btn.btn-lg.btn-primary.btn-block(type="submit") Upload
+		script.
+			function validate(){
+				var valid = false,
+					form = window.document.forms[0],
+					emsg = window.document.querySelectorAll("#emsg")[0],
+					fileName = $(form.image).val(),
+					imgSize = (imgSize) ? readImage($("#image")[0].files[0]) : false; 
+				if((/^.{0,1000}$/g).test(form.description.value) && ( /^([A-Z0-9]{2,9},{1}(\s{1})?)+([A-Z0-9]{2,9})$/ig).test(form.tags.value)){
+					switch(fileName.length-3) {
+						case fileName.lastIndexOf("gif"): 
+							valid = true;
+							break;
+						case fileName.lastIndexOf("png"): 
+							valid = true;
+							break;
+						case fileName.lastIndexOf("jpeg"): 
+							valid = true;
+							break;
+						case fileName.lastIndexOf("jpg"): 
+							valid = true;
+							break;
+						default:
+							valid = false;
 				}
+				if (valid) {
+					emsg.innerHTML = "";
+					return valid;
+				} else {
+					emsg.innerHTML = "Invalid credentials supplied";
+					return valid;
+				}
+			}

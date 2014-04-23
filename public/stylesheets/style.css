@@ -36,7 +36,7 @@ a:hover {
 	border: none;
 	color: #ffffff;
 	border-radius: 2px;
-    text-shadow: none !important;
+    text-shadow: none;
 }
 
 .btn:hover,
@@ -53,27 +53,6 @@ a:hover {
 	border: none;
 	outline: none;
 	color: #ffffff;
-}
-
-.btn.clear {
-	border: 1px solid;
-	border-color: inherit;
-	color: inherit;
-	background-color: transparent;
-	border-radius: 4px;
-    text-shadow: 0 0 2px #000;
-}
-
-.btn.clear:hover,
-.btn.clear:focus,
-.btn.clear:active:focus {
-	color: #ffffff;
-    border-color: #a67c52;
-	outline: none;
-}
-
-.btn.clear:active {
-	background-color: rgba(255, 255, 255, 0.2);
 }
 
 .btn + .btn {	
@@ -94,6 +73,41 @@ a:hover {
 	padding: 10px;
 	text-align: center;
 	text-shadow: 0 0 5px #000000;
+}
+
+/* Transparent */
+.transparent a {
+	color: #ffffff;
+	text-shadow: 0 0 5px #000000;
+	text-decoration: underline;	
+}
+
+.transparent .btn,
+.btn.clear {
+	border: 1px solid;
+	border-color: inherit;
+	color: inherit;
+	background-color: transparent;
+	border-radius: 4px;
+    text-shadow: 0 0 5px #000000;
+    box-shadow: 0 0 5px #000000, inset 0 0 5px #000000;
+	text-decoration: none;	
+}
+
+.transparent .btn:hover,
+.transparent .btn:focus,
+.transparent .btn:active:focus,
+.btn.clear:hover,
+.btn.clear:focus,
+.btn.clear:active:focus {
+	color: #ffffff;
+    border-color: #a67c52;
+	outline: none;
+}
+
+.transparent .btn:active,
+.btn.clear:active {
+	background-color: rgba(255, 255, 255, 0.2);
 }
 
 /* Header */
@@ -314,6 +328,8 @@ form.form-transparent {
 	box-shadow: 0 0 50px #000000;
 	font-size: 12px;
 	text-shadow: none;
+	color: #ffffff;
+	text-align: center;
 }
 
 form.form-transparent hr {
@@ -497,10 +513,11 @@ footer .footer-logo {
 }
 
 .settings-picture {
-	height: 100px;
-	width: 100px;
+	height: 110px;
+	width: 110px;
 	position: absolute;
 	left: 0;
+	background-color: #999999;
 }
 
 .settings-sidebar {
