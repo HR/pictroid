@@ -15,19 +15,18 @@ var express = require('express'),
     db = require('./scripts/data'),
     resources = require('./scripts/resources'),
     newrelic = require('newrelic'),
-    helmet = require('helmet'),
-    url = require('url');
+    helmet = require('helmet');
 
 // all environments
 app.set('port', process.env.PORT || 3000);
 app.use(express.static(path.join(__dirname, 'public')));
 app.set('view engine', 'jade');
-app.use(app.router);
-app.use(express.favicon());
 app.use(express.logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded());
 app.use(express.methodOverride());
+app.use(app.router);
+app.use(express.bodyParser());
 // app.use(helmet.xframe());
 // app.use(helmet.iexss());
 // app.use(helmet.contentTypeOptions());
@@ -89,13 +88,10 @@ app.post('/signup', function(req, res) {
 	// var SignUp = new auth.signup(req.body.username, req.body.password, req.body.email, res);
 	var Parse = require('parse').Parse;
 	Parse.initialize(process.env.parseID, process.env.parseJavascriptKey, process.env.parseMasterKey);
-
 	var user = new Parse.User();
-
 	user.set("username", req.body.username);
 	user.set("password", req.body.password);
 	user.set("email", req.body.email);
-
 	user.signUp(null, {
 		success: function(user) {
 			// Redirect to email confirmation page
@@ -108,6 +104,26 @@ app.post('/signup', function(req, res) {
 				window.document.getElementById('emsg').innerHTML=error.message;
 			}
 		}
+	});
+});
+
+app.post('/signin', function(req, res) {
+	var util = require('util');
+	var Parse = require('parse').Parse;
+	Parse.initialize(process.env.parseID, process.env.parseJavascriptKey, process.env.parseMasterKey);
+	console.log(util.inspect(req, false, null));
+	Parse.User.logIn(req.body.username, req.body.password, {
+	  success: function(user) {
+	    // Do stuff after successful login.
+	    var query = new Parse.Query(user);
+	    if (query.equalTo("SignIn", "")) {
+	    	res.render('explore');
+	    };
+	  },
+	  error: function(user, error) {
+	    // The login failed. Check error to see why.
+	    console.log("Error: " + error.code + " " + error.message);
+	  }
 	});
 });
 
