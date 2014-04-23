@@ -347,7 +347,13 @@ form.form-transparent a {
 	text-shadow: 0 0 5px #000000;
 }
 
-form.form-transparent input, form.form-transparent textarea {
+#username {
+	padding-top-top: 0px !important; 
+	font-size: 1.2rem;
+	vertical-align: middle;
+}
+
+form.form-transparent input, form.form-transparent textarea, #username {
 	background-color: rgba(255, 255, 255, 0.2);
 	margin: 5px 0;
 	box-shadow: none;

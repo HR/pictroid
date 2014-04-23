@@ -15,7 +15,8 @@ var express = require('express'),
     db = require('./scripts/data'),
     resources = require('./scripts/resources'),
     newrelic = require('newrelic'),
-    helmet = require('helmet');
+    helmet = require('helmet'),
+    moment = require('moment');
 
 // all environments
 app.set('port', process.env.PORT || 3000);
@@ -79,8 +80,15 @@ app.get('/user/:name', function(req, res) {
     res.render('user/profile', { username: req.params.name });
 });
 app.get('/user/:name/settings', function(req, res) {
+	var Parse = require('parse').Parse;
+	Parse.initialize(process.env.parseID, process.env.parseJavascriptKey, process.env.parseMasterKey);
+	var currentUser = Parse.User.current();
 	// Code to authorize
-    res.render('user/settings', { });
+	if (currentUser) {
+		res.render('user/settings', { username:currentUser.attributes.username, email:currentUser.attributes.email});
+	} else {
+		res.redirect('/signin');
+	};
 });
 app.get('/*', function(req, res) {
     res.render('error', { error: '404' });
@@ -126,10 +134,11 @@ app.post('/signin', function(req, res) {
 	Parse.User.logIn(req.body.username, req.body.password, {
 	  success: function(user) {
 	    // Do stuff after successful login.
-	    // var user = Parse.Object.extend("User");
-	    // var query = new Parse.Query(User);
 	    if (user.attributes.lastSignIn == undefined) {
-	    	res.render('explore');
+	    	// TO DO 
+			// set date for last login  using moment with format "yyyy'-'MM'-'dd'T'HH':'mm':'ss.SSS'Z'"
+	    	// user.set("lastSignIn", moment().format('MMMM Do YYYY, h:mm:ss a'));
+	    	res.redirect('/user/'+user.attributes.username+'/settings');
 	    };
 	  },
 	  error: function(user, error) {

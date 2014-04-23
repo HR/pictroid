@@ -9,7 +9,7 @@
   "dependencies": {
     "bower": "*",
     "express": "3.5.1",
-    "flickrapi": "*",
+    "flickrapi": "~0.3.14",
     "grunt-cli": "*",
     "jade": "*",
     "mongodb": "*",
@@ -18,7 +18,7 @@
     "parse": "*",
     "request": "*",
     "sass": "*",
-    "flickrapi": "~0.3.14",
-    "helmet": "*"
+    "helmet": "*",
+    "moment": "^2.6.0"
   }
 }

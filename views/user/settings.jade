@@ -8,14 +8,14 @@ block variables
 	- var headerClasses = 'navbar-fixed-top navbar-transparent'
 
 block content
-	form.form-settings.form-transparent(role="form", action="", method="POST")
+	form.form-settings.form-transparent(role="form", action="/settings", method="POST")
 		img(src="/images/logo/icon.png", alt="Pictroid", height="75")
 		hr
 		.settings-combo
 			img.settings-picture(src="", alt="")
 			.settings-sidebar
-				input.form-control(type="text", name="username", placeholder="Username")
-				input.form-control(type="email", name="email", placeholder="Email")
+				p.form-control(id="username") #{username}
+				input.form-control(type="email", name="email", placeholder='#{email}')
 				a.btn.btn-block#settings-picture-change Change Picture
 		hr
 		input.form-control(type="password", name="password", placeholder="New Password")
