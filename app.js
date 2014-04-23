@@ -123,18 +123,21 @@ app.post('/signin', function(req, res) {
 	var util = require('util');
 	var Parse = require('parse').Parse;
 	Parse.initialize(process.env.parseID, process.env.parseJavascriptKey, process.env.parseMasterKey);
-	console.log(util.inspect(req, false, null));
 	Parse.User.logIn(req.body.username, req.body.password, {
 	  success: function(user) {
 	    // Do stuff after successful login.
-	    var query = new Parse.Query(user);
-	    if (query.equalTo("SignIn", "")) {
+	    // var user = Parse.Object.extend("User");
+	    // var query = new Parse.Query(User);
+	    if (user.attributes.lastSignIn == undefined) {
 	    	res.render('explore');
 	    };
 	  },
 	  error: function(user, error) {
 	    // The login failed. Check error to see why.
 	    console.log("Error: " + error.code + " " + error.message);
+	    if (error.code == 101) {
+
+	    };
 	  }
 	});
 });
