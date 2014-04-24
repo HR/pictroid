@@ -1,7 +1,7 @@
 extends layout
 
 block head
-	title= picObject.get("name")+' | Pictroid'
+	title= picObject.image.get("name")+' | Pictroid'
 	
 block variables
 	- var headerClasses = 'navbar-absolute'
@@ -10,9 +10,9 @@ block content
 	+chickenLittle()
 	.page
 		.container.image-page
-			h1.image-title= picObject.get("name")
+			h1.image-title= picObject.image.get("name")
 			hr
-			img.image-image(src="", alt=picObject.get("name"))
+			img.image-image(src=picObject.src.get("src"), alt=picObject.image.get("name"))
 			.image-stats
 				.image-by
 					i by&nbsp;
@@ -23,12 +23,18 @@ block content
 				.image-social
 					ul(class="details")
 						li(class="views")
-							| 532
+							if(picObject.image.get("views"))
+								span= picObject.image.get("views")
+							else 
+								| 0
 						li(class="comments")
-							| 23
+							if(picObject.image.get("commentCount"))
+								span= picObject.image.get("commentCount")
+							else 
+								| 0
 			.image-details
 				.image-description 
-					p= picObject.get("description")
+					p= picObject.image.get("description")
 				.image-comments
 					h2 Comment on this pic
 					if !authed

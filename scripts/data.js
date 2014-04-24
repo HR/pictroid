@@ -80,18 +80,18 @@ asteroids.upload = function(name, src, desc) {
 
 asteroids.query = {}
 asteroids.query.getPic = function(id){
-	var promise = new Parse.Promise();
 	var imgQuery = new Parse.Query(Image);
-	imgQuery.get(id, {
-		success: function(result) {
-			// TBD: Get src
-			promise.resolve(result);
-		},
-		error: function(object, error) {
-			promise.resolve(false);
-		}
+	var image = {};
+	return imgQuery.get(id).then(function(result){
+		// Add image table
+		image.image = result;
+
+		// Get src
+		return result.relation("src").query().first().then(function(src){
+			image.src = src;
+			return image;
+		});
 	});
-	return promise;
 }
 asteroids.query.getLatest = function(width) {
 	var imgQuery = new Parse.Query(Image);
