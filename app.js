@@ -99,7 +99,7 @@ app.get('/upload', function(req, res) {
 	if (currentUser) {
 		res.render('user/upload');
 	} else {
-        res.redirect('/signin');
+        res.redirect('/signin'+'?er=SignInRequired');
     }
 });
 app.get('/user/:name', function(req, res) {
@@ -111,7 +111,7 @@ app.get('/user/:name/settings', function(req, res) {
 	var currentUser = Parse.User.current();
 	// Code to authorize
 	if (currentUser) {
-		res.render('user/settings', { username:currentUser.attributes.username, email:currentUser.attributes.email});
+		res.render('user/settings', { username:currentUser.attributes.username, email:currentUser.attributes.email, status:currentUser.attributes.status, authed:true, user:true});
 	} else {
 		res.redirect('/signin');
 	}
@@ -138,6 +138,7 @@ app.post('/signup', function(req, res) {
 	user.set("username", req.body.username.toLowerCase());
 	user.set("password", req.body.password);
 	user.set("email", req.body.email.toLowerCase());
+	user.set("status", "Explorer");
 	user.signUp(null, {
 		success: function(user) {
 			// Redirect to email confirmation page
@@ -161,8 +162,13 @@ app.post('/signin', function(req, res) {
 	    	// TO DO 
 			// set date for last login  using moment with format "yyyy'-'MM'-'dd'T'HH':'mm':'ss.SSS'Z'"
 	    	// user.set("lastSignIn", moment().format('MMMM Do YYYY, h:mm:ss a'));
+	    	user.set("lastSignIn", moment.utc().format());
+	    	user.save();
 	    	res.redirect('/user/'+user.attributes.username+'/settings');
-	    };
+	    } else {
+	    	user.set("lastSignIn", moment.utc().format());
+	    	res.redirect('/');
+	    }
 	  },
 	  error: function(user, error) {
 	    // The login failed. Check error to see why.
