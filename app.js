@@ -62,19 +62,48 @@ app.get('/email_confirmed', function(req, res) {
     }
 });
 app.get('/explore/:filter?', function(req, res) {
+    
     res.render('explore', { filter: req.params.filter });
 });
 app.get('/pic/:id', function(req, res) {
-    res.render('details', { picID: req.params.id });
+    var Parse = require('parse').Parse;
+	Parse.initialize(process.env.parseID, process.env.parseJavascriptKey, process.env.parseMasterKey);
+    var Image = Parse.Object.extend("Image"),
+        query = new Parse.Query(Image);
+    query.get(req.params.id, {
+		success: function(object) {
+			// Redirect to email confirmation page
+			res.render('details', { title: object.attributes.name, description: object.attributes.description, imagesrc:object.attributes.src});
+		},
+		error: function(object, error) {
+			// Show the error message somewhere and let the user try again.
+			console.log("Error: " + error.code + " " + error.message);
+		}
+	})
 });
 app.get('/signin', function(req, res) {
-    res.render('signin');
+    if(!Parse.User.current()){
+        res.render('signin');
+    } else {
+        res.redirect('/');
+    }
 });
 app.get('/signup', function(req, res) {
-    res.render('signup');
+    if(!Parse.User.current()){
+        res.render('signup');
+    } else {
+        res.redirect('/');
+    }
 });
 app.get('/upload', function(req, res) {
-    res.render('user/upload');
+    var Parse = require('parse').Parse;
+	Parse.initialize(process.env.parseID, process.env.parseJavascriptKey, process.env.parseMasterKey);
+	var currentUser = Parse.User.current();
+	// Code to authorize
+	if (currentUser) {
+		res.render('user/upload');
+	} else {
+        res.redirect('/signin', { error: "Must be logged in to upload"};
 });
 app.get('/user/:name', function(req, res) {
     res.render('user/profile', { username: req.params.name });
@@ -145,8 +174,10 @@ app.post('/signin', function(req, res) {
 	    // The login failed. Check error to see why.
 	    console.log("Error: " + error.code + " " + error.message);
 	    if (error.code == 101) {
-
-	    };
+            res.render('/signin', { error : error.message });
+	    } else {
+            res.render('/signin', { error : error.message });
+        }
 	  }
 	});
 });
