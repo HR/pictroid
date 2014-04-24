@@ -127,6 +127,33 @@ app.post('/kimono_spitzer', function(req, res) {
 	});
 });
 
+app.post('/user/:name/settings', function(req, res) {
+	var Parse = require('parse').Parse;
+	Parse.initialize(process.env.parseID, process.env.parseJavascriptKey, process.env.parseMasterKey);
+	var currentUser = Parse.User.current();
+	user.set("email", req.body.email.toLowerCase());  // attempt to change username
+	user.set("password", req.body.password); 
+    user.save(null, {
+	  success: function(user) {
+	    // This succeeds, since the user was authenticated on the device
+
+	    // Get the user from a non-authenticated method
+	    var query = new Parse.Query(Parse.User);
+	    query.get(user.objectId, {
+	      	success: function(userAgain) {
+	        user.set("email", req.body.email.toLowerCase());  // attempt to change username
+			user.set("password", req.body.password); 
+	        userAgain.save(null, {
+	          error: function(userAgain, error) {
+	            // This will error, since the Parse.User is not authenticated
+	            console.log("Error: " + error.code + " " + error.message);
+	          }
+	        });
+	      }
+	    });
+	}
+});
+
 app.post('/signup', function(req, res) {
 	// var SignUp = new auth.signup(req.body.username, req.body.password, req.body.email, res);
 	var Parse = require('parse').Parse;
