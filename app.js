@@ -62,6 +62,7 @@ app.get('/email_confirmed', function(req, res) {
     }
 });
 app.get('/explore/:filter?', function(req, res) {
+    
     res.render('explore', { filter: req.params.filter });
 });
 app.get('/pic/:id', function(req, res) {
@@ -75,13 +76,31 @@ app.get('/pic/:id', function(req, res) {
 	});
 });
 app.get('/signin', function(req, res) {
-    res.render('signin');
+	var Parse = require('parse').Parse;
+    if(!Parse.User.current()){
+        res.render('signin');
+    } else {
+        res.redirect('/');
+    }
 });
 app.get('/signup', function(req, res) {
-    res.render('signup');
+	var Parse = require('parse').Parse;
+    if(!Parse.User.current()){
+        res.render('signup');
+    } else {
+        res.redirect('/');
+    }
 });
 app.get('/upload', function(req, res) {
-    res.render('user/upload');
+    var Parse = require('parse').Parse;
+	Parse.initialize(process.env.parseID, process.env.parseJavascriptKey, process.env.parseMasterKey);
+	var currentUser = Parse.User.current();
+	// Code to authorize
+	if (currentUser) {
+		res.render('user/upload');
+	} else {
+        res.redirect('/signin');
+    }
 });
 app.get('/user/:name', function(req, res) {
     res.render('user/profile', { username: req.params.name });
@@ -95,7 +114,7 @@ app.get('/user/:name/settings', function(req, res) {
 		res.render('user/settings', { username:currentUser.attributes.username, email:currentUser.attributes.email});
 	} else {
 		res.redirect('/signin');
-	};
+	}
 });
 app.get('/*', function(req, res) {
     res.render('error', { error: '404' });
@@ -116,9 +135,9 @@ app.post('/signup', function(req, res) {
 	var Parse = require('parse').Parse;
 	Parse.initialize(process.env.parseID, process.env.parseJavascriptKey, process.env.parseMasterKey);
 	var user = new Parse.User();
-	user.set("username", req.body.username);
+	user.set("username", req.body.username.toLowerCase());
 	user.set("password", req.body.password);
-	user.set("email", req.body.email);
+	user.set("email", req.body.email.toLowerCase());
 	user.signUp(null, {
 		success: function(user) {
 			// Redirect to email confirmation page
@@ -127,18 +146,15 @@ app.post('/signup', function(req, res) {
 		error: function(user, error) {
 			// Show the error message somewhere and let the user try again.
 			console.log("Error: " + error.code + " " + error.message);
-			if(error == 202) {
-				window.document.getElementById('emsg').innerHTML=error.message;
-			}
+			res.render('signup', { error : error.message });
 		}
 	});
 });
 
 app.post('/signin', function(req, res) {
-	var util = require('util');
 	var Parse = require('parse').Parse;
 	Parse.initialize(process.env.parseID, process.env.parseJavascriptKey, process.env.parseMasterKey);
-	Parse.User.logIn(req.body.username, req.body.password, {
+	Parse.User.logIn(req.body.username.toLowerCase(), req.body.password, {
 	  success: function(user) {
 	    // Do stuff after successful login.
 	    if (user.attributes.lastSignIn == undefined) {
@@ -152,8 +168,10 @@ app.post('/signin', function(req, res) {
 	    // The login failed. Check error to see why.
 	    console.log("Error: " + error.code + " " + error.message);
 	    if (error.code == 101) {
-
-	    };
+            res.render('signin', { error : error.message });
+	    } else {
+            res.render('signin', { error : error.message });
+        }
 	  }
 	});
 });

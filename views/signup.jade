@@ -7,6 +7,7 @@ block variables
 	- var bodyClasses = "background-wallpaper"
 	- var headerClasses = 'navbar-fixed-top navbar-transparent'
 
+
 block content
 	form.form-signin.form-transparent(role="form", action="/signup", method="POST", onsubmit="return(validate());")
 		img(src="/images/logo/icon.png", alt="Pictroid", height="75")
@@ -15,7 +16,9 @@ block content
 		input.form-control(type="email", name="email", placeholder="Email")
 		input.form-control(type="password", name="password", placeholder="Password")
 		input.form-control(type="password", name="passwordconfirm", placeholder="Confirm password")
-		p(id="emsg" style="color:#DD7674;")
+		p(id="emsg" style="color:#DD7674;display:none;")
+		if (error)
+			p(class="emsg") #{error}
 		button.btn.btn-lg.btn-primary.btn-block(type="submit") Sign Up
 		br
 		p(style="text-align: center;")
@@ -24,17 +27,30 @@ block content
 			function validate(){
 				var valid = false,
 					form = window.document.forms[0],
-					emsg = window.document.querySelectorAll("#emsg")[0];
-				if ((/^[a-z0-9_-]{6,10}$/i).test(form.username.value) && (/^([a-z0-9_\.-]+)@([\da-z\.-]+)\.([a-z\.]{2,6})$/g).test(form.email.value) && (/^[a-z0-9_-]{6,14}$/g).test(form.password.value)) {
-					valid = (form.password.value === form.passwordconfirm.value) ? true : false;
-				} else {
+					ermsg,
+					emsg = window.document.querySelectorAll(".emsg")[0];
+				if((/^[a-z0-9_-]{6,10}$/i).test(form.username.value)){
+					ermsg = "Invalid username, needs to be 6-14 alphanumeric and - _ characters";
+					valid = false;
+				}
+				if((/^([a-z0-9_\.-]+)@([\da-z\.-]+)\.([a-z\.]{2,6})$/g).test(form.email.value)) {
+					ermsg = "Invalid email, a valid email Go-hub.be@email.com";
+					valid = false;
+				}
+				if((/^[a-z0-9_-]{6,14}$/g).test(form.password.value)){
+					ermsg = "Invalid password, needs to be 6-14 alphanumeric and - _ characters";
+					valid = false;
+				}
+				if(form.password.value === form.passwordconfirm.value) {
+					ermsg = "Password does not match";
 					valid = false;
 				}
 				if (valid) {
-					emsg.innerHTML = "";
+					emsg.style.display = "none";
 					return valid;
 				} else {
-					emsg.innerHTML = "Invalid credentials supplied";
+					emsg.innerHTML = ermsg;
+					emsg.style.display = "block";
 					return valid;
 				}
 			}

@@ -30,7 +30,7 @@ block content
 			function validate(){
 				var valid = false,
 					form = window.document.forms[0],
-					emsg = window.document.querySelectorAll("#emsg")[0],
+					emsg = window.document.querySelectorAll(".emsg")[0],
 					fileName = $(form.image).val(),
 					imgSize = (imgSize) ? readImage($("#image")[0].files[0]) : false; 
 				if((/^.{0,1000}$/g).test(form.description.value) && ( /^([A-Z0-9]{2,9},{1}(\s{1})?)+([A-Z0-9]{2,9})$/ig).test(form.tags.value)){

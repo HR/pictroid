@@ -14,11 +14,11 @@
     "jade": "*",
     "mongodb": "*",
     "monk": "*",
-    "newrelic": "*",
     "parse": "*",
     "request": "*",
     "sass": "*",
     "helmet": "*",
-    "moment": "^2.6.0"
+    "moment": "^2.6.0",
+    "newrelic": "*",
   }
 }
