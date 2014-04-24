@@ -348,12 +348,20 @@ form.form-transparent a {
 }
 
 #username {
-	padding-top-top: 0px !important; 
-	font-size: 1.2rem;
+	padding-top: 0px !important;
 	vertical-align: middle;
+	font-size: 1.8rem;
+	line-height: 2rem;
 }
 
-form.form-transparent input, form.form-transparent textarea, #username {
+#status  {
+	padding-top: 0px !important;
+	vertical-align: middle;
+	font-size: 1.6rem;
+	line-height: 1.6rem;
+}
+
+form.form-transparent input, form.form-transparent textarea, #username, #status {
 	background-color: rgba(255, 255, 255, 0.2);
 	margin: 5px 0;
 	box-shadow: none;
@@ -528,6 +536,10 @@ footer .footer-logo {
 	position: absolute;
 	left: 0;
 	background-color: #999999;
+}
+
+.settings-picture:hover {
+	background-image: url();
 }
 
 .settings-sidebar {
