@@ -13,7 +13,8 @@ mixin feed()
 	.feed
 		each val in results
 			.feed-item
-				img(src=val.src.get("src"), alt='')
+				a(href= "/pic/"+val.image.id)
+					img(src=val.src.get("src"), alt='')
 				.stats
 					ul(class="details")
 						li(class="user")

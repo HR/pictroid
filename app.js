@@ -65,7 +65,14 @@ app.get('/explore/:filter?', function(req, res) {
     res.render('explore', { filter: req.params.filter });
 });
 app.get('/pic/:id', function(req, res) {
-    res.render('details', { picID: req.params.id });
+	db.asteroids.query.getPic(req.params.id).then(function(result) {
+		console.log(result);
+		if (result) {
+			res.render('details', { picObject: result });
+		} else {
+			res.render('error', { error: '404' }); 
+		}	
+	});
 });
 app.get('/signin', function(req, res) {
     res.render('signin');
