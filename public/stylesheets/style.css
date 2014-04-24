@@ -391,7 +391,11 @@ form #or {
 }
 
 .emsg {
-	color:#DD7674;
+	background-color: rgba(221, 118, 116, 0.4);
+	color: #fff !important;
+	line-height: auto;
+	font-size: 13px !important;
+	padding: 1% 0% 1% 2% !important;
 }
 
 /* Dropbox Element */
