@@ -550,7 +550,7 @@ footer .footer-logo {
 /* Details */
 .image-page {
 	margin-bottom: 0;
-	padding: 0 !important;
+	padding-bottom: 0 !important;
 }
 
 .image-title {
@@ -563,7 +563,7 @@ footer .footer-logo {
 }
 
 .image-stats {
-	padding: 10px 15px 15px;
+	padding: 10px 15px;
 }
 
 .image-stats div {
@@ -580,6 +580,7 @@ footer .footer-logo {
 
 .image-social {
 	float: right;
+	padding-top: 3px;
 }
 
 .image-social div + div {

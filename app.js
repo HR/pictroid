@@ -17,6 +17,11 @@ var express = require('express'),
     newrelic = require('newrelic'),
     helmet = require('helmet'),
     moment = require('moment');
+  
+// Parse initialization  
+var Parse = require('parse').Parse;
+Parse.initialize(process.env.parseID, process.env.parseJavascriptKey, process.env.parseMasterKey);
+var currentUser;
 
 // all environments
 app.set('port', process.env.PORT || 3000);
@@ -79,8 +84,7 @@ app.get('/pic/:id', function(req, res) {
 	});
 });
 app.get('/signin', function(req, res) {
-	var Parse = require('parse').Parse;
-    if(!Parse.User.current()){
+    if(!currentUser){
     	if(req.query.er === "SignInRequired") {
     		res.render('signin', { error : "You have to be signed in to access the page" });
     	} else {
@@ -92,28 +96,22 @@ app.get('/signin', function(req, res) {
     }
 });
 app.get('/signout', function(req, res) {
-	var Parse = require('parse').Parse,
-        currentUser = Parse.User.current();
-    if(Parse.User.current()){
+    if(currentUser){
         Parse.User.logOut();
-        currentUser = Parse.User.current();
+        currentUser = null;
         res.redirect('/');  // this will now be null
     } else {
         res.redirect('/signin');
     }
 });
 app.get('/signup', function(req, res) {
-	var Parse = require('parse').Parse;
-    if(!Parse.User.current()){
+    if(!currentUser){
         res.render('signup');
     } else {
         res.redirect('/');
     }
 });
 app.get('/upload', function(req, res) {
-    var Parse = require('parse').Parse;
-	Parse.initialize(process.env.parseID, process.env.parseJavascriptKey, process.env.parseMasterKey);
-	var currentUser = Parse.User.current();
 	// Code to authorize
 	if (currentUser) {
 		res.render('user/upload');
@@ -125,9 +123,6 @@ app.get('/user/:name', function(req, res) {
     res.render('user/profile', { username: req.params.name });
 });
 app.get('/account/settings', function(req, res) {
-	var Parse = require('parse').Parse;
-	Parse.initialize(process.env.parseID, process.env.parseJavascriptKey, process.env.parseMasterKey);
-	var currentUser = Parse.User.current();
 	// Code to authorize
 	if (currentUser) {
 		res.render('account/settings', { username:currentUser.attributes.username, email:currentUser.attributes.email, status:currentUser.attributes.status, authed:true});
@@ -150,12 +145,9 @@ app.post('/kimono_spitzer', function(req, res) {
 });
 
 app.post('/account/settings', function(req, res) {
-	var Parse = require('parse').Parse;
-	Parse.initialize(process.env.parseID, process.env.parseJavascriptKey, process.env.parseMasterKey);
-	var currentUser = Parse.User.current();
-	user.set("email", req.body.email.toLowerCase());  // attempt to change username
-	user.set("password", req.body.password); 
-    user.save(null, {
+	currentUser.set("email", req.body.email.toLowerCase());  // attempt to change username
+	currentUser.set("password", req.body.password); 
+    currentUser.save(null, {
 		success: function(user) {
 			// This succeeds, since the user was authenticated on the device
 		}
@@ -164,8 +156,6 @@ app.post('/account/settings', function(req, res) {
 
 app.post('/signup', function(req, res) {
 	// var SignUp = new auth.signup(req.body.username, req.body.password, req.body.email, res);
-	var Parse = require('parse').Parse;
-	Parse.initialize(process.env.parseID, process.env.parseJavascriptKey, process.env.parseMasterKey);
 	var user = new Parse.User();
 	user.set("username", req.body.username.toLowerCase());
 	user.set("password", req.body.password);
@@ -185,8 +175,6 @@ app.post('/signup', function(req, res) {
 });
 
 app.post('/signin', function(req, res) {
-	var Parse = require('parse').Parse;
-	Parse.initialize(process.env.parseID, process.env.parseJavascriptKey, process.env.parseMasterKey);
 	Parse.User.logIn(req.body.username.toLowerCase(), req.body.password, {
 	  success: function(user) {
 	    // Do stuff after successful login.
@@ -201,6 +189,7 @@ app.post('/signin', function(req, res) {
 	    	user.set("lastSignIn", moment.utc().format());
 	    	res.redirect('/');
 	    }
+	    currentUser = Parse.User.current();
 	  },
 	  error: function(user, error) {
 	    // The login failed. Check error to see why.

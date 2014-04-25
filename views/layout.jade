@@ -36,20 +36,6 @@ html
 		meta(name='Pictroid', content='#eee')
 		meta(name='Pictroid', content='/images/favicon/mstile-144x144.png')
 	body
-		//
-			script(type='text/javascript')
-				var Parse = require('parse').Parse;
-					window.onload = function(){
-						Parse.initialize(,);
-						var query = new Parse.Query(Parse.User);
-						query.find({
-							success: function(users) {
-								for (var i = 0; i < users.length; ++i) {
-									console.log(users[i].get('username'));
-								}
-							}
-						});
-					}
 		div(id="wrapper", class=bodyClasses)
 			include components/header
 			block content
