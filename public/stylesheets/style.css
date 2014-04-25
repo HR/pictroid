@@ -346,18 +346,6 @@ form.form-transparent p {
 form.form-transparent a {
 	text-shadow: 0 0 5px #000000;
 }
-.formp  {
-	padding-top: 0px !important;
-	vertical-align: middle;
-	font-size: 1.2rem !important;
-	background-color: rgba(255, 255, 255, 0.2);
-	box-shadow: none;
-	border: 2px solid transparent;
-	height: 28px;
-	color: #ffffff;
-	border-radius: 2px;
-	margin-bottom: 5px;
-}
 
 form.form-transparent input, form.form-transparent textarea, #username {
 	background-color: rgba(255, 255, 255, 0.2);
@@ -366,15 +354,6 @@ form.form-transparent input, form.form-transparent textarea, #username {
 	border: 2px solid transparent;
 	color: #ffffff;
 	border-radius: 2px;
-}
-
-#username {
-	padding-top: 0px !important;
-	text-shadow: 0px 0px 20px #000;
-	vertical-align: middle;
-	font-size: 1.8rem;
-	text-transform:capitalize;
-	background-color: rgba(255, 255, 255, 0) !important;
 }
 
 form.form-transparent input:focus, form.form-transparent textarea:focus {
@@ -552,6 +531,27 @@ footer .footer-logo {
 .settings-sidebar {
 	margin-left: 115px;
 	min-height: 100px;
+} 
+
+.formp  {
+	padding-top: 0px !important;
+	vertical-align: middle;
+	font-size: 1.2rem !important;
+	background-color: rgba(255, 255, 255, 0.2);
+	box-shadow: none;
+	border: 2px solid transparent;
+	height: 28px;
+	color: #ffffff;
+	border-radius: 2px;
+	margin-bottom: 5px;
+}
+#username {
+	padding-top: 0px !important;
+	text-shadow: 0px 0px 20px #000;
+	vertical-align: middle;
+	font-size: 1.8rem;
+	text-transform:capitalize;
+	background-color: rgba(255, 255, 255, 0) !important;
 }
 
 /* Details */
