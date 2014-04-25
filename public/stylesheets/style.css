@@ -346,14 +346,6 @@ form.form-transparent p {
 form.form-transparent a {
 	text-shadow: 0 0 5px #000000;
 }
-
-#username {
-	padding-top: 0px !important;
-	vertical-align: middle;
-	font-size: 1.8rem;
-	line-height: 2rem;
-}
-
 .formp  {
 	padding-top: 0px !important;
 	vertical-align: middle;
@@ -374,6 +366,15 @@ form.form-transparent input, form.form-transparent textarea, #username {
 	border: 2px solid transparent;
 	color: #ffffff;
 	border-radius: 2px;
+}
+
+#username {
+	padding-top: 0px !important;
+	text-shadow: 0px 0px 20px #000;
+	vertical-align: middle;
+	font-size: 1.8rem;
+	text-transform:capitalize;
+	background-color: rgba(255, 255, 255, 0) !important;
 }
 
 form.form-transparent input:focus, form.form-transparent textarea:focus {
