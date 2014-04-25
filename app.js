@@ -99,7 +99,11 @@ app.get('/signout', function(req, res) {
     if(currentUser){
         Parse.User.logOut();
         currentUser = null;
-        res.redirect('/');  // this will now be null
+        if (req.query.return_to) {
+	    	res.redirect(req.query.return_to);
+	    } else {
+	    	res.redirect('/');
+	    }
     } else {
         res.redirect('/signin');
     }
@@ -130,6 +134,14 @@ app.get('/account/settings', function(req, res) {
 		res.redirect('/signin');
 	}
 });
+app.get('/passwordchange_confirmation', function(req, res) {
+	// Code to authorize
+	if (req.query.username) {
+		res.render('passwordchange_confirmation', { username:req.query.username});
+	} else {
+		res.redirect('/');
+	}
+});
 app.get('/*', function(req, res) {
     res.render('error', { error: '404' });
 });
@@ -155,7 +167,7 @@ app.post('/account/settings', function(req, res) {
 	.then(
 	  function(user) {
 	    console.log('Password changed', user);
-	    res.redirect('/password_changed');
+	    res.redirect('/passwordchange_confirmation?username='+currentUser.attributes.username);
 	  },
 	  function(error) {
 	    console.log('Something went wrong', error);
@@ -191,7 +203,6 @@ app.post('/signin', function(req, res) {
 	    	user.set("lastSignIn", new Date());
 	    	// TO DO 
 	    	// set default profile pic
-	    	// user.set("lastSignIn", new Date());
 	    	user.save().then(
 			  function(user) {
 			    console.log('success');
