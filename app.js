@@ -152,19 +152,23 @@ app.post('/kimono_spitzer', function(req, res) {
 app.post('/account/settings', function(req, res) {
 	var Parse = require('parse').Parse;
 	Parse.initialize(process.env.parseID, process.env.parseJavascriptKey, process.env.parseMasterKey);
-	var currentUser = Parse.User.current();
-	if (req.body.email) {
-		user.set("email", req.body.email.toLowerCase());
-	};
-	if (req.body.password) {
-		user.set("password", req.body.password);
-	}; 
-    user.save(null, {
-		success: function(user) {
-			// This succeeds, since the user was authenticated on the device
-			res.redirect('/signout?returnto=/signin');
-		}
-	});
+	user = Parse.User.current();
+	user.set("password", req.body.password);
+	user.save()
+	.then(
+	  function(user) {
+	    return user.fetch();
+	  }
+	)
+	.then(
+	  function(user) {
+	    console.log('Password changed', user);
+	    res.redirect('/password_changed');
+	  },
+	  function(error) {
+	    console.log('Something went wrong', error);
+	  }
+	);
 });
 
 app.post('/signup', function(req, res) {
@@ -198,12 +202,11 @@ app.post('/signin', function(req, res) {
 	    if (user.attributes.lastSignIn == undefined) {
 	    	// TO DO 
 			// set date for last login  using moment with format "yyyy'-'MM'-'dd'T'HH':'mm':'ss.SSS'Z'"
-	    	// user.set("lastSignIn", moment().format('MMMM Do YYYY, h:mm:ss a'));
-	    	user.set("lastSignIn", moment.utc().format());
-	    	user.save();
+	    	// user.set("lastSignIn", moment().format('YYYY-MM-DDTHH:MM:ss.SSS')+'Z');
+	    	// user.save();
 	    	res.redirect('/account/settings');
 	    } else {
-	    	user.set("lastSignIn", moment.utc().format());
+	    	// user.set("lastSignIn", moment().format('YYYY-MM-DDTHH:MM:ss.SSS')+'Z');
 	    	res.redirect('/');
 	    }
 	  },
