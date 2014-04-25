@@ -18,9 +18,7 @@ var express = require('express'),
     helmet = require('helmet'),
     moment = require('moment'),
     base64 = require('base64-js'),
-    multiparty = require('multiparty'),
-    http = require('http'),
-    util = require('util');
+    multiparty = require('multiparty');
   
 // Parse initialization  
 var Parse = require('parse').Parse;
