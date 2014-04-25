@@ -520,13 +520,21 @@ footer .footer-logo {
 .settings-picture {
 	height: 110px;
 	width: 110px;
-	position: absolute;
+	position: relative;
+	float: left;
 	left: 0;
 	background-color: #999999;
 }
 
+.form-file {
+	position: relative;
+	position: relative;
+	float: left;
+	width: 100%;
+}
+
 .settings-picture:hover {
-	background-image: url();
+
 }
 
 .settings-sidebar {
