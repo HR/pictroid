@@ -28,10 +28,10 @@ div.navbar.navbar-default(role='navigation', class=headerClasses)
 						a(href="/upload") Upload
 				li
 					a(href="/about") About
-				if authed && user
+				if authed && username
 					li
 						!= '<a class="dropdown-toggle" href="#" data-toggle="dropdown">'
-						!= user.first+' '+user.last
+						!= username
 						!= '<b class="caret"></b></a>'
 						ul.dropdown-menu
 							li

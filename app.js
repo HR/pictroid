@@ -61,8 +61,14 @@ app.get('/email_confirmed', function(req, res) {
     	res.redirect('/');
     }
 });
+app.get('/email_confirmation', function(req, res) {
+    if(req.query.email){
+	    res.render('email_confirmed', { email : req.query.email });
+    } else {
+    	res.redirect('/');
+    }
+});
 app.get('/explore/:filter?', function(req, res) {
-    
     res.render('explore', { filter: req.params.filter });
 });
 app.get('/pic/:id', function(req, res) {
@@ -78,6 +84,16 @@ app.get('/signin', function(req, res) {
         res.render('signin');
     } else {
         res.redirect('/');
+    }
+});
+app.get('/signout', function(req, res) {
+	var Parse = require('parse').Parse,
+        currentUser = Parse.User.current();
+    if(Parse.User.current()){
+        Parse.User.logOut();
+        currentUser = Parse.User.current();  // this will now be null
+    } else {
+        res.redirect('/signin');
     }
 });
 app.get('/signup', function(req, res) {
@@ -108,7 +124,7 @@ app.get('/user/:name/settings', function(req, res) {
 	var currentUser = Parse.User.current();
 	// Code to authorize
 	if (currentUser) {
-		res.render('user/settings', { username:currentUser.attributes.username, email:currentUser.attributes.email, status:currentUser.attributes.status, authed:true, user:true});
+		res.render('user/settings', { username:currentUser.attributes.username, email:currentUser.attributes.email, status:currentUser.attributes.status, authed:true});
 	} else {
 		res.redirect('/signin');
 	}
@@ -152,7 +168,7 @@ app.post('/signup', function(req, res) {
 	user.signUp(null, {
 		success: function(user) {
 			// Redirect to email confirmation page
-			res.render('email_confirmation', { email: req.body.email});
+			res.redirect('email_confirmation?email='+req.body.email);
 		},
 		error: function(user, error) {
 			// Show the error message somewhere and let the user try again.

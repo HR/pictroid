@@ -9,3 +9,11 @@ block content
 			h1 Confirm your email address
 			hr(style="height:1px;")
 			p A confirmation email has been sent to #{email}. Please click on the confirmation link in the email to activate your account.
+            p 
+                | You'll be redirected to the homepage in 5 seconds ...
+    script.
+        setTimeout(function(){
+			window.location.replace("/");
+			},
+			5000
+		);
