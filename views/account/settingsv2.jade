@@ -15,8 +15,8 @@ block content
 			img.settings-picture(src="", alt="")
 			.settings-sidebar
 				p.form-control(id="username") #{username}
-				p.form-control(class="formp") #{status}
-				p.form-control(class="formp") #{email}
+				p.form-control(id="status") #{status}
+				input.form-control(type="email", name="email", placeholder='#{email}')
 		hr
 		input.form-control(type="password", name="password", placeholder="New Password")
 		input.form-control(type="password", name="passwordconfirm", placeholder="Confirm Password")

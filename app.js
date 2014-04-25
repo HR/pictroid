@@ -153,11 +153,16 @@ app.post('/account/settings', function(req, res) {
 	var Parse = require('parse').Parse;
 	Parse.initialize(process.env.parseID, process.env.parseJavascriptKey, process.env.parseMasterKey);
 	var currentUser = Parse.User.current();
-	user.set("email", req.body.email.toLowerCase());  // attempt to change username
-	user.set("password", req.body.password); 
+	if (req.body.email) {
+		user.set("email", req.body.email.toLowerCase());
+	};
+	if (req.body.password) {
+		user.set("password", req.body.password);
+	}; 
     user.save(null, {
 		success: function(user) {
 			// This succeeds, since the user was authenticated on the device
+			res.redirect('/signout?returnto=/signin');
 		}
 	});
 });

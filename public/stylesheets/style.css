@@ -354,14 +354,20 @@ form.form-transparent a {
 	line-height: 2rem;
 }
 
-#status  {
+.formp  {
 	padding-top: 0px !important;
 	vertical-align: middle;
-	font-size: 1.6rem;
-	line-height: 1.6rem;
+	font-size: 1.2rem !important;
+	background-color: rgba(255, 255, 255, 0.2);
+	box-shadow: none;
+	border: 2px solid transparent;
+	height: 28px;
+	color: #ffffff;
+	border-radius: 2px;
+	margin-bottom: 5px;
 }
 
-form.form-transparent input, form.form-transparent textarea, #username, #status {
+form.form-transparent input, form.form-transparent textarea, #username {
 	background-color: rgba(255, 255, 255, 0.2);
 	margin: 5px 0;
 	box-shadow: none;
