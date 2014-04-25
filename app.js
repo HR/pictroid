@@ -188,14 +188,32 @@ app.post('/signin', function(req, res) {
 	  success: function(user) {
 	    // Do stuff after successful login.
 	    if (user.attributes.lastSignIn == undefined) {
+	    	user.set("lastSignIn", new Date());
 	    	// TO DO 
-			// set date for last login  using moment with format "yyyy'-'MM'-'dd'T'HH':'mm':'ss.SSS'Z'"
-	    	// user.set("lastSignIn", moment().format('YYYY-MM-DDTHH:MM:ss.SSS')+'Z');
-	    	// user.save();
-	    	res.redirect('/account/settings');
+	    	// set default profile pic
+	    	// user.set("lastSignIn", new Date());
+	    	user.save().then(
+			  function(user) {
+			    console.log('success');
+			    res.redirect('/account/settings');
+			  },
+			  function(error) {
+			    console.log('error', error);
+			    res.render('signin', { error : error.message });
+			  }
+			);
 	    } else {
-	    	// user.set("lastSignIn", moment().format('YYYY-MM-DDTHH:MM:ss.SSS')+'Z');
-	    	res.redirect('/');
+	    	user.set("lastSignIn", new Date());
+	    	user.save().then(
+			  function(user) {
+			    console.log('success');
+			    res.redirect('/');
+			  },
+			  function(error) {
+			    console.log('error', error);
+			    res.render('signin', { error : error.message });
+			  }
+			);
 	    }
 	    currentUser = Parse.User.current();
 	  },
