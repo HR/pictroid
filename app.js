@@ -145,11 +145,16 @@ app.post('/kimono_spitzer', function(req, res) {
 });
 
 app.post('/account/settings', function(req, res) {
-	currentUser.set("email", req.body.email.toLowerCase());  // attempt to change username
-	currentUser.set("password", req.body.password); 
-    currentUser.save(null, {
+	if (req.body.email) {
+		user.set("email", req.body.email.toLowerCase());
+	};
+	if (req.body.password) {
+		user.set("password", req.body.password);
+	}; 
+    user.save(null, {
 		success: function(user) {
 			// This succeeds, since the user was authenticated on the device
+			res.redirect('/signout?returnto=/signin');
 		}
 	});
 });
