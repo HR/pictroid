@@ -35,9 +35,9 @@ div.navbar.navbar-default(role='navigation', class=headerClasses)
 						!= '<b class="caret"></b></a>'
 						ul.dropdown-menu
 							li
-								a(href='/'+user.name) Profile
+								a(href='/user/'+username) Profile
 							li
-								a(href='/'+user.name+'/settings') Settings
+								a(href='/account/settings') Settings
 							li
 								a(href='/signout') Sign Out
 				else

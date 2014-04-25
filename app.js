@@ -81,8 +81,13 @@ app.get('/pic/:id', function(req, res) {
 app.get('/signin', function(req, res) {
 	var Parse = require('parse').Parse;
     if(!Parse.User.current()){
-        res.render('signin');
+    	if(req.query.er === "SignInRequired") {
+    		res.render('signin', { error : "You have to be signed in to access the page" });
+    	} else {
+    		res.render('signin');
+    	}
     } else {
+
         res.redirect('/');
     }
 });
@@ -91,7 +96,8 @@ app.get('/signout', function(req, res) {
         currentUser = Parse.User.current();
     if(Parse.User.current()){
         Parse.User.logOut();
-        currentUser = Parse.User.current();  // this will now be null
+        currentUser = Parse.User.current();
+        res.redirect('/');  // this will now be null
     } else {
         res.redirect('/signin');
     }
@@ -118,13 +124,13 @@ app.get('/upload', function(req, res) {
 app.get('/user/:name', function(req, res) {
     res.render('user/profile', { username: req.params.name });
 });
-app.get('/user/:name/settings', function(req, res) {
+app.get('/account/settings', function(req, res) {
 	var Parse = require('parse').Parse;
 	Parse.initialize(process.env.parseID, process.env.parseJavascriptKey, process.env.parseMasterKey);
 	var currentUser = Parse.User.current();
 	// Code to authorize
 	if (currentUser) {
-		res.render('user/settings', { username:currentUser.attributes.username, email:currentUser.attributes.email, status:currentUser.attributes.status, authed:true});
+		res.render('account/settings', { username:currentUser.attributes.username, email:currentUser.attributes.email, status:currentUser.attributes.status, authed:true});
 	} else {
 		res.redirect('/signin');
 	}
@@ -143,7 +149,7 @@ app.post('/kimono_spitzer', function(req, res) {
 	});
 });
 
-app.post('/user/:name/settings', function(req, res) {
+app.post('/account/settings', function(req, res) {
 	var Parse = require('parse').Parse;
 	Parse.initialize(process.env.parseID, process.env.parseJavascriptKey, process.env.parseMasterKey);
 	var currentUser = Parse.User.current();
@@ -190,7 +196,7 @@ app.post('/signin', function(req, res) {
 	    	// user.set("lastSignIn", moment().format('MMMM Do YYYY, h:mm:ss a'));
 	    	user.set("lastSignIn", moment.utc().format());
 	    	user.save();
-	    	res.redirect('/user/'+user.attributes.username+'/settings');
+	    	res.redirect('/account/settings');
 	    } else {
 	    	user.set("lastSignIn", moment.utc().format());
 	    	res.redirect('/');
