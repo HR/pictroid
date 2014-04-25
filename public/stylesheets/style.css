@@ -138,6 +138,7 @@ a:hover {
 
 .navbar-nav a {
     border-bottom: 1px solid transparent;
+    text-transform:capitalize;
 }
 
 .navbar-nav a.active,
