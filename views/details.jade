@@ -32,6 +32,15 @@ block content
 								span= picObject.image.get("commentCount")
 							else 
 								| 0
+						li.image-share						
+							.a2a_kit.a2a_default_style
+								a.a2a_dd(href="http://www.addtoany.com/share_save")
+								a.a2a_button_facebook
+								a.a2a_button_twitter
+								a.a2a_button_google_plus
+								a.a2a_button_email
+								a.a2a_button_wordpress
+							script(type="text/javascript", src="//static.addtoany.com/menu/page.js")
 			.image-details
 				.image-description 
 					p= picObject.image.get("description")

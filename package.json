@@ -23,6 +23,7 @@
     "parse": "*",
     "redis": "*",
     "request": "*",
+    "form-data": "~0.1.2",
     "sass": "*"
   }
 }
