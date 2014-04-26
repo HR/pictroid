@@ -41,7 +41,7 @@ app.configure('production', function(){
 	cache.auth(redisURL.auth.split(":")[1]);
 });
 cache.on("error", function (err) {
-	console.log("Error " + err);
+   console.log("Error " + err);
 });
 
 // all environments
