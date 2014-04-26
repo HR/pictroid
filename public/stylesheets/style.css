@@ -138,7 +138,6 @@ a:hover {
 
 .navbar-nav a {
     border-bottom: 1px solid transparent;
-    text-transform:capitalize;
 }
 
 .navbar-nav a.active,
@@ -606,6 +605,15 @@ footer .footer-logo {
 
 .image-social div + div {
 	margin-left: 15px;
+}
+
+.image-share {
+	height: auto;
+	float: right;
+	position: relative;
+	width: auto;
+	margin-left: 12px;
+	display: inline-block;
 }
 
 .image-details {
