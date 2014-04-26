@@ -31,7 +31,7 @@ var currentUser;
 var cache;
 app.configure('development', function(){
   app.use(express.errorHandler({ dumpExceptions: true, showStack: true }));
-  cached = redis.createClient(); 
+  cache = redis.createClient();
 });
 
 app.configure('production', function(){
