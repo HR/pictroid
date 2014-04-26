@@ -28,18 +28,20 @@ var express = require('express'),
 var Parse = require('parse').Parse;
 Parse.initialize(process.env.parseID, process.env.parseJavascriptKey, process.env.parseMasterKey);
 var currentUser;
-/* Production
-var redisURL = url.parse(process.env.REDISCLOUD_URL);
-var cache = redis.createClient(redisURL.port, redisURL.hostname, {no_ready_check: true});
-cache.auth(redisURL.auth.split(":")[1]);
-*/
-/* Development
-var cachedCurrentUser = redis.createClient();
-cachedCurrentUser.on("error", function (err) {
-	console.log("Error " + err);
-});*/
+var cache;
+app.configure('development', function(){
+  app.use(express.errorHandler({ dumpExceptions: true, showStack: true }));
+  cached = redis.createClient(); 
+});
+
+app.configure('production', function(){
+	app.use(express.errorHandler());
+	var redisURL = url.parse(process.env.REDISCLOUD_URL);
+	cache = redis.createClient(redisURL.port, redisURL.hostname, {no_ready_check: true});
+	cache.auth(redisURL.auth.split(":")[1]);
+});
 cache.on("error", function (err) {
-        console.log("Error " + err);
+	console.log("Error " + err);
 });
 
 // all environments
