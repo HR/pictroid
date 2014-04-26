@@ -1,20 +1,20 @@
 extends ../layout
 
 block head
-	title= username+'\'s Profile | Pictroid'
+	title= profile_username+'\'s Profile | Pictroid'
 
 block content
 	+chickenLittle()
 	.page
 		.container.profile-container
 			.profile-info
-				img.profile-info-picture(src="", alt="")
+				img.profile-info-picture(src="#{profile_image}", alt="profile_image")
 				.profile-info-text
-					.profile-name= username
-					p Arizona, USA
-					p Explorer
-					p 12 Pictroids
+					.profile-name #{profile_username}
+					p #{profile_status}
+					p  12 Pictroids
 					p 432 Views
+				//- img.profile-header-picture(src="/images/profile/pic_userh.png", alt="profile_image")
 			.profile-pics
 				h3
 					a(href="#") Pics

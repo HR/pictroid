@@ -21,6 +21,7 @@
     "helmet": "*",
     "moment": "^2.6.0",
     "newrelic": "*",
-    "multiparty": "*"
+    "multiparty": "*",
+    "redis": "*"
   }
 }

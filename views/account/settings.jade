@@ -14,43 +14,43 @@ block content
 		hr
 		.settings-combo
 			img.settings-picture(src="#{profileImgSrc}", alt="#{username}_profile_image")
-			input.form-file(type="file" id="profilePhotoFileUpload" name="profileImgFile")
+			//- input.form-file(type="file" id="profilePhotoFileUpload" name="profileImgFile")
 			.settings-sidebar
 				p.form-control(id="username") #{username}
 				p.form-control(class="formp") #{status}
 				p.form-control(class="formp") #{email}
 		hr
-		//- input.form-control(type="password", name="password", placeholder="New Password")
-		//- input.form-control(type="password", name="passwordconfirm", placeholder="Confirm Password")
+		input.form-control(type="password", name="password", placeholder="New Password")
+		input.form-control(type="password", name="passwordconfirm", placeholder="Confirm Password")
 		p(class="emsg" style="color:#DD7674;display:none;")
 		if (error)
 			p(class="emsg") #{error}
 		button.btn.btn-lg.btn-block(type="submit") Update
-		//- script.
-		//- 	function validate(){
-		//- 		var valid = true,
-		//- 			form = window.document.forms[0],
-		//- 			ermsg = "Invalid credentials",
-		//- 			emsg = window.document.querySelectorAll(".emsg")[0];
-		//- 		if(form.password.value) {
-		//- 			if(!(/^[a-z0-9_-]{6,14}$/g).test(form.password.value)) {
-		//- 				ermsg = "Invalid password, needs to be 6-14 alphanumeric and - _ characters";
-		//- 				valid = false;
-		//- 			}
-		//- 			if(form.password.value !== form.passwordconfirm.value){
-		//- 				ermsg = "Passwords do not match";
-		//- 				valid = false;
-		//- 			}
-		//- 		} else {
-		//- 			valid = false;
-		//- 		}
-		//- 		console.log(valid);
-		//- 		if(valid){
-		//- 			emsg.style.display = "none";
-		//- 			return valid;
-		//- 		} else {
-		//- 			emsg.innerHTML = ermsg;
-		//- 			emsg.style.display = "block";
-		//- 			return valid;
-		//- 		}
-		//- 	}
+		script.
+			function validate(){
+				var valid = true,
+					form = window.document.forms[0],
+					ermsg = "Invalid credentials",
+					emsg = window.document.querySelectorAll(".emsg")[0];
+				if(form.password.value) {
+					if(!(/^[a-z0-9_-]{6,14}$/g).test(form.password.value)) {
+						ermsg = "Invalid password, needs to be 6-14 alphanumeric and - _ characters";
+						valid = false;
+					}
+					if(form.password.value !== form.passwordconfirm.value){
+						ermsg = "Passwords do not match";
+						valid = false;
+					}
+				} else {
+					valid = false;
+				}
+				console.log(valid);
+				if(valid){
+					emsg.style.display = "none";
+					return valid;
+				} else {
+					emsg.innerHTML = ermsg;
+					emsg.style.display = "block";
+					return valid;
+				}
+			}

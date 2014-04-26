@@ -308,7 +308,12 @@ a:hover {
 	background-color: #999999;
 }
 
+.profile-header-picture {
+
+}
+
 .profile-name {
+	text-transform:capitalize;
 	font-size: 24px;
 	color: #a67c52;
 	margin-top: 10px;
@@ -647,6 +652,7 @@ footer .footer-logo {
 	font-weight: 200;
 	display: flex;
 	flex-flow: row wrap;
+	margin: 0px !important;
 }
 
 .feed-item {
