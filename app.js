@@ -257,23 +257,23 @@ app.post('/account/settings', function(req, res) {
 				res.render('signin', { error : error.message, secure:true});
 			});
 		});
+		currentUser.set("password", fields.password[0]);
+		currentUser.save()
+		.then(
+		  function(user) {
+			return user.fetch();
+		  }
+		)
+		.then(
+		  function(user) {
+			console.log('Password changed', user);
+			res.redirect('/passwordchange_confirmation?username='+currentUser.attributes.username);
+		  },
+		  function(error) {
+			console.log('Something went wrong', error);
+		  }
+		);
 	});
-	currentUser.set("password", req.body.password);
-	currentUser.save()
-	.then(
-	  function(user) {
-		return user.fetch();
-	  }
-	)
-	.then(
-	  function(user) {
-		console.log('Password changed', user);
-		res.redirect('/passwordchange_confirmation?username='+currentUser.attributes.username);
-	  },
-	  function(error) {
-		console.log('Something went wrong', error);
-	  }
-	);
 });
 
 app.post('/signup', function(req, res) {
