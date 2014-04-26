@@ -8,7 +8,7 @@ block variables
 	- var headerClasses = 'navbar-fixed-top navbar-transparent'
 
 block content
-	form.form-settings.form-transparent(role="form", action="/account/settings", method="POST", onsubmit="return(validate());")
+	form.form-settings.form-transparent(role="form", enctype="multipart/form-data", action="/account/settings", method="POST", onsubmit="return(validate());")
 		img(src="/images/logo/icon.png", alt="Pictroid", height="75")
 		hr
 		.settings-combo
