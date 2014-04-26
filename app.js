@@ -20,7 +20,8 @@ var express = require('express'),
 	base64 = require('base64-js'),
 	multiparty = require('multiparty'),
 	redis = require("redis"),
-	fs = require("fs");
+	fs = require("fs"),
+	uuid = require('node-uuid');
   
 // Parse initialization  
 var Parse = require('parse').Parse;
@@ -43,22 +44,25 @@ app.use(express.urlencoded());
 app.use(express.methodOverride());
 app.use(app.router);
 app.use(express.bodyParser());
-// app.use(helmet.xframe());
-// app.use(helmet.iexss());
-// app.use(helmet.contentTypeOptions());
-// app.use(helmet.cacheControl());
-// app.use(express.cookieParser(process.env.cpsKey));
-// app.use(express.session({
-//   secret: process.env.sKey,
-//   key: 'sid',
-//     cookie: {httpOnly: true, secure: true}
-// }));
+app.use(helmet.xframe());
+app.use(helmet.iexss());
+app.use(helmet.contentTypeOptions());
+app.use(helmet.cacheControl());
+app.use(express.cookieParser(process.env.cpsKey));
+app.use(express.cookieParser(process.env.cpsKey));
+app.use(express.session({
+  secret: uuid.v4(),
+  key: 'sid',
+    cookie: {
+    	httpOnly: true, secure: true
+    }
+}));
 
-// app.use(express.csrf());
-// app.use(function (req, res, next) {
-//   res.locals.csrftoken = req.csrfToken();
-//   next();
-// });
+app.use(express.csrf());
+app.use(function (req, res, next) {
+  res.locals.csrftoken = req.csrfToken();
+  next();
+});
 // development only
 if ('development' == app.get('env')) {
   app.use(express.errorHandler());

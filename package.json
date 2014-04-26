@@ -7,7 +7,7 @@
     "start": "node app.js"
   },
   "dependencies": {
-    "base64-js": "*",
+    "node-uuid": "*",
     "bower": "*",
     "express": "3.5.1",
     "flickrapi": "~0.3.14",
