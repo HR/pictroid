@@ -28,16 +28,16 @@ div.navbar.navbar-default(role='navigation', class=headerClasses)
 						a(href="/upload") Upload
 				li
 					a(href="/about") About
-				if authed && user
+				if authed && username
 					li
 						!= '<a class="dropdown-toggle" href="#" data-toggle="dropdown">'
-						!= user.first+' '+user.last
+						!= username
 						!= '<b class="caret"></b></a>'
 						ul.dropdown-menu
 							li
-								a(href='/'+user.name) Profile
+								a(href='/user/'+username) Profile
 							li
-								a(href='/'+user.name+'/settings') Settings
+								a(href='/account/settings') Settings
 							li
 								a(href='/signout') Sign Out
 				else

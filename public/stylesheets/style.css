@@ -307,7 +307,12 @@ a:hover {
 	background-color: #999999;
 }
 
+.profile-header-picture {
+
+}
+
 .profile-name {
+	text-transform:capitalize;
 	font-size: 24px;
 	color: #a67c52;
 	margin-top: 10px;
@@ -347,21 +352,7 @@ form.form-transparent a {
 	text-shadow: 0 0 5px #000000;
 }
 
-#username {
-	padding-top: 0px !important;
-	vertical-align: middle;
-	font-size: 1.8rem;
-	line-height: 2rem;
-}
-
-#status  {
-	padding-top: 0px !important;
-	vertical-align: middle;
-	font-size: 1.6rem;
-	line-height: 1.6rem;
-}
-
-form.form-transparent input, form.form-transparent textarea, #username, #status {
+form.form-transparent input, form.form-transparent textarea, #username {
 	background-color: rgba(255, 255, 255, 0.2);
 	margin: 5px 0;
 	box-shadow: none;
@@ -533,24 +524,53 @@ footer .footer-logo {
 .settings-picture {
 	height: 110px;
 	width: 110px;
-	position: absolute;
+	position: relative;
+	float: left;
 	left: 0;
 	background-color: #999999;
 }
 
+.form-file {
+	position: relative;
+	position: relative;
+	float: left;
+	width: 100%;
+}
+
 .settings-picture:hover {
-	background-image: url();
+
 }
 
 .settings-sidebar {
 	margin-left: 115px;
 	min-height: 100px;
+} 
+
+.formp  {
+	padding-top: 0px !important;
+	vertical-align: middle;
+	font-size: 1.2rem !important;
+	background-color: rgba(255, 255, 255, 0.2);
+	box-shadow: none;
+	border: 2px solid transparent;
+	height: 28px;
+	color: #ffffff;
+	border-radius: 2px;
+	margin-bottom: 5px;
+}
+#username {
+	padding-top: 0px !important;
+	text-shadow: 0px 0px 20px #000;
+	vertical-align: middle;
+	font-size: 1.8rem;
+	text-transform:capitalize;
+	background-color: rgba(255, 255, 255, 0) !important;
 }
 
 /* Details */
 .image-page {
 	margin-bottom: 0;
-	padding: 0 !important;
+	padding-bottom: 0 !important;
 }
 
 .image-title {
@@ -563,7 +583,7 @@ footer .footer-logo {
 }
 
 .image-stats {
-	padding: 10px 15px 15px;
+	padding: 10px 15px;
 }
 
 .image-stats div {
@@ -580,10 +600,20 @@ footer .footer-logo {
 
 .image-social {
 	float: right;
+	padding-top: 3px;
 }
 
 .image-social div + div {
 	margin-left: 15px;
+}
+
+.image-share {
+	height: auto;
+	float: right;
+	position: relative;
+	width: auto;
+	margin-left: 12px;
+	display: inline-block;
 }
 
 .image-details {
@@ -630,6 +660,7 @@ footer .footer-logo {
 	font-weight: 200;
 	display: flex;
 	flex-flow: row wrap;
+	margin: 0px !important;
 }
 
 .feed-item {

@@ -12,7 +12,10 @@ html
 		// Meta
 		meta(charset='utf-8')
 		meta(name='viewport', content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no')
-		
+		if secure
+			meta(http-equiv='cache-control', content='no-cache')
+			meta(http-equiv='expires', content='0')
+			meta(http-equiv='pragma', content='no-cache')
 		// Favicon
 		link(rel="icon", type="image/png", href="/images/favicon/64.png")
 
@@ -36,20 +39,6 @@ html
 		meta(name='Pictroid', content='#eee')
 		meta(name='Pictroid', content='/images/favicon/mstile-144x144.png')
 	body
-		//
-			script(type='text/javascript')
-				var Parse = require('parse').Parse;
-					window.onload = function(){
-						Parse.initialize(,);
-						var query = new Parse.Query(Parse.User);
-						query.find({
-							success: function(users) {
-								for (var i = 0; i < users.length; ++i) {
-									console.log(users[i].get('username'));
-								}
-							}
-						});
-					}
 		div(id="wrapper", class=bodyClasses)
 			include components/header
 			block content
@@ -57,6 +46,6 @@ html
 		
 		// Bootstrap core JavaScript
 		// Placed at the end of the document so the pages load faster
-		script(src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js")
-		script(src="/bootstrap/bootstrap.min.js")
-		script(src="//www.parsecdn.com/js/parse-1.2.18.min.js")
+		script(src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js?n=1")
+		script(src="/bootstrap/bootstrap.min.js?n=1")
+		script(src="//www.parsecdn.com/js/parse-1.2.18.min.js?n=1")

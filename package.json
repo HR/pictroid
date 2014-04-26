@@ -7,19 +7,23 @@
     "start": "node app.js"
   },
   "dependencies": {
+    "base64-js": "*",
     "bower": "*",
     "express": "3.5.1",
     "flickrapi": "~0.3.14",
     "grunt-cli": "*",
+    "helmet": "*",
     "jade": "*",
+    "moment": "^2.6.0",
     "mongodb": "*",
     "monk": "*",
-    "parse": "*",
-    "request": "*",
-    "sass": "*",
-    "helmet": "*",
-    "moment": "^2.6.0",
+    "multiparty": "*",
     "newrelic": "*",
-    "form-data": "~0.1.2"
+    "node-uuid": "*",
+    "parse": "*",
+    "redis": "*",
+    "request": "*",
+    "form-data": "~0.1.2",
+    "sass": "*"
   }
 }

@@ -1,0 +1,64 @@
+extends ../layout
+
+block head
+	title Settings | Pictroid
+
+block variables
+	- var bodyClasses = "background-wallpaper"
+	- var headerClasses = 'navbar-fixed-top navbar-transparent'
+
+block content
+	form.form-settings.form-transparent(role="form", action="/account/settings", method="POST", onsubmit="return(validate());")
+		img(src="/images/logo/icon.png", alt="Pictroid", height="75")
+		hr
+		.settings-combo
+			img.settings-picture(src="", alt="")
+			.settings-sidebar
+				p.form-control(id="username") #{username}
+				p.form-control(id="status") #{status}
+				input.form-control(type="email", name="email", placeholder='#{email}')
+		hr
+		input.form-control(type="password", name="password", placeholder="New Password")
+		input.form-control(type="password", name="passwordconfirm", placeholder="Confirm Password")
+		p(id="emsg" style="color:#DD7674;display:none;")
+		if (error)
+			p(class="emsg") #{error}
+		button.btn.btn-lg.btn-block(type="submit") Update
+		script.
+			function validate(){
+				var valid = true,
+					form = window.document.forms[0],
+					ermsg,
+					emsg = window.document.querySelectorAll(".emsg")[0];
+				if(form.email.value || form.password.value){
+					if(form.email.value) {
+						if(!(/^([a-z0-9_\.-]+)@([\da-z\.-]+)\.([a-z\.]{2,6})$/g).test(form.email.value)){	
+							ermsg = "Invalid email, a valid email Go-hub.be@email.com";
+							valid = false;
+						}
+					}
+					if(form.password.value) {
+						if(form.password.value !== form.passwordconfirm.value){
+							ermsg = "Passwords do not match";
+							valid = false;
+						}
+						if(!(/^[a-z0-9_-]{6,14}$/g).test(form.password.value)) {
+							ermsg = "Invalid password, needs to be 6-14 alphanumeric and - _ characters";
+							valid = false;
+						}
+					}
+					//- console.log('flag: '+flag);
+					//- console.log(Boolean(valid && (form.email.value || flag)));
+					//- return false;
+					if(valid){
+						emsg.style.display = "none";
+						return valid;
+					} else {
+						emsg.innerHTML = ermsg;
+						emsg.style.display = "block";
+						return valid;
+					}
+				} else {
+					return false;
+				}
+			}

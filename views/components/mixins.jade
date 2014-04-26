@@ -21,9 +21,15 @@ mixin feed()
 							a(href="#")
 								| User01
 						li(class="views")
-							| 532
+							if(views)
+								#{views}
+							else 
+								| 0
 						li(class="comments")
-							| 23
+							if(comments)
+								#{comments}
+							else
+								| 0
 				.text
 					h4=val.image.get("name")
 					p=val.image.get("description")

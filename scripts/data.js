@@ -93,6 +93,12 @@ asteroids.query.getPic = function(id){
 		return image;
 	});
 }
+asteroids.query.getUser = function(username){
+	var userQuery = new Parse.Query(Parse.User);
+	return userQuer.get(username).then(function(result){
+		console.log(result);
+	});
+}
 asteroids.query.getLatest = function(width) {
 	var imgQuery = new Parse.Query(Image);
 	imgQuery.descending("createdAt");

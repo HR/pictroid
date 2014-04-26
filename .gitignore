@@ -12,4 +12,7 @@ out/
 thumbs.db
 _MACOSX
 __MACOSX
+*.exe
+*.dll
+*.conf
 *.sublime-workspace
