@@ -87,10 +87,10 @@ asteroids.query.getPic = function(id){
 		image.image = result;
 
 		// Get src
-		return result.relation("src").query().first().then(function(src){
-			image.src = src;
-			return image;
-		});
+		return result.relation("src").query().first();
+	}).then(function(src){
+		image.src = src;
+		return image;
 	});
 }
 asteroids.query.getLatest = function(width) {

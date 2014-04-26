@@ -19,6 +19,7 @@
     "sass": "*",
     "helmet": "*",
     "moment": "^2.6.0",
-    "newrelic": "*"
+    "newrelic": "*",
+    "form-data": "~0.1.2"
   }
 }
