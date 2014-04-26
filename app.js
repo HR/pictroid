@@ -21,16 +21,19 @@ var express = require('express'),
 	multiparty = require('multiparty'),
 	redis = require("redis"),
 	fs = require("fs"),
-	uuid = require('node-uuid');
+	uuid = require('node-uuid'),
+	url = require('url');
   
 // Parse initialization  
 var Parse = require('parse').Parse;
 Parse.initialize(process.env.parseID, process.env.parseJavascriptKey, process.env.parseMasterKey);
 var currentUser;
-/*var cachedCurrentUser = redis.createClient();
-cachedCurrentUser.on("error", function (err) {
-        console.log("Error " + err);
-});*/
+// var redisURL = url.parse(process.env.REDISCLOUD_URL);
+// var cache = redis.createClient(redisURL.port, redisURL.hostname, {no_ready_check: true});
+// cache.auth(redisURL.auth.split(":")[1]);
+// cache.on("error", function (err) {
+//         console.log("Error " + err);
+// });
 
 // all environments
 app.set('port', process.env.PORT || 3000);
@@ -51,9 +54,9 @@ app.use(express.cookieParser(process.env.cpsKey));
 app.use(express.session({
   secret: uuid.v4(),
   key: 'sid',
-    cookie: {
-    	httpOnly: true, secure: true
-    }
+	cookie: {
+		httpOnly: true, secure: true
+	}
 }));
 
 app.use(express.csrf());
@@ -150,7 +153,7 @@ app.get('/signout', function(req, res) {
 	if(currentUser){
 		Parse.User.logOut();
 		currentUser = null;
-		//cachedCurrentUser.del("username","email", "status", "profileImgSrc");
+		cache.del("username","email", "status", "profileImgSrc");
 		if (req.query.return_to) {
 			res.redirect(req.query.return_to);
 		} else {
@@ -248,16 +251,16 @@ app.post('/account/settings', function(req, res) {
 	currentUser.save()
 	.then(
 	  function(user) {
-	    return user.fetch();
+		return user.fetch();
 	  }
 	)
 	.then(
 	  function(user) {
-	    console.log('Password changed', user);
-	    res.redirect('/passwordchange_confirmation?username='+currentUser.attributes.username);
+		console.log('Password changed', user);
+		res.redirect('/passwordchange_confirmation?username='+currentUser.attributes.username);
 	  },
 	  function(error) {
-	    console.log('Something went wrong', error);
+		console.log('Something went wrong', error);
 	  }
 	);
 });
@@ -313,10 +316,10 @@ app.post('/signin', function(req, res) {
 					);
 				}
 				currentUser = Parse.User.current();
-				/*cachedCurrentUser.set("username", currentUser.attributes.username);
-			    cachedCurrentUser.set("email", currentUser.attributes.email);
-			    cachedCurrentUser.set("status", currentUser.attributes.status);
-			    cachedCurrentUser.set("profileImgSrc", currentUser.get("profileImg").url());*/
+				cache.set("username", currentUser.attributes.username);
+				cache.set("email", currentUser.attributes.email);
+				cache.set("status", currentUser.attributes.status);
+				cache.set("profileImgSrc", currentUser.get("profileImg").url());
 			} else {
 				res.render('signin', { error : "You have to confirm your email before you can Sign In", secure:true});
 			}
