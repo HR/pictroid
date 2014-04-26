@@ -27,12 +27,10 @@ var express = require('express'),
 var Parse = require('parse').Parse;
 Parse.initialize(process.env.parseID, process.env.parseJavascriptKey, process.env.parseMasterKey);
 var currentUser;
-/* Redis integration
-var cachedCurrentUser = redis.createClient();
 var cachedCurrentUser = redis.createClient();
 cachedCurrentUser.on("error", function (err) {
         console.log("Error " + err);
-});*/
+});
 
 // all environments
 app.set('port', process.env.PORT || 3000);
@@ -152,7 +150,7 @@ app.get('/signout', function(req, res) {
 	if(currentUser){
 		Parse.User.logOut();
 		currentUser = null;
-		// cachedCurrentUser.del("username","email", "status", "profileImgSrc");
+		cachedCurrentUser.del("username","email", "status", "profileImgSrc");
 		if (req.query.return_to) {
 			res.redirect(req.query.return_to);
 		} else {
@@ -315,11 +313,10 @@ app.post('/signin', function(req, res) {
 					);
 				}
 				currentUser = Parse.User.current();
-				/*
 				cachedCurrentUser.set("username", currentUser.attributes.username);
 			    cachedCurrentUser.set("email", currentUser.attributes.email);
 			    cachedCurrentUser.set("status", currentUser.attributes.status);
-			    cachedCurrentUser.set("profileImgSrc", currentUser.get("profileImg").url());*/
+			    cachedCurrentUser.set("profileImgSrc", currentUser.get("profileImg").url());
 			} else {
 				res.render('signin', { error : "You have to confirm your email before you can Sign In", secure:true});
 			}
