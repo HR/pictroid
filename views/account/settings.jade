@@ -8,13 +8,12 @@ block variables
 	- var headerClasses = 'navbar-fixed-top navbar-transparent'
 
 block content
-	form.form-settings.form-transparent(role="form", action="/account/settings", method="POST", enctype="multipart/form-data") 
-		//- , onsubmit="return(validate());"
+	form.form-settings.form-transparent(role="form", action="/account/settings", method="POST", enctype="multipart/form-data", onsubmit="return(validate());")
 		img(src="/images/logo/icon.png", alt="Pictroid", height="75")
 		hr
 		.settings-combo
 			img.settings-picture(src="#{profileImgSrc}", alt="#{username}_profile_image")
-			//- input.form-file(type="file" id="profilePhotoFileUpload" name="profileImgFile")
+			input.form-file(type="file", id="profilePhotoFileUpload", name="profileImgFile", accept="image/*")
 			.settings-sidebar
 				p.form-control(id="username") #{username}
 				p.form-control(class="formp") #{status}
@@ -30,22 +29,26 @@ block content
 			function validate(){
 				var valid = true,
 					form = window.document.forms[0],
-					ermsg = "Invalid credentials",
+					ermsg = "",
 					emsg = window.document.querySelectorAll(".emsg")[0];
-				if(form.password.value) {
-					if(!(/^[a-z0-9_-]{6,14}$/g).test(form.password.value)) {
-						ermsg = "Invalid password, needs to be 6-14 alphanumeric and - _ characters";
-						valid = false;
-					}
-					if(form.password.value !== form.passwordconfirm.value){
-						ermsg = "Passwords do not match";
-						valid = false;
-					}
-				} else {
+				if((!form.profileImgFile || !form.profileImgFile.files[0]) &&
+						!form.password.value) {
+					ermsg = "Nothing to change...";
 					valid = false;
 				}
-				console.log(valid);
-				if(valid){
+				if(form.profileImgFile && form.profileImgFile.files[0] && form.profileImgFile.files[0].size > 30000){
+					ermsg += "File must be below 30kb in size.<br>";
+					valid = false;
+				}
+				if(form.password.value && !(/^[a-z0-9_-]{6,14}$/g).test(form.password.value)){
+					ermsg += "Invalid password, needs to be 6-14 alphanumeric and - _ characters.<br>";
+					valid = false;
+				}
+				if(form.password.value && !(form.password.value === form.passwordconfirm.value)) {
+					ermsg += "Passwords do not match.<br>";
+					valid = false;
+				}
+				if (valid) {
 					emsg.style.display = "none";
 					return valid;
 				} else {
