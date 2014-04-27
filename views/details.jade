@@ -15,8 +15,11 @@ block content
 			img.image-image(src=picObject.src.get("src"), alt=picObject.image.get("name"))
 			.image-stats
 				.image-by
-					i by&nbsp;
-					a(href="#") username
+					i by &nbsp;
+					if(imgOwner)
+						a(href="/user/#{imgOwner}") imgOwner
+					else
+						a(href="/user/pictroid") Pictroid
 				.image-tags
 					.tag #foo
 					.tag #bar

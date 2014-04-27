@@ -18,8 +18,10 @@ mixin feed()
 				.stats
 					ul(class="details")
 						li(class="user")
-							a(href="#")
-								| User01
+							if(imgOwner)
+								a(href="/user/#{imgOwner}") imgOwner
+							else
+								a(href="/user/pictroid") Pictroid
 						li(class="views")
 							if(views)
 								#{views}
