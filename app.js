@@ -7,6 +7,8 @@
 var express = require('express'),
 	http = require('http'),
 	mongo = require('mongodb'),
+	MongoClient = require('mongodb').MongoClient,
+	mongoose = require('mongoose'),
 	monk = require('monk'),
 	path = require('path'),
 	routes = require('./routes'),
@@ -19,18 +21,28 @@ var express = require('express'),
 	moment = require('moment'),
 	base64 = require('base64-js'),
 	multiparty = require('multiparty'),
-	redis = require("redis"),
 	fs = require("fs"),
-	uuid = require('node-uuid');
+	uuid = require('node-uuid'),
+	url = require('url');
   
 // Parse initialization  
 var Parse = require('parse').Parse;
 Parse.initialize(process.env.parseID, process.env.parseJavascriptKey, process.env.parseMasterKey);
 var currentUser;
-/*var cachedCurrentUser = redis.createClient();
-cachedCurrentUser.on("error", function (err) {
-        console.log("Error " + err);
-});*/
+var cache;
+app.configure('development', function(){
+  app.use(express.errorHandler({ dumpExceptions: true, showStack: true }));
+  // MongoClient.connect('mongodb://127.0.0.1:27017/db', function(err, db) {
+  //   if(err){
+  //   	console.log(err);
+  //   }
+  //  });
+  // mongoose.connect('mongodb://127.0.0.1:27017/db');
+});
+
+app.configure('production', function(){
+	app.use(express.errorHandler());
+});
 
 // all environments
 app.set('port', process.env.PORT || 3000);
@@ -51,9 +63,9 @@ app.use(express.cookieParser(process.env.cpsKey));
 app.use(express.session({
   secret: uuid.v4(),
   key: 'sid',
-    cookie: {
-    	httpOnly: true, secure: true
-    }
+	cookie: {
+		httpOnly: true, secure: true
+	}
 }));
 
 app.use(express.csrf());
@@ -150,7 +162,6 @@ app.get('/signout', function(req, res) {
 	if(currentUser){
 		Parse.User.logOut();
 		currentUser = null;
-		//cachedCurrentUser.del("username","email", "status", "profileImgSrc");
 		if (req.query.return_to) {
 			res.redirect(req.query.return_to);
 		} else {
@@ -225,41 +236,43 @@ app.post('/account/settings', function(req, res) {
 	// Get file string as input stream
 	// Convert image to base64 with buffer
 	// Set parse profile image
-	//	form.parse(req, function(err, fields, files) {
-		// var imagef = fs.readFile(files.profileImgFile.path, 'utf8', function (err, data) {
-		//     if (err) throw err;
-		//     console.log(data.toString());
-		// });
-		// var image = new Buffer(files.profileImgFile, 'base64').toString('binary');
-	// });
-	// var image = new Buffer(req.body.profileImgFile, 'base64').toString('binary');
-	// currentUser.set("profileImg", new Parse.File("user_profile", { base64:image}));
-	// currentUser.save().then(
-	//   function(user) {
-	//     console.log('success');
-	//     res.redirect('/account/settings');
-	//   },
-	//   function(error) {
-	//     console.log('error', error);
-	//     res.render('signin', { error : error.message, secure:true});
-	//   }
-	// );
-	currentUser.set("password", req.body.password);
-	currentUser.save()
-	.then(
-	  function(user) {
-	    return user.fetch();
-	  }
-	)
-	.then(
-	  function(user) {
-	    console.log('Password changed', user);
-	    res.redirect('/passwordchange_confirmation?username='+currentUser.attributes.username);
-	  },
-	  function(error) {
-	    console.log('Something went wrong', error);
-	  }
-	);
+	form.parse(req, function(err, fields, files) {
+		var imagef = fs.readFile(files.profileImgFile[0].path, function (err, data) {
+			if (err) throw err;
+			// convert to array
+			data = Array.prototype.map.call(data, function (val){
+				return val;
+			});
+			var file = new Parse.File("user_profile", data, files.profileImgFile[0].headers["content-type"]);
+			file.save().then(function (file) {
+				currentUser.set("profileImg", file);
+				return currentUser.save();
+			}).then(function(user) {
+				console.log('success');
+				res.redirect('/account/settings');
+			},
+			function(error) {
+				console.log('error', error);
+				res.render('signin', { error : error.message, secure:true});
+			});
+		});
+		currentUser.set("password", fields.password[0]);
+		currentUser.save()
+		.then(
+		  function(user) {
+			return user.fetch();
+		  }
+		)
+		.then(
+		  function(user) {
+			console.log('Password changed', user);
+			res.redirect('/passwordchange_confirmation?username='+currentUser.attributes.username);
+		  },
+		  function(error) {
+			console.log('Something went wrong', error);
+		  }
+		);
+	});
 });
 
 app.post('/signup', function(req, res) {
@@ -313,10 +326,6 @@ app.post('/signin', function(req, res) {
 					);
 				}
 				currentUser = Parse.User.current();
-				/*cachedCurrentUser.set("username", currentUser.attributes.username);
-			    cachedCurrentUser.set("email", currentUser.attributes.email);
-			    cachedCurrentUser.set("status", currentUser.attributes.status);
-			    cachedCurrentUser.set("profileImgSrc", currentUser.get("profileImg").url());*/
 			} else {
 				res.render('signin', { error : "You have to confirm your email before you can Sign In", secure:true});
 			}

@@ -15,4 +15,5 @@ __MACOSX
 *.exe
 *.dll
 *.conf
+*.dat
 *.sublime-workspace

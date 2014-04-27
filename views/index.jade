@@ -13,10 +13,11 @@ block content
 			img(src="/images/logo/icon.png", alt="Pictroid", height="200")
 			h2 Socially exploring the universe 
 			if authed
-				a.btn.clear(href="/upload") Upload			
-			else
-				a.btn.clear(href="/signin") Sign In
 				a.btn.clear(href="/explore") Explore
+				a.btn.clear(href="/upload") Upload
+			else
+				a.btn.clear(href="/explore") Explore
+				a.btn.clear(href="/signin") Sign In
 	.page
 		br
 		.container
