@@ -28,7 +28,7 @@ block content
 							else 
 								| 0
 						li(class="comments")
-							a(href="#disqus_thread")
+							a(href="/pic/"+picObject.image.id+"#disqus_thread", data-disqus-identifier=picObject.image.id) 0
 							//
 								if(picObject.image.get("commentCount"))
 									span= picObject.image.get("commentCount")
@@ -67,10 +67,13 @@ block content
 						.comment
 							a.comment-user(href="#") Foo User
 							.comment-text Bar baz qux
+				!= '<script>var thisID="'+picObject.image.id+'";</script>'
 				#disqus_thread
 					script.
 						/* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
 						var disqus_shortname = 'codexa'; // required: replace example with your forum shortname
+						var disqus_identifier = thisID;
+						
 						/* * * DON'T EDIT BELOW THIS LINE * * */
 						(function() {
 							var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
