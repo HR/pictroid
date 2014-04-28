@@ -15,8 +15,11 @@ block content
 			img.image-image(src=picObject.src.get("src"), alt=picObject.image.get("name"))
 			.image-stats
 				.image-by
-					i by&nbsp;
-					a(href="#") username
+					i by &nbsp;
+					if(imgOwner)
+						a(href="/user/#{imgOwner}") imgOwner
+					else
+						a(href="/user/pictroid") Pictroid
 				.image-tags
 					.tag #foo
 					.tag #bar
@@ -28,10 +31,12 @@ block content
 							else 
 								| 0
 						li(class="comments")
-							if(picObject.image.get("commentCount"))
-								span= picObject.image.get("commentCount")
-							else 
-								| 0
+							a(href="/pic/"+picObject.image.id+"#disqus_thread", data-disqus-identifier=picObject.image.id) 0
+							//
+								if(picObject.image.get("commentCount"))
+									span= picObject.image.get("commentCount")
+								else 
+									| 0
 						li.image-share						
 							.a2a_kit.a2a_default_style
 								a.a2a_dd(href="http://www.addtoany.com/share_save")
@@ -44,23 +49,49 @@ block content
 			.image-details
 				.image-description 
 					p= picObject.image.get("description")
-				.image-comments
-					h2 Comment on this pic
-					if !authed
-						p.image-comments-notice Please <a href="/signin">Sign In</a> or 
-							<a href="/signup">Sign Up</a> to comment.
-					.comment
-						a.comment-user(href="#") Foo User
-						.comment-text Bar baz qux
-					.comment
-						a.comment-user(href="#") Foo User
-						.comment-text Bar baz qux
-					.comment
-						a.comment-user(href="#") Foo User
-						.comment-text Bar baz qux
-					.comment
-						a.comment-user(href="#") Foo User
-						.comment-text Bar baz qux
-					.comment
-						a.comment-user(href="#") Foo User
-						.comment-text Bar baz qux
+				//
+					.image-comments
+						h2 Comment on this pic
+						if !authed
+							p.image-comments-notice Please <a href="/signin">Sign In</a> or 
+								<a href="/signup">Sign Up</a> to comment.
+						.comment
+							a.comment-user(href="#") Foo User
+							.comment-text Bar baz qux
+						.comment
+							a.comment-user(href="#") Foo User
+							.comment-text Bar baz qux
+						.comment
+							a.comment-user(href="#") Foo User
+							.comment-text Bar baz qux
+						.comment
+							a.comment-user(href="#") Foo User
+							.comment-text Bar baz qux
+						.comment
+							a.comment-user(href="#") Foo User
+							.comment-text Bar baz qux
+				!= '<script>var thisID="'+picObject.image.id+'";</script>'
+				#disqus_thread
+					script.
+						/* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+						var disqus_shortname = 'codexa'; // required: replace example with your forum shortname
+						var disqus_identifier = thisID;
+						
+						/* * * DON'T EDIT BELOW THIS LINE * * */
+						(function() {
+							var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+							dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+							(document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+						})();
+						(function () {
+							var s = document.createElement('script'); s.async = true;
+							s.type = 'text/javascript';
+							s.src = '//' + disqus_shortname + '.disqus.com/count.js';
+							(document.getElementsByTagName('HEAD')[0] || document.getElementsByTagName('BODY')[0]).appendChild(s);
+						}());
+					noscript
+						| Please enable JavaScript to view the
+						a(href='http://disqus.com/?ref_noscript') comments powered by Disqus.
+					a.dsq-brlink(href='http://disqus.com')
+						| comments powered by
+						span.logo-disqus Disqus

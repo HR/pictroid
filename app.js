@@ -7,6 +7,8 @@
 var express = require('express'),
 	http = require('http'),
 	mongo = require('mongodb'),
+	MongoClient = require('mongodb').MongoClient,
+	mongoose = require('mongoose'),
 	monk = require('monk'),
 	path = require('path'),
 	routes = require('./routes'),
@@ -19,7 +21,6 @@ var express = require('express'),
 	moment = require('moment'),
 	base64 = require('base64-js'),
 	multiparty = require('multiparty'),
-	redis = require("redis"),
 	fs = require("fs"),
 	uuid = require('node-uuid'),
 	url = require('url');
@@ -31,17 +32,16 @@ var currentUser;
 var cache;
 app.configure('development', function(){
   app.use(express.errorHandler({ dumpExceptions: true, showStack: true }));
-  cache = redis.createClient();
+  // MongoClient.connect('mongodb://127.0.0.1:27017/db', function(err, db) {
+  //   if(err){
+  //   	console.log(err);
+  //   }
+  //  });
+  // mongoose.connect('mongodb://127.0.0.1:27017/db');
 });
 
 app.configure('production', function(){
 	app.use(express.errorHandler());
-	var redisURL = url.parse(process.env.REDISCLOUD_URL);
-	cache = redis.createClient(redisURL.port, redisURL.hostname, {no_ready_check: true});
-	cache.auth(redisURL.auth.split(":")[1]);
-});
-cache.on("error", function (err) {
-   console.log("Error " + err);
 });
 
 // all environments
@@ -162,7 +162,6 @@ app.get('/signout', function(req, res) {
 	if(currentUser){
 		Parse.User.logOut();
 		currentUser = null;
-		cache.del("username","email", "status", "profileImgSrc");
 		if (req.query.return_to) {
 			res.redirect(req.query.return_to);
 		} else {
@@ -323,10 +322,6 @@ app.post('/signin', function(req, res) {
 					);
 				}
 				currentUser = Parse.User.current();
-				cache.set("username", currentUser.attributes.username);
-				cache.set("email", currentUser.attributes.email);
-				cache.set("status", currentUser.attributes.status);
-				cache.set("profileImgSrc", currentUser.get("profileImg").url());
 			} else {
 				res.render('signin', { error : "You have to confirm your email before you can Sign In", secure:true});
 			}
