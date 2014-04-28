@@ -9,7 +9,7 @@ block variables
 	- var charCount = 1000
 
 block content
-	form.form-transparent(role="form", action="/upload", method="POST", onsubmit="return(validate());")
+	form.form-transparent(role="form", action="/upload", enctype="multipart/form-data", method="POST", onsubmit="return(validate());")
 		img(src="/images/logo/icon.png", alt="Pictroid", height="75")
 		hr
 		#dropbox

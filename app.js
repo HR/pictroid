@@ -340,9 +340,24 @@ app.post('/signin', function(req, res) {
 
 app.post('/upload', function(req, res) {
 	// Code to handle upload
-	res.writeHead(200,{"content-type":"text/plain;charset=UTF8;"});
-	res.end("POST");
-	console.log(request.body); 
+	var form = new multiparty.Form();
+	form.parse(req, function(err, fields, files) {
+		var imagef = fs.readFile(files.image[0].path, function (err, data) {
+			if(err) throw err;
+			
+			db.asteroids.upload(files.image[0].originalFilename, [{
+				src: data,
+				contentType: files.image[0].headers["content-type"],
+				resolution: {},
+				isFile: true
+			}], fields.description[0]).then(function (result) {
+				console.log(result);
+			}, function (err) {
+				console.log(err);
+			});
+			res.redirect("/upload");
+		});
+	});
 });
 
 db.asteroids.query.getLatest(600).then(function() {
