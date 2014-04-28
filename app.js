@@ -233,10 +233,6 @@ app.post('/kimono_spitzer', function(req, res) {
 
 app.post('/account/settings', function(req, res) {
 	var form = new multiparty.Form();
-	// TO DO
-	// Get file string as input stream
-	// Convert image to base64 with buffer
-	// Set parse profile image
 	form.parse(req, function(err, fields, files) {
 		var imagef = fs.readFile(files.profileImgFile[0].path, function (err, data) {
 			if (err) throw err;
