@@ -17,6 +17,7 @@ var asteroids = {};
  * @param {Object[]} src Array of src image files.
  * @param {Boolean} [src.isFile=false] Whether the file is file or url.
  * @param {String|Array} src.src The source of the file, can be url, base64, or byte array
+ * @param {string} [src.contentType="image/gif"] The content type if it is a file.
  * @param {Object} src.resolution Resolution information of the image
  * @param {Number} src.resolution.x The width of the image in pixels
  * @param {Number} src.resolution.y The height of the image in pixels
@@ -52,7 +53,16 @@ asteroids.upload = function(name, src, desc) {
 			imgSrc.setACL(imageACL);
 
 			if(src[i].isFile) {
-				var file = new Parse.File(name + ".gif", typeof src[i].src === "string" ? {base64: src[i].src} : src[i].src);
+				if(typeof src[i].src === "string") {
+					src[i].src = {base64: src[i].src};
+				} else if(!Array.isArray(src[i].src)) {
+					// Convert data to array
+					src[i].src = Array.prototype.map.call(src[i].src, function (val){
+						return val;
+					});
+				}
+				
+				var file = new Parse.File(name, src[i].src, src[i].contentType || "image/gif");
 
 				srcReady = file.save();
 			} else {
@@ -64,16 +74,20 @@ asteroids.upload = function(name, src, desc) {
 					imgSrc.set("src", file);
 				} else {
 					imgSrc.set("file", file);
-					imgSrc.set("src", flile.url());
+					imgSrc.set("src", file.url());
 				}
 
-				return imgSrc.save().then(function(imgSrc) {
-					image.relation("src").add(imgSrc);
-				});
+				return imgSrc.save()
+			}).then(function(imgSrc) {
+				image.relation("src").add(imgSrc);
 			}));
 		}
 		return Parse.Promise.when(finished).then(function(result) {
+			image.set("owner", Parse.User.current());
 			return image.save();
+		}).then(function (result) {
+			Parse.User.current().relation("uploads").add(image);
+			return Parse.User.current().save();
 		});
 	});
 }

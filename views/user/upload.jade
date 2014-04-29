@@ -9,7 +9,7 @@ block variables
 	- var charCount = 1000
 
 block content
-	form.form-transparent(role="form", action="/upload", method="POST", onsubmit="return(validate());")
+	form.form-transparent(role="form", action="/upload", enctype="multipart/form-data", method="POST", onsubmit="return(validate());")
 		img(src="/images/logo/icon.png", alt="Pictroid", height="75")
 		hr
 		#dropbox
@@ -20,6 +20,8 @@ block content
 		p(id="or")
 			| OR
 		input.form-control(type="file", id="image", name="image")
+		hr
+		input.form-control(type="text", id="title", name="title", placeholder="Title")
 		textarea.form-control(type="text", name="description", placeholder="Description" row="20")
 		p(style="text-align:right; padding: 0px;")
 			| You have #{charCount} characters left

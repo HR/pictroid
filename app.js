@@ -232,10 +232,6 @@ app.post('/kimono_spitzer', function(req, res) {
 
 app.post('/account/settings', function(req, res) {
 	var form = new multiparty.Form();
-	// TO DO
-	// Get file string as input stream
-	// Convert image to base64 with buffer
-	// Set parse profile image
 	form.parse(req, function(err, fields, files) {
 		var imagef = fs.readFile(files.profileImgFile[0].path, function (err, data) {
 			if (err) throw err;
@@ -339,9 +335,24 @@ app.post('/signin', function(req, res) {
 
 app.post('/upload', function(req, res) {
 	// Code to handle upload
-	res.writeHead(200,{"content-type":"text/plain;charset=UTF8;"});
-	res.end("POST");
-	console.log(request.body); 
+	var form = new multiparty.Form();
+	form.parse(req, function(err, fields, files) {
+		var imagef = fs.readFile(files.image[0].path, function (err, data) {
+			if(err) throw err;
+			
+			db.asteroids.upload(fields.title[0], [{
+				src: data,
+				contentType: files.image[0].headers["content-type"],
+				resolution: {},
+				isFile: true
+			}], fields.description[0]).then(function (result) {
+				console.log(result);
+			}, function (err) {
+				console.log(err);
+			});
+			res.redirect("/upload");
+		});
+	});
 });
 
 db.asteroids.query.getLatest(600).then(function() {
