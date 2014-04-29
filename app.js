@@ -340,7 +340,7 @@ app.post('/upload', function(req, res) {
 		var imagef = fs.readFile(files.image[0].path, function (err, data) {
 			if(err) throw err;
 			
-			db.asteroids.upload(files.image[0].originalFilename, [{
+			db.asteroids.upload(fields.title[0], [{
 				src: data,
 				contentType: files.image[0].headers["content-type"],
 				resolution: {},
