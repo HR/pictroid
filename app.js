@@ -108,7 +108,7 @@ app.get('/pic/:id', function(req, res) {
 			res.render('error', { error: '404' }); 	
 		});
 	} else {
-		db.asteroids.query.getPic(req.params.id).then(function(result) {
+		db.asteroids.query.getPic(req.params.id).then(function(result) {;
 			res.render('details', { picObject: result });
 		}, function() { 
 			res.render('error', { error: '404' }); 	
@@ -117,11 +117,17 @@ app.get('/pic/:id', function(req, res) {
 });
 app.get('/user/:name', function(req, res) {
 	var query = new Parse.Query(Parse.User);
-	query.equalTo("username", req.params.name);  // find all the women
+	query.equalTo("username", req.params.name);
 	query.first({
 		success: function(user) {
-			// Do stuff
 			if (user !== undefined) {
+				var relation = user.relation("uploads");
+				relation.query().find({
+					success: function(uploads) {
+						// uploads contains the uploads of the user in param
+						console.log(uploads);
+					}
+				});
 				if (currentUser) {
 					res.render('user/profile', { profile_username:req.params.name, profile_image:user.get("profileImg").url(), profile_status:user.get("status"), username:currentUser.attributes.username, authed:true});
 				} else {
@@ -139,7 +145,7 @@ app.get('/user/:name', function(req, res) {
 	
 });
 app.get('/upload', function(req, res) {
-	// Code to authedorize
+	// Code to auth
 	if (currentUser) {
 		res.render('user/upload', { username:currentUser.attributes.username, authed:true});
 	} else {
@@ -179,15 +185,28 @@ app.get('/signup', function(req, res) {
 	}
 });
 app.get('/account/settings', function(req, res) {
-	// Code to authedorize
+	// Code to auth
 	if (currentUser) {
 		res.render('account/settings', { username:currentUser.attributes.username, email:currentUser.attributes.email, status:currentUser.attributes.status, profileImgSrc:currentUser.get("profileImg").url(), authed:true, secure:true});
 	} else {
 		res.redirect('/signin');
 	}
 });
+app.get('/password_reset', function(req, res) {
+	if (!currentUser) {
+		res.render('password_reset', { secure:true});
+	} else {
+		res.redirect('/account/settings');
+	}
+});
+app.get('/password_reset_request', function(req, res) {
+	if(req.query.email){
+		res.render('password_reset_request', { email : req.query.email, secure:true});
+	} else {
+		res.redirect('/');
+	}
+});
 app.get('/passwordchange_confirmation', function(req, res) {
-	// Code to authedorize
 	if (req.query.username) {
 		res.render('passwordchange_confirmation', { username:req.query.username, secure:true});
 	} else {
@@ -209,12 +228,8 @@ app.get('/email_confirmation', function(req, res) {
 	}
 });
 app.get('/invalid_link', function(req, res) {
-	// Code to authedorize
-	if (req.query.username) {
-		res.render('passwordchange_confirmation', { username:req.query.username, secure:true});
-	} else {
-		res.redirect('/');
-	}
+	// Code to auth
+	res.redirect('/');
 });
 app.get('/*', function(req, res) {
 	res.render('error', { error: '404' });
@@ -229,7 +244,18 @@ app.post('/kimono_spitzer', function(req, res) {
 		res.send(500, arguments);
 	});
 });
-
+app.post('/password_reset', function(req, res) {
+	Parse.User.requestPasswordReset(req.body.email.toLowerCase(), {
+	  success: function() {
+	    // Password reset request was sent successfully
+	    res.redirect("/password_reset_request?email="+req.body.email.toLowerCase());
+	  },
+	  error: function(error) {
+	    // Show the error message somewhere
+	    alert("Error: " + error.code + " " + error.message);
+	  }
+	});
+});
 app.post('/account/settings', function(req, res) {
 	var form = new multiparty.Form();
 	form.parse(req, function(err, fields, files) {

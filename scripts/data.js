@@ -99,7 +99,6 @@ asteroids.query.getPic = function(id){
 	return imgQuery.get(id).then(function(result){
 		// Add image table
 		image.image = result;
-
 		// Get src
 		return result.relation("src").query().first();
 	}).then(function(src){
