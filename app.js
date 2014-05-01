@@ -83,6 +83,45 @@ app.get('/', function(req, res) {
 	if(currentUser){
 		res.render('index', { title: 'Pictroid', username:currentUser.attributes.username, authed:true});
 	} else {
+		var req = http.request({
+		    host: "www.kimonolabs.com",
+		    port: 80,
+		    path: "/api/5zeipr38?apikey="+process.env.kimonoKey,
+		    method: "GET",
+		    headers: {
+		        "Content-Type": "application/json"
+		    }
+		}, function(res) {
+		    var output = '';
+		    res.setEncoding('utf8');
+
+		    res.on('data', function (chunk) {
+		        output += chunk;
+		    });
+
+		    res.on('end', function() {
+		        var obj = JSON.parse(output);
+		        if(res.statusCode === 200) {
+		        		for(var b=0; b<obj.count; b++){
+		        			console.log("Title: "+obj.results.Apod_Detail[b].Title);
+	        				console.log("Date: "+obj.results.Apod_Detail[b].Date);
+	        				if (obj.results.Apod_Detail[b].Image.href === undefined) {
+	        					// reject record creation if undefined because there is moct likely an embedded video iframe from youtube there
+	        					console.log("--- undefined, src="+obj.results.Apod_Detail[b].Image.src+" "+b);
+	        				} else {
+	        					console.log("Image: "+obj.results.Apod_Detail[b].Image.href);
+	        				}
+	        				//console.log("Description: "+obj.results.Apod_Detail[b].Description.text);
+		        		}
+		            
+		        }
+		        // update parse -- only once
+		    });
+		});
+		req.on('error', function(err) {
+		    //res.send('error: ' + err.message);
+		});
+		req.end();
 		res.render('index');
 	}
 });
@@ -229,7 +268,7 @@ app.get('/email_confirmation', function(req, res) {
 });
 app.get('/invalid_link', function(req, res) {
 	// Code to auth
-	res.redirect('/');
+	res.redirect('/404');
 });
 app.get('/*', function(req, res) {
 	res.render('error', { error: '404' });
