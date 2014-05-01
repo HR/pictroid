@@ -84,42 +84,44 @@ app.get('/', function(req, res) {
 		res.render('index', { title: 'Pictroid', username:currentUser.attributes.username, authed:true});
 	} else {
 		var req = http.request({
-		    host: "www.kimonolabs.com",
-		    port: 80,
-		    path: "/api/5zeipr38?apikey="+process.env.kimonoKey,
-		    method: "GET",
-		    headers: {
-		        "Content-Type": "application/json"
-		    }
+			 host: "www.kimonolabs.com",
+			 port: 80,
+			 path: "/api/5zeipr38?apikey="+process.env.kimonoKey,
+			 method: "GET",
+			 headers: {
+				  "Content-Type": "application/json"
+			 }
 		}, function(res) {
-		    var output = '';
-		    res.setEncoding('utf8');
+			 var output = '';
+			 res.setEncoding('utf8');
 
-		    res.on('data', function (chunk) {
-		        output += chunk;
-		    });
+			 res.on('data', function (chunk) {
+				  output += chunk;
+			 });
 
-		    res.on('end', function() {
-		        var obj = JSON.parse(output);
-		        if(res.statusCode === 200) {
-		        		for(var b=0; b<obj.count; b++){
-		        			console.log("Title: "+obj.results.Apod_Detail[b].Title);
-	        				console.log("Date: "+obj.results.Apod_Detail[b].Date);
-	        				if (obj.results.Apod_Detail[b].Image.href === undefined) {
-	        					// reject record creation if undefined because there is moct likely an embedded video iframe from youtube there
-	        					console.log("--- undefined, src="+obj.results.Apod_Detail[b].Image.src+" "+b);
-	        				} else {
-	        					console.log("Image: "+obj.results.Apod_Detail[b].Image.href);
-	        				}
-	        				//console.log("Description: "+obj.results.Apod_Detail[b].Description.text);
-		        		}
-		            
-		        }
-		        // update parse -- only once
-		    });
+			 res.on('end', function() {
+				  var obj = JSON.parse(output);
+				  if(res.statusCode === 200) {
+						for(var b=0; b<obj.count; b++){
+							if (obj.results.Apod_Detail[b].Title !== undefined && obj.results.Apod_Detail[b].Date !== undefined && obj.results.Apod_Detail[b].Image.href !== undefined) {
+								// Upload to Parse DB routine -- ONLY ONCE --
+								// console.log("Title: "+obj.results.Apod_Detail[b].Title);
+								// console.log("Image: "+obj.results.Apod_Detail[b].Image.href);
+								// console.log("Description: "+obj.results.Apod_Detail[b].Description.text);
+								// set "API" field @Parse to "APOD"
+
+								// Later implement date and set "actualDate" @Parse to this
+								// To implement (set() in Parse) need to parse into a Date() object using momentjs (a node package @npm)
+								// console.log("Date: "+obj.results.Apod_Detail[b].Date);
+
+							}
+						}
+						
+				  }
+			 });
 		});
 		req.on('error', function(err) {
-		    //res.send('error: ' + err.message);
+			 //res.send('error: ' + err.message);
 		});
 		req.end();
 		res.render('index');
@@ -286,12 +288,12 @@ app.post('/kimono_spitzer', function(req, res) {
 app.post('/password_reset', function(req, res) {
 	Parse.User.requestPasswordReset(req.body.email.toLowerCase(), {
 	  success: function() {
-	    // Password reset request was sent successfully
-	    res.redirect("/password_reset_request?email="+req.body.email.toLowerCase());
+		 // Password reset request was sent successfully
+		 res.redirect("/password_reset_request?email="+req.body.email.toLowerCase());
 	  },
 	  error: function(error) {
-	    // Show the error message somewhere
-	    alert("Error: " + error.code + " " + error.message);
+		 // Show the error message somewhere
+		 alert("Error: " + error.code + " " + error.message);
 	  }
 	});
 });
