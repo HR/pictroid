@@ -19,7 +19,7 @@ mixin feed()
 					ul(class="details")
 						li(class="user")
 							if(imgOwner)
-								a(href="/user/#{imgOwner}") imgOwner
+								a(href="/user/#{imgOwner}") #{imgOwner}
 							else
 								a(href="/user/pictroid") Pictroid
 						li(class="views")

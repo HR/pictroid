@@ -94,11 +94,12 @@ asteroids.upload = function(name, src, desc) {
 
 asteroids.query = {}
 asteroids.query.getPic = function(id){
-	var imgQuery = new Parse.Query(Image);
+	var imgQuery = new Parse.Query(Image).include("owner");
 	var image = {};
 	return imgQuery.get(id).then(function(result){
 		// Add image table
 		image.image = result;
+		image.username = result.get("owner").attributes.username;
 		// Get src
 		return result.relation("src").query().first();
 	}).then(function(src){

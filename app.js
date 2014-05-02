@@ -144,13 +144,13 @@ app.get('/explore/:filter?', function(req, res) {
 app.get('/pic/:id', function(req, res) {
 	if(currentUser){
 		db.asteroids.query.getPic(req.params.id).then(function(result) {
-			res.render('details', { picObject: result, username:currentUser.attributes.username, authed:true});
+			res.render('details', { picObject: result, imgOwner:result.username, username:currentUser.attributes.username, authed:true});
 		}, function() {
 			res.render('error', { error: '404' }); 	
 		});
 	} else {
-		db.asteroids.query.getPic(req.params.id).then(function(result) {;
-			res.render('details', { picObject: result });
+		db.asteroids.query.getPic(req.params.id).then(function(result) {
+			res.render('details', { picObject: result, imgOwner:result.username });
 		}, function() { 
 			res.render('error', { error: '404' }); 	
 		});
