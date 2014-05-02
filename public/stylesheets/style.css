@@ -397,6 +397,12 @@ form #or {
 	padding: 1% 0% 1% 2% !important;
 }
 
+@media (max-width: 450px) {
+	form.form-transparent {
+		width: 90%;
+	}
+}
+
 /* Dropbox Element */
 #dropbox{
     background-color: rgba(255, 255, 255, 0.1);
@@ -496,7 +502,7 @@ footer .footer-logo {
 	}
 }
 
-@media (max-width: 510px) {
+@media (max-width: 450px) {
 	footer {
 		height: auto;
 	}
@@ -505,11 +511,14 @@ footer .footer-logo {
     	display: block;
     	height: auto;
   	}
+  	footer .footer-logo {
+  		width: 60%;
+  	}
 	footer .column {
     	float: none;
     	width: 100%;
     	display: block;
-    	margin: 0 0 30px;
+    	margin: 0 0 18px;
 	}   
   	footer .top {
     	text-align: center;  
@@ -668,12 +677,11 @@ footer .footer-logo {
 	width: 30%;
 	background-color: #fff;
 	column-rule: #333;
-	border: 1px solid #eee;
 	border-radius: 3px;
 }
 
 .feed-item:hover {
-	box-shadow: 0px 2px 1px rgba(0,0,0,0.3);
+	box-shadow: 0px 2px 3px rgba(0,0,0,0.3);
 }
 
 .feed img {
@@ -756,7 +764,7 @@ li.comments {
 .container h3 {
 	margin-left: 2rem;
 	display: inline;
-	font-size: 1.2rem;
+	font-size: 1.35rem;
 }
 
 .container h3:first-child {
@@ -768,7 +776,7 @@ li.comments {
 	color: #666;
 }
 
-.container h3:first-child > a {
+.container h3 > a.active {
 	color: #a67c52;
 }
 
