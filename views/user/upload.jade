@@ -22,41 +22,58 @@ block content
 		input.form-control(type="file", id="image", name="image")
 		hr
 		input.form-control(type="text", id="title", name="title", placeholder="Title")
-		textarea.form-control(type="text", name="description", placeholder="Description" row="20")
+		textarea.form-control(type="text", id="description", name="description", placeholder="Description" row="20")
 		p(style="text-align:right; padding: 0px;")
-			| You have #{charCount} characters left
+			| You have <span id="charCount">1000</span> characters left
 		input.form-control(type="text", name="tags", placeholder="#Tags")
-		p(id="emsg")
+		if error
+			style.
+				.emsg {
+					display: block !important;
+				}
+		div.emsg
+			h5 Errors:
+			ul.emul
+				li #{error}
 		button.btn.btn-lg.btn-primary.btn-block(type="submit") Upload
 		script.
+			window.addEventListener('DOMContentLoaded', function() { descriptionCount(); });
+			document.getElementById("description").addEventListener('input', function() { descriptionCount(); });
+			function descriptionCount() {
+				document.getElementById("charCount").textContent = (1000 - document.getElementById("description").value.length);			
+			}
 			function validate(){
-				var valid = false,
+				var valid = true,
 					form = window.document.forms[0],
-					emsg = window.document.querySelectorAll(".emsg")[0],
+					ermsg = "",
+					emsg = window.document.querySelectorAll(".emsg")[0],					
+					emul = window.document.querySelectorAll(".emul")[0],
 					fileName = $(form.image).val(),
-					imgSize = (imgSize) ? readImage($("#image")[0].files[0]) : false; 
-				if((/^.{0,1000}$/g).test(form.description.value) && ( /^([A-Z0-9]{2,9},{1}(\s{1})?)+([A-Z0-9]{2,9})$/ig).test(form.tags.value)){
-					switch(fileName.length-3) {
-						case fileName.lastIndexOf("gif"): 
-							valid = true;
-							break;
-						case fileName.lastIndexOf("png"): 
-							valid = true;
-							break;
-						case fileName.lastIndexOf("jpeg"): 
-							valid = true;
-							break;
-						case fileName.lastIndexOf("jpg"): 
-							valid = true;
-							break;
-						default:
-							valid = false;
+					imgSize = (imgSize) ? readImage($("#image")[0].files[0]) : false;
+				switch(fileName.length-3) {
+					case fileName.lastIndexOf("gif"):
+					case fileName.lastIndexOf("png"):
+					case fileName.lastIndexOf("jpeg"):
+					case fileName.lastIndexOf("jpg"):
+						break;
+					default:
+						ermsg += errorLi("We do not support this file type.  Please upload a file with the extension .gif, .png, .jpeg, or .jpg");
+						valid = false;
+						break;
+				}
+				if(!(/^.{0,1000}$/g).test(form.description.value)){
+					ermsg += errorLi("Please enter a description that is less than 1000 characters long.");
+					valid = false;
 				}
 				if (valid) {
-					emsg.innerHTML = "";
+					emsg.style.display = "none";
 					return valid;
 				} else {
-					emsg.innerHTML = "Invalid credentials supplied";
+					emul.innerHTML = ermsg;
+					emsg.style.display = "block";
 					return valid;
 				}
+			}
+			function errorLi(text) {
+				return ('<li>'+text+'</li>');
 			}

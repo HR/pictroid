@@ -394,7 +394,14 @@ form #or {
 	color: #fff !important;
 	line-height: auto;
 	font-size: 13px !important;
-	padding: 1% 0% 1% 2% !important;
+	padding: 10px;
+	text-align: left;
+	display: none;
+	margin: 5px 0;
+}
+
+.emsg h5 {
+	margin: 0 0 10px;
 }
 
 @media (max-width: 450px) {
