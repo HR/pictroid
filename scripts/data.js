@@ -99,7 +99,12 @@ asteroids.query.getPic = function(id){
 	return imgQuery.get(id).then(function(result){
 		// Add image table
 		image.image = result;
-		image.username = result.get("owner").attributes.username;
+		var owner = result.get("owner");
+		if (owner) {
+			image.username = owner.get('username');
+		} else {
+			image.username = 'pictroid';
+		}
 		// Get src
 		return result.relation("src").query().first();
 	}).then(function(src){
@@ -114,29 +119,39 @@ asteroids.query.getUser = function(username){
 	});
 }
 asteroids.query.getLatest = function(width) {
-	var imgQuery = new Parse.Query(Image);
+	var imgQuery = new Parse.Query(Image).include("owner");
 	imgQuery.descending("createdAt");
 	return imgQuery.find().then(function(results){
 		var fileQuery;
 		var images = [];
 		for (var i = 0; i < results.length; i++) {
-			fileQuery = results[i].relation("src").query();
-			fileQuery.lessThanOrEqualTo("width", width);
-			fileQuery.descending("width");
-			(function(image) {
-				images.push(fileQuery.first().then(function(result){
-					if(!result) {
-						var fileQuery = image.relation("src").query();
-						fileQuery.ascending("width");
-						return fileQuery.first();
-					}
-					return result;
-				}).then(function(result) {
-					return {
-						image: image,
-						src: result
-					}
-				}));
+			(function() {
+				var owner = results[i].get("owner");
+				var imgOwner;
+				if (owner) {
+					imgOwner = owner.get('username');
+				} else {
+					imgOwner = 'pictroid';
+				}
+				fileQuery = results[i].relation("src").query();
+				fileQuery.lessThanOrEqualTo("width", width);
+				fileQuery.descending("width");
+				(function(image) {
+					images.push(fileQuery.first().then(function(result){
+						if(!result) {
+							var fileQuery = image.relation("src").query();
+							fileQuery.ascending("width");
+							return fileQuery.first();
+						}
+						return result;
+					}).then(function(result) {
+						return {
+							image: image,
+							src: result,
+							username: imgOwner
+						}
+					}));
+				})(results[i]);
 			})(results[i]);
 		};
 		return Parse.Promise.when(images);
