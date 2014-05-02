@@ -17,41 +17,51 @@ block content
 		input.form-control(type="email", name="email", placeholder="Email")
 		input.form-control(type="password", name="password", placeholder="Password")
 		input.form-control(type="password", name="passwordconfirm", placeholder="Confirm password")
-		p(id="emsg" style="color:#DD7674;display:none;")
-		if (error)
-			p(class="emsg") #{error}
+		if error
+			style.
+				.emsg {
+					display: block !important;
+				}
+		div.emsg
+			h5 Errors:
+			ul.emul
+				li #{error}
 		button.btn.btn-lg.btn-primary.btn-block(type="submit") Sign Up
 		br
 		p(style="text-align: center;")
 			| Already have an account?  Then <a href="/signin">Sign In</a>
 		script.
 			function validate(){
-				var valid = false,
+				var valid = true,
 					form = window.document.forms[0],
-					ermsg,
-					emsg = window.document.querySelectorAll(".emsg")[0];
-				if(!(/^[a-z0-9_-]{6,10}$/i).test(form.username.value)){
-					ermsg = "Invalid username, needs to be 6-14 alphanumeric and - _ characters";
+					ermsg = "",
+					emsg = window.document.querySelectorAll(".emsg")[0],					
+					emul = window.document.querySelectorAll(".emul")[0];
+				if(!form.username.value || !(/^[a-z0-9_-]{6,14}$/gi).test(form.username.value)){
+					ermsg += errorLi("Invalid username, needs to be 6-14 alphanumeric and - _ characters");
 					valid = false;
 				}
-				if(!(/^([a-z0-9_\.-]+)@([\da-z\.-]+)\.([a-z\.]{2,6})$/g).test(form.email.value)) {
-					ermsg = "Invalid email, enter a valid email like john.n-doe@gmail.com";
+				if(!form.email.value || !(/^([a-z0-9_\.-]+)@([\da-z\.-]+)\.([a-z\.]{2,6})$/gi).test(form.email.value)) {
+					ermsg += errorLi("Invalid email, enter a valid email like john.n-doe@gmail.com");
 					valid = false;
 				}
-				if(!(/^[a-z0-9_-]{6,14}$/g).test(form.password.value)){
-					ermsg = "Invalid password, needs to be 6-14 alphanumeric and - _ characters";
+				if(!form.password.value || !(/^[a-z0-9_-]{6,14}$/gi).test(form.password.value)){
+					ermsg += errorLi("Invalid password, needs to be 6-14 alphanumeric and - _ characters.");
 					valid = false;
 				}
-				if(!(form.password.value === form.passwordconfirm.value) {
-					ermsg = "Password does not match";
+				if(!form.passwordconfirm.value || !(form.password.value === form.passwordconfirm.value)) {
+					ermsg += errorLi("Passwords do not match.");
 					valid = false;
 				}
 				if (valid) {
 					emsg.style.display = "none";
 					return valid;
 				} else {
-					emsg.innerHTML = ermsg;
+					emul.innerHTML = ermsg;
 					emsg.style.display = "block";
 					return valid;
 				}
+			}
+			function errorLi(text) {
+				return ('<li>'+text+'</li>');
 			}

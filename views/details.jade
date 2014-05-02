@@ -16,10 +16,7 @@ block content
 			.image-stats
 				.image-by
 					i by &nbsp;
-					if(imgOwner)
-						a(href="/user/#{imgOwner}") imgOwner
-					else
-						a(href="/user/pictroid") Pictroid
+					a(href="/user/"+picObject.username)= picObject.username
 				.image-tags
 					.tag #foo
 					.tag #bar
@@ -32,12 +29,7 @@ block content
 								| 0
 						li(class="comments")
 							a(href="/pic/"+picObject.image.id+"#disqus_thread", data-disqus-identifier=picObject.image.id) 0
-							//
-								if(picObject.image.get("commentCount"))
-									span= picObject.image.get("commentCount")
-								else 
-									| 0
-						li.image-share						
+						li.image-share
 							.a2a_kit.a2a_default_style
 								a.a2a_dd(href="http://www.addtoany.com/share_save")
 								a.a2a_button_facebook

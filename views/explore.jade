@@ -19,3 +19,19 @@ block content
 				a(href="/explore/latest") Latest
 			hr
 			+feed()
+	script.
+		window.onload = function() {
+			var current = '#{filter}',
+				a = $('h3 > a');
+			
+			if(current === "popular") {
+				a[0].className = "active";
+				a[1].className = a[2].className = "";
+			} else if(current === "rated") {
+				a[1].className = "active";
+				a[0].className = a[2].className = "";
+			} else if(current === "latest") {
+				a[2].className = "active";
+				a[0].className = a[1].className = "";
+			}
+		};
