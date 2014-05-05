@@ -409,7 +409,7 @@ app.post('/upload', function(req, res) {
 		console.log(files.image[0].originalFilename);
 		rackspaceIO.upload(imagef, files.image[0].originalFilename, function() {
 			db.asteroids.upload(fields.title[0], [{
-				src: "",
+				src: "https://f49616eb8426aa48ddc0-242db41c2a25302f08cc6f5f496e18ee.ssl.cf5.rackcdn.com/" + files.image[0].originalFilename,
 				contentType: files.image[0].headers["content-type"],
 				resolution: {}
 			}], fields.description[0]).then(function (result) {
