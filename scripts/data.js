@@ -88,6 +88,8 @@ asteroids.upload = function(name, src, desc) {
 		}).then(function (result) {
 			Parse.User.current().relation("uploads").add(image);
 			return Parse.User.current().save();
+		}).then(function(user) {
+			return image;
 		});
 	});
 }

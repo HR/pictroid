@@ -6,17 +6,26 @@ var blockStorage = require("pkgcloud").storage.createClient({
 	region: "IAD"
 });
 
-exports.upload = function (file, name, callback) {
-	blockStorage.getContainers(function(err, containers) {
-		var i = 0;
-		while(!containers[i].name.match(/^Images-\d{5}$/)) {
-			i++;
-		}
+function findByRegExName(obj, regex) {
+	var i = 0;
+	while(!obj[i].name.match(regex)) {
+		i++;
+	}
+	return obj[i]
+}
 
-		var container = containers[i];
-		file.pipe(blockStorage.upload({
-			container: container,
-			remote: name
-		}, callback));
+exports.upload = function (file, name, callback) {
+	blockStorage.getContainers(function (err, containers) {
+		blockStorage.getCdnContainers(function (err, cdns) {
+			var container = findByRegExName(containers, /^Images-\d{5}$/);
+			var cdn = findByRegExName(cdns, container.name);
+			console.log(cdn);
+			file.pipe(blockStorage.upload({
+				container: container,
+				remote: name
+			}, function (err, result) {
+				callback(err, result, cdn.cdnSslUri + "/" + name);
+			}));
+		});
 	});
 }

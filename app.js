@@ -406,18 +406,17 @@ app.post('/upload', function(req, res) {
 	var form = new multiparty.Form();
 	form.parse(req, function(err, fields, files) {
 		var imagef = fs.createReadStream(files.image[0].path);
-		console.log(files.image[0].originalFilename);
-		rackspaceIO.upload(imagef, files.image[0].originalFilename, function() {
+		rackspaceIO.upload(imagef, files.image[0].originalFilename, function(err, result, url) {
 			db.asteroids.upload(fields.title[0], [{
-				src: "https://f49616eb8426aa48ddc0-242db41c2a25302f08cc6f5f496e18ee.ssl.cf5.rackcdn.com/" + files.image[0].originalFilename,
+				src: url,
 				contentType: files.image[0].headers["content-type"],
 				resolution: {}
 			}], fields.description[0]).then(function (result) {
-				console.log(result);
+				res.redirect("/pic/" + result.id);
 			}, function (err) {
 				console.log(err);
+				res.send("Error: " + JSON.stringify(err), 500);
 			});
-			res.redirect("/upload");
 		});
 	});
 });
