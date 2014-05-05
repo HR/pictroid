@@ -25,6 +25,7 @@
     "redis": "*",
     "request": "*",
     "form-data": "~0.1.2",
-    "sass": "*"
+    "sass": "*",
+    "pkgcloud": "~0.9.4"
   }
 }
