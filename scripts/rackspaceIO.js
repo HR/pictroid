@@ -6,13 +6,17 @@ var blockStorage = require("pkgcloud").storage.createClient({
 	region: "IAD"
 });
 
+exports.upload = function (file, name, callback) {
+	blockStorage.getContainers(function(err, containers) {
+		var i = 0;
+		while(!containers[i].name.match(/^Images-\d{5}$/)) {
+			i++;
+		}
 
-blockStorage.getContainers(function(err, containers) {
-	var myFile = fs.createReadStream("C:/Users/Jack/Documents/GitHub/pictroid/logs.txt");
-	myFile.pipe(blockStorage.upload({
-		container: containers[0],
-		remote: "logs.txt"
-	}, function(err, result) {
-		console.log(result);
-	}));
-});
+		var container = containers[i];
+		file.pipe(blockStorage.upload({
+			container: container,
+			remote: name
+		}, callback));
+	});
+}

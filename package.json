@@ -16,7 +16,7 @@
     "jade": "*",
     "moment": "^2.6.0",
     "mongodb": "*",
-    "mongoose": "~3.8",
+    "mongoose": "~3.8.8",
     "monk": "*",
     "multiparty": "*",
     "newrelic": "*",

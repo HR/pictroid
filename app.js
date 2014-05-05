@@ -23,7 +23,8 @@ var express = require('express'),
 	multiparty = require('multiparty'),
 	fs = require("fs"),
 	uuid = require('node-uuid'),
-	url = require('url');
+	url = require('url'),
+	rackspaceIO = require('./scripts/rackspaceIO');
   
 // Parse initialization  
 var Parse = require('parse').Parse;
@@ -404,14 +405,13 @@ app.post('/upload', function(req, res) {
 	// Code to handle upload
 	var form = new multiparty.Form();
 	form.parse(req, function(err, fields, files) {
-		var imagef = fs.readFile(files.image[0].path, function (err, data) {
-			if(err) throw err;
-			
+		var imagef = fs.createReadStream(files.image[0].path);
+		console.log(files.image[0].originalFilename);
+		rackspaceIO.upload(imagef, files.image[0].originalFilename, function() {
 			db.asteroids.upload(fields.title[0], [{
-				src: data,
+				src: "",
 				contentType: files.image[0].headers["content-type"],
-				resolution: {},
-				isFile: true
+				resolution: {}
 			}], fields.description[0]).then(function (result) {
 				console.log(result);
 			}, function (err) {
