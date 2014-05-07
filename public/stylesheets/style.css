@@ -75,6 +75,23 @@ a:hover {
 	text-shadow: 0 0 5px #000000;
 }
 
+.notice {
+	text-align: center;
+	background-color: #A67C52;
+	color: #ffffff;
+	padding: 10px;
+	font-size: 14px;
+	margin: 10px 0;
+	display: block;
+	border: 1px solid #252525;
+}
+
+.notice h1 {
+	font-size: 20px;
+	margin: 0 0 5px 0;
+	font-weight: 100;
+}
+
 /* Transparent */
 .transparent a {
 	color: #ffffff;

@@ -131,15 +131,21 @@ app.get('/explore/:filter?', function(req, res) {
 	}
 });
 app.get('/pic/:id', function(req, res) {
+	var message = req.query.m;
+	if(message == "u"){
+		message = [];
+		message.title = "Success!";
+		message.message = "Your pic has been successfully uploaded.";
+	}
 	if(currentUser){
 		db.asteroids.query.getPic(req.params.id).then(function(result) {
-			res.render('details', { picObject: result, imgOwner:result.username, username:currentUser.attributes.username, authed:true});
+			res.render('details', { m:message, picObject: result, imgOwner:result.username, username:currentUser.attributes.username, authed:true});
 		}, function() {
 			res.render('error', { error: '404' }); 	
 		});
 	} else {
 		db.asteroids.query.getPic(req.params.id).then(function(result) {
-			res.render('details', { picObject: result, imgOwner:result.username });
+			res.render('details', {  m:message, picObject:result, imgOwner:result.username });
 		}, function() { 
 			res.render('error', { error: '404' }); 	
 		});
@@ -408,7 +414,7 @@ app.post('/upload', function(req, res) {
 				contentType: files.image[0].headers["content-type"],
 				resolution: {}
 			}], fields.description[0]).then(function (result) {
-				res.redirect("/pic/" + result.id);
+				res.redirect("/pic/"+result.id+"?m=u");
 			}, function (err) {
 				console.log(err);
 				res.send("Error: " + JSON.stringify(err), 500);
