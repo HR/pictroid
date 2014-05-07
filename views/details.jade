@@ -10,6 +10,10 @@ block content
 	+chickenLittle()
 	.page
 		.container.image-page
+			if m
+				div.notice
+					h1= m.title
+					= m.message
 			h1.image-title= picObject.image.get("name")
 			hr
 			img.image-image(src=picObject.src.get("src"), alt=picObject.image.get("name"))

@@ -23,7 +23,8 @@ var express = require('express'),
 	multiparty = require('multiparty'),
 	fs = require("fs"),
 	uuid = require('node-uuid'),
-	url = require('url');
+	url = require('url'),
+	rackspaceIO = require('./scripts/rackspaceIO');
   
 // Parse initialization  
 var Parse = require('parse').Parse;
@@ -83,47 +84,35 @@ app.get('/', function(req, res) {
 	if(currentUser){
 		res.render('index', { title: 'Pictroid', username:currentUser.attributes.username, authed:true});
 	} else {
-		var req = http.request({
-			 host: "www.kimonolabs.com",
-			 port: 80,
-			 path: "/api/5zeipr38?apikey="+process.env.kimonoKey,
-			 method: "GET",
-			 headers: {
-				  "Content-Type": "application/json"
-			 }
-		}, function(res) {
+		/*var kimReq = http.request({
+			host: "www.kimonolabs.com",
+			port: 80,
+			path: "/api/5zeipr38?apikey="+process.env.kimonoKey,
+			method: "GET",
+			headers: {
+			  "Content-Type": "application/json"
+			}
+		}, function(kimRes) {
 			 var output = '';
-			 res.setEncoding('utf8');
+			 kimRes.setEncoding('utf8');
 
-			 res.on('data', function (chunk) {
+			 kimRes.on('data', function (chunk) {
 				  output += chunk;
 			 });
 
-			 res.on('end', function() {
+			 kimRes.on('end', function() {
 				  var obj = JSON.parse(output);
-				  if(res.statusCode === 200) {
-						for(var b=0; b<obj.count; b++){
-							if (obj.results.Apod_Detail[b].Title !== undefined && obj.results.Apod_Detail[b].Date !== undefined && obj.results.Apod_Detail[b].Image.href !== undefined) {
-								// Upload to Parse DB routine -- ONLY ONCE --
-								// console.log("Title: "+obj.results.Apod_Detail[b].Title);
-								// console.log("Image: "+obj.results.Apod_Detail[b].Image.href);
-								// console.log("Description: "+obj.results.Apod_Detail[b].Description.text);
-								// set "API" field @Parse to "APOD"
-
-								// Later implement date and set "actualDate" @Parse to this
-								// To implement (set() in Parse) need to parse into a Date() object using momentjs (a node package @npm)
-								// console.log("Date: "+obj.results.Apod_Detail[b].Date);
-
-							}
-						}
-						
+				  if(kimRes.statusCode === 200) {
+						resources.updateAPOD(obj).then(function(){}, function() {
+							console.error(arguments);
+						});
 				  }
 			 });
 		});
-		req.on('error', function(err) {
+		kimReq.on('error', function(err) {
 			 //res.send('error: ' + err.message);
 		});
-		req.end();
+		kimReq.end();*/
 		res.render('index');
 	}
 });
@@ -142,15 +131,21 @@ app.get('/explore/:filter?', function(req, res) {
 	}
 });
 app.get('/pic/:id', function(req, res) {
+	var message = req.query.m;
+	if(message == "u"){
+		message = [];
+		message.title = "Success!";
+		message.message = "Your pic has been successfully uploaded.";
+	}
 	if(currentUser){
 		db.asteroids.query.getPic(req.params.id).then(function(result) {
-			res.render('details', { picObject: result, imgOwner:result.username, username:currentUser.attributes.username, authed:true});
+			res.render('details', { m:message, picObject: result, imgOwner:result.username, username:currentUser.attributes.username, authed:true});
 		}, function() {
 			res.render('error', { error: '404' }); 	
 		});
 	} else {
 		db.asteroids.query.getPic(req.params.id).then(function(result) {
-			res.render('details', { picObject: result, imgOwner:result.username });
+			res.render('details', {  m:message, picObject:result, imgOwner:result.username });
 		}, function() { 
 			res.render('error', { error: '404' }); 	
 		});
@@ -278,7 +273,15 @@ app.get('/*', function(req, res) {
 
 // Post
 app.post('/kimono_spitzer', function(req, res) {
-	resources.updateKimono(req.body).then(function(){
+	resources.updateSpitzer(req.body).then(function(){
+		res.send(arguments);
+	}, function() {
+		console.error(arguments);
+		res.send(500, arguments);
+	});
+});
+app.post('/kimono_APOD', function(req, res) {
+	resources.updateAPOD(req.body).then(function(){
 		res.send(arguments);
 	}, function() {
 		console.error(arguments);
@@ -404,20 +407,18 @@ app.post('/upload', function(req, res) {
 	// Code to handle upload
 	var form = new multiparty.Form();
 	form.parse(req, function(err, fields, files) {
-		var imagef = fs.readFile(files.image[0].path, function (err, data) {
-			if(err) throw err;
-			
+		var imagef = fs.createReadStream(files.image[0].path);
+		rackspaceIO.upload(imagef, files.image[0].originalFilename, function(err, result, url) {
 			db.asteroids.upload(fields.title[0], [{
-				src: data,
+				src: url,
 				contentType: files.image[0].headers["content-type"],
-				resolution: {},
-				isFile: true
+				resolution: {}
 			}], fields.description[0]).then(function (result) {
-				console.log(result);
+				res.redirect("/pic/"+result.id+"?m=u");
 			}, function (err) {
 				console.log(err);
+				res.send("Error: " + JSON.stringify(err), 500);
 			});
-			res.redirect("/upload");
 		});
 	});
 });

@@ -24,7 +24,7 @@ var asteroids = {};
  * @param {Number} src.resolution.size The size of the image in kilobytes
  * @param {String} desc A description of the image
 */
-asteroids.upload = function(name, src, desc) {
+asteroids.upload = function(name, src, desc, date, api) {
 	var imgQuery = new Parse.Query(Image);
 	imgQuery.equalTo("name", name);
 	return imgQuery.find().then(function(results) {
@@ -37,6 +37,12 @@ asteroids.upload = function(name, src, desc) {
 
 		image.set("name", name);
 		image.set("description", desc);
+		if(date) {
+			image.set("actualDate", date);
+		}
+		if(api) {
+			image.set("api", api);
+		}
 		
 		// set permissions
 		var imageACL = new Parse.ACL(Parse.User.current());
@@ -86,8 +92,12 @@ asteroids.upload = function(name, src, desc) {
 			image.set("owner", Parse.User.current());
 			return image.save();
 		}).then(function (result) {
-			Parse.User.current().relation("uploads").add(image);
-			return Parse.User.current().save();
+			if(Parse.User.current()) {
+				Parse.User.current().relation("uploads").add(image);
+				return Parse.User.current().save();
+			}
+		}).then(function(user) {
+			return image;
 		});
 	});
 }
