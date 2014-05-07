@@ -83,47 +83,35 @@ app.get('/', function(req, res) {
 	if(currentUser){
 		res.render('index', { title: 'Pictroid', username:currentUser.attributes.username, authed:true});
 	} else {
-		var req = http.request({
-			 host: "www.kimonolabs.com",
-			 port: 80,
-			 path: "/api/5zeipr38?apikey="+process.env.kimonoKey,
-			 method: "GET",
-			 headers: {
-				  "Content-Type": "application/json"
-			 }
-		}, function(res) {
+		/*var kimReq = http.request({
+			host: "www.kimonolabs.com",
+			port: 80,
+			path: "/api/5zeipr38?apikey="+process.env.kimonoKey,
+			method: "GET",
+			headers: {
+			  "Content-Type": "application/json"
+			}
+		}, function(kimRes) {
 			 var output = '';
-			 res.setEncoding('utf8');
+			 kimRes.setEncoding('utf8');
 
-			 res.on('data', function (chunk) {
+			 kimRes.on('data', function (chunk) {
 				  output += chunk;
 			 });
 
-			 res.on('end', function() {
+			 kimRes.on('end', function() {
 				  var obj = JSON.parse(output);
-				  if(res.statusCode === 200) {
-						for(var b=0; b<obj.count; b++){
-							if (obj.results.Apod_Detail[b].Title !== undefined && obj.results.Apod_Detail[b].Date !== undefined && obj.results.Apod_Detail[b].Image.href !== undefined) {
-								// Upload to Parse DB routine -- ONLY ONCE --
-								// console.log("Title: "+obj.results.Apod_Detail[b].Title);
-								// console.log("Image: "+obj.results.Apod_Detail[b].Image.href);
-								// console.log("Description: "+obj.results.Apod_Detail[b].Description.text);
-								// set "API" field @Parse to "APOD"
-
-								// Later implement date and set "actualDate" @Parse to this
-								// To implement (set() in Parse) need to parse into a Date() object using momentjs (a node package @npm)
-								// console.log("Date: "+obj.results.Apod_Detail[b].Date);
-
-							}
-						}
-						
+				  if(kimRes.statusCode === 200) {
+						resources.updateAPOD(obj).then(function(){}, function() {
+							console.error(arguments);
+						});
 				  }
 			 });
 		});
-		req.on('error', function(err) {
+		kimReq.on('error', function(err) {
 			 //res.send('error: ' + err.message);
 		});
-		req.end();
+		kimReq.end();*/
 		res.render('index');
 	}
 });
@@ -278,7 +266,15 @@ app.get('/*', function(req, res) {
 
 // Post
 app.post('/kimono_spitzer', function(req, res) {
-	resources.updateKimono(req.body).then(function(){
+	resources.updateSpitzer(req.body).then(function(){
+		res.send(arguments);
+	}, function() {
+		console.error(arguments);
+		res.send(500, arguments);
+	});
+});
+app.post('/kimono_APOD', function(req, res) {
+	resources.updateAPOD(req.body).then(function(){
 		res.send(arguments);
 	}, function() {
 		console.error(arguments);
