@@ -42,9 +42,9 @@ app.configure('development', function(){
   mhost = '127.0.0.1';
   mport = 27017;
   MongoClient.connect('mongodb://127.0.0.1:27017/user', function(err, db) {
-    if (err){
-    	console.log(err);
-    }
+	if (err){
+		console.log(err);
+	}
   });
   // mongoose.connect('mongodb://127.0.0.1:27017/db');
 });
@@ -145,11 +145,9 @@ app.get('/explore/:filter?', function(req, res) {
 	}
 });
 app.get('/pic/:id', function(req, res) {
-<<<<<<< HEAD
 	if (req.session.auth){
 		db.asteroids.query.getPic(req.params.id).then(function(result) {
 			res.render('details', { picObject: result, username:req.session.user.username, authed:true});
-=======
 	var message = req.query.m;
 	if(message == "u"){
 		message = [];
@@ -159,7 +157,6 @@ app.get('/pic/:id', function(req, res) {
 	if(currentUser){
 		db.asteroids.query.getPic(req.params.id).then(function(result) {
 			res.render('details', { m:message, picObject: result, imgOwner:result.username, username:currentUser.attributes.username, authed:true});
->>>>>>> dev
 		}, function() {
 			res.render('error', { error: '404' }); 	
 		});
@@ -177,7 +174,6 @@ app.get('/user/:name', function(req, res) {
 	query.first({
 		success: function(user) {
 			if (user !== undefined) {
-<<<<<<< HEAD
 				var imgQ = user.relation("uploads").query();
 				var image = {};
 				imgQ.find({
@@ -192,7 +188,6 @@ app.get('/user/:name', function(req, res) {
 				});
 				if (req.session.auth) {
 					res.render('user/profile', { profile_username:req.params.name, profile_image:user.get("profileImg").url(), profile_status:user.get("status"), username:req.session.user.username, authed:true});
-=======
 				var relation = user.relation("uploads");
 				relation.query().find({
 					success: function(uploads) {
@@ -202,7 +197,6 @@ app.get('/user/:name', function(req, res) {
 				});
 				if (currentUser) {
 					res.render('user/profile', { profile_username:req.params.name, profile_image:user.get("profileImg").url(), profile_status:user.get("status"), username:currentUser.attributes.username, authed:true});
->>>>>>> dev
 				} else {
 					res.render('user/profile', { profile_username:req.params.name, results:image ,profile_image:user.get("profileImg").url(), profile_status:user.get("status")});
 				}
@@ -218,15 +212,12 @@ app.get('/user/:name', function(req, res) {
 	
 });
 app.get('/upload', function(req, res) {
-<<<<<<< HEAD
 	// Code to authedorize
 	if (req.session.auth) {
 		res.render('user/upload', { username:req.session.user.username, authed:true});
-=======
 	// Code to auth
 	if (currentUser) {
 		res.render('user/upload', { username:currentUser.attributes.username, authed:true});
->>>>>>> dev
 	} else {
 		res.redirect('/signin'+'?er=SignInRequired');
 	}
@@ -276,15 +267,13 @@ app.get('/signup', function(req, res) {
 	}
 });
 app.get('/account/settings', function(req, res) {
-<<<<<<< HEAD
 	// Code to authedorize
 	if (req.session.auth) {
 		res.render('account/settings', { username:req.session.user.username, email:req.session.user.email, status:req.session.user.status, profileImgSrc:req.session.user.profileImg.url, authed:true, secure:true});
-=======
+
 	// Code to auth
 	if (currentUser) {
 		res.render('account/settings', { username:currentUser.attributes.username, email:currentUser.attributes.email, status:currentUser.attributes.status, profileImgSrc:currentUser.get("profileImg").url(), authed:true, secure:true});
->>>>>>> dev
 	} else {
 		res.redirect('/signin');
 	}
@@ -481,18 +470,15 @@ app.post('/upload', function(req, res) {
 	// Code to handle upload
 	var form = new multiparty.Form();
 	form.parse(req, function(err, fields, files) {
-<<<<<<< HEAD
 		var imagef = fs.readFile(files.image[0].path, function (err, data) {
 			if (err) throw err;
 			
 			db.asteroids.upload(files.image[0].originalFilename, [{
 				src: data,
-=======
 		var imagef = fs.createReadStream(files.image[0].path);
 		rackspaceIO.upload(imagef, files.image[0].originalFilename, function(err, result, url) {
 			db.asteroids.upload(fields.title[0], [{
 				src: url,
->>>>>>> dev
 				contentType: files.image[0].headers["content-type"],
 				resolution: {}
 			}], fields.description[0]).then(function (result) {
