@@ -6,6 +6,7 @@
 //var db =  monk('localhost:27017/test');
 var express = require('express'),
 	http = require('http'),
+	mongojs = require('mongojs'),
 	mongo = require('mongodb'),
 	MongoClient = require('mongodb').MongoClient,
 	mongoose = require('mongoose'),
@@ -31,46 +32,42 @@ var express = require('express'),
 // Parse initialization  
 var Parse = require('parse').Parse;
 Parse.initialize(process.env.parseID, process.env.parseJavascriptKey, process.env.parseMasterKey);
-var cache,
-	sid = uuid.v4(),
+var sid = uuid.v4(),
+	mdb,
 	mport,
 	mhost,
-	mdb,
+	mdbName,
 	visitor = ua(process.env.gTrackID, sid);
 app.configure('development', function(){
   app.use(express.errorHandler({ dumpExceptions: true, showStack: true }));
+  mdb = mongojs.connect('localhost/cache', ['pics']);
   env = false;
-  mdb = 'pics';
+  mdbName = 'cache';
   mhost = '127.0.0.1';
   mport = 27017;
-  MongoClient.connect('mongodb://127.0.0.1:27017/pics', function(err, db) {
-    if (err){
-    	console.log(err);
-    }
-  });
-  mongoose.connect('mongodb://127.0.0.1:27017/pics');
+  // MongoClient.connect('mongodb://127.0.0.1:27017/cache', function(err, db) {
+  //   if (err){
+  //   	console.log(err);
+  //   }
+  // });
+  mongoose.connect('mongodb://127.0.0.1:27017/cache');
 });
 
 app.configure('production', function(){
 	app.use(express.errorHandler());
 	env = true;
-	mdb = 'heroku_app23982462';
+	mdbName = 'heroku_app23982462';
 	mhost = 'ds037508.mongolab.com';
 	mport = 37508;
-	URI = 'mmongodb://'+process.env.DbUser+':'+process.env.DbPass+'@ds037508.mongolab.com:'+mport+'/'+mdb;
-	MongoClient.connect(URI, function(err, db) {
-		if (err){
-			console.log(err);
-		}
-	});
+	URI = 'mmongodb://'+process.env.DbUser+':'+process.env.DbPass+'@ds037508.mongolab.com:'+mport+'/'+mdbName;
+	// MongoClient.connect(URI, function(err, db) {
+	// 	if (err){
+	// 		console.log(err);
+	// 	}
+	// });
+	mdb = mongojs.connect(URI, ['pics']);
 	mongoose.connect(URI);
 });
-
-var mdb = mongoose.connection;
-	mdb.on('error', console.error.bind(console, 'connection error:'));
-	mdb.once('open', function callback () {
-	  console.log("connected to mongoose");
-	});
 
 // all environments
 app.set('port', process.env.PORT || 3000);
@@ -89,7 +86,7 @@ app.use(express.cookieParser(sid));
 app.use(express.session({
 	secret: sid,
 	store: new MongoStore({
-		db: mdb,
+		db: mdbName,
 		host: mhost,
 		port: mport
 	}),
@@ -156,23 +153,56 @@ app.get('/explore/:filter?', function(req, res) {
 	}
 });
 app.get('/pic/:id', function(req, res) {
-	var message = req.query.m;
+	var message = req.query.m,
+		views;
 	if(message == "u"){
 		message = [];
 		message.title = "Success!";
 		message.message = "Your pic has been successfully uploaded.";
 	}
+	mdb.pics.count({picID:req.params.id}, function(err, count){
+		if (!err) { 
+			if (count) {
+				mdb.pics.update({picID:req.params.id}, {$inc:{views:1}}, {multi:true}, function(err, val) {
+				    // the update is complete
+				    if (err) console.log("error incrementing: "+err)
+				    else console.log("view count incremented "+val);
+				});
+			} else {
+				mdb.pics.insert({picID:req.params.id, views:1}, function(err, val){
+					if (err) console.log("error creating: "+err)
+				    else console.log("view count created " + val);
+				});
+			}
+		} else { 
+			console.log(err)
+		};
+	});
 	if(req.session.auth){
 		db.asteroids.query.getPic(req.params.id).then(function(result) {
-			res.render('details', { m:message, picObject: result, imgOwner:result.username, username:req.session.user.username, authed:true});
+			mdb.pics.findOne({picID:req.params.id}, function(err, pic) {
+				if (!err) {
+					res.render('details', { m:message, picObject: result, imgOwner:result.username, username:req.session.user.username, views:pic.views, authed:true});
+				} else {
+					res.render('details', {  m:message, picObject:result, imgOwner:result.username});
+					console.log("error retrieving view count: "+err);
+				}
+			});
 		}, function() {
 			res.render('error', { error: '404' }); 	
 		});
 	} else {
 		db.asteroids.query.getPic(req.params.id).then(function(result) {
-			res.render('details', {  m:message, picObject:result, imgOwner:result.username });
+			mdb.pics.findOne({picID:req.params.id}, function(err, pic) {
+				if (!err) {
+					res.render('details', {  m:message, picObject:result, imgOwner:result.username, views:pic.views});
+				} else {
+					res.render('details', {  m:message, picObject:result, imgOwner:result.username});
+					console.log("error retrieving view count: "+err);
+				}
+			});
 		}, function() { 
-			res.render('error', { error: '404' }); 	
+			res.render('error', { error: '404' });
 		});
 	}
 });
