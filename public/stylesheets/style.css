@@ -76,20 +76,20 @@ a:hover {
 }
 
 .notice {
-	text-align: center;
+	text-align: left;
 	background-color: #A67C52;
 	color: #ffffff;
 	padding: 10px;
 	font-size: 14px;
 	margin: 10px 0;
 	display: block;
-	border: 1px solid #252525;
+	font-weight: 200;
 }
 
 .notice h1 {
-	font-size: 20px;
+	font-size: 18px;
 	margin: 0 0 5px 0;
-	font-weight: 100;
+	font-weight: 400;
 }
 
 /* Transparent */
@@ -656,6 +656,7 @@ footer .footer-logo {
 
 .image-description {
 	font-size: 16px;
+	font-weight: 200;
 }
 
 .image-details h2 {
