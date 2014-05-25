@@ -24,7 +24,7 @@ var asteroids = {};
  * @param {Number} src.resolution.size The size of the image in kilobytes
  * @param {String} desc A description of the image
 */
-asteroids.upload = function(name, src, desc) {
+asteroids.upload = function(name, src, desc, date, api) {
 	var imgQuery = new Parse.Query(Image);
 	imgQuery.equalTo("name", name);
 	return imgQuery.find().then(function(results) {
@@ -37,6 +37,12 @@ asteroids.upload = function(name, src, desc) {
 
 		image.set("name", name);
 		image.set("description", desc);
+		if(date) {
+			image.set("actualDate", date);
+		}
+		if(api) {
+			image.set("api", api);
+		}
 		
 		// set permissions
 		var imageACL = new Parse.ACL(Parse.User.current());
@@ -86,20 +92,29 @@ asteroids.upload = function(name, src, desc) {
 			image.set("owner", Parse.User.current());
 			return image.save();
 		}).then(function (result) {
-			Parse.User.current().relation("uploads").add(image);
-			return Parse.User.current().save();
+			if(Parse.User.current()) {
+				Parse.User.current().relation("uploads").add(image);
+				return Parse.User.current().save();
+			}
+		}).then(function(user) {
+			return image;
 		});
 	});
 }
 
 asteroids.query = {}
 asteroids.query.getPic = function(id){
-	var imgQuery = new Parse.Query(Image);
+	var imgQuery = new Parse.Query(Image).include("owner");
 	var image = {};
 	return imgQuery.get(id).then(function(result){
 		// Add image table
 		image.image = result;
-
+		var owner = result.get("owner");
+		if (owner) {
+			image.username = owner.get('username');
+		} else {
+			image.username = 'pictroid';
+		}
 		// Get src
 		return result.relation("src").query().first();
 	}).then(function(src){
@@ -114,29 +129,39 @@ asteroids.query.getUser = function(username){
 	});
 }
 asteroids.query.getLatest = function(width) {
-	var imgQuery = new Parse.Query(Image);
+	var imgQuery = new Parse.Query(Image).include("owner");
 	imgQuery.descending("createdAt");
 	return imgQuery.find().then(function(results){
 		var fileQuery;
 		var images = [];
 		for (var i = 0; i < results.length; i++) {
-			fileQuery = results[i].relation("src").query();
-			fileQuery.lessThanOrEqualTo("width", width);
-			fileQuery.descending("width");
-			(function(image) {
-				images.push(fileQuery.first().then(function(result){
-					if(!result) {
-						var fileQuery = image.relation("src").query();
-						fileQuery.ascending("width");
-						return fileQuery.first();
-					}
-					return result;
-				}).then(function(result) {
-					return {
-						image: image,
-						src: result
-					}
-				}));
+			(function() {
+				var owner = results[i].get("owner");
+				var imgOwner;
+				if (owner) {
+					imgOwner = owner.get('username');
+				} else {
+					imgOwner = 'pictroid';
+				}
+				fileQuery = results[i].relation("src").query();
+				fileQuery.lessThanOrEqualTo("width", width);
+				fileQuery.descending("width");
+				(function(image) {
+					images.push(fileQuery.first().then(function(result){
+						if(!result) {
+							var fileQuery = image.relation("src").query();
+							fileQuery.ascending("width");
+							return fileQuery.first();
+						}
+						return result;
+					}).then(function(result) {
+						return {
+							image: image,
+							src: result,
+							username: imgOwner
+						}
+					}));
+				})(results[i]);
 			})(results[i]);
 		};
 		return Parse.Promise.when(images);

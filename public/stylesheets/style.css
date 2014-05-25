@@ -75,6 +75,23 @@ a:hover {
 	text-shadow: 0 0 5px #000000;
 }
 
+.notice {
+	text-align: left;
+	background-color: #A67C52;
+	color: #ffffff;
+	padding: 10px;
+	font-size: 14px;
+	margin: 10px 0;
+	display: block;
+	font-weight: 200;
+}
+
+.notice h1 {
+	font-size: 18px;
+	margin: 0 0 5px 0;
+	font-weight: 400;
+}
+
 /* Transparent */
 .transparent a {
 	color: #ffffff;
@@ -394,7 +411,20 @@ form #or {
 	color: #fff !important;
 	line-height: auto;
 	font-size: 13px !important;
-	padding: 1% 0% 1% 2% !important;
+	padding: 10px;
+	text-align: left;
+	display: none;
+	margin: 5px 0;
+}
+
+.emsg h5 {
+	margin: 0 0 10px;
+}
+
+@media (max-width: 450px) {
+	form.form-transparent {
+		width: 90%;
+	}
 }
 
 /* Dropbox Element */
@@ -496,7 +526,7 @@ footer .footer-logo {
 	}
 }
 
-@media (max-width: 510px) {
+@media (max-width: 450px) {
 	footer {
 		height: auto;
 	}
@@ -505,11 +535,14 @@ footer .footer-logo {
     	display: block;
     	height: auto;
   	}
+  	footer .footer-logo {
+  		width: 60%;
+  	}
 	footer .column {
     	float: none;
     	width: 100%;
     	display: block;
-    	margin: 0 0 30px;
+    	margin: 0 0 18px;
 	}   
   	footer .top {
     	text-align: center;  
@@ -623,6 +656,7 @@ footer .footer-logo {
 
 .image-description {
 	font-size: 16px;
+	font-weight: 200;
 }
 
 .image-details h2 {
@@ -668,12 +702,11 @@ footer .footer-logo {
 	width: 30%;
 	background-color: #fff;
 	column-rule: #333;
-	border: 1px solid #eee;
 	border-radius: 3px;
 }
 
 .feed-item:hover {
-	box-shadow: 0px 2px 1px rgba(0,0,0,0.3);
+	box-shadow: 0px 2px 3px rgba(0,0,0,0.3);
 }
 
 .feed img {
@@ -756,7 +789,7 @@ li.comments {
 .container h3 {
 	margin-left: 2rem;
 	display: inline;
-	font-size: 1.2rem;
+	font-size: 1.35rem;
 }
 
 .container h3:first-child {
@@ -768,7 +801,7 @@ li.comments {
 	color: #666;
 }
 
-.container h3:first-child > a {
+.container h3 > a.active {
 	color: #a67c52;
 }
 

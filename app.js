@@ -24,7 +24,8 @@ var express = require('express'),
 	multiparty = require('multiparty'),
 	fs = require("fs"),
 	uuid = require('node-uuid'),
-	url = require('url');
+	url = require('url'),
+	rackspaceIO = require('./scripts/rackspaceIO');
   
 // Parse initialization  
 var Parse = require('parse').Parse;
@@ -104,6 +105,35 @@ app.get('/', function(req, res) {
 	if (req.session.auth){
 		res.render('index', { title: 'Pictroid', username:req.session.user.username, authed:true});
 	} else {
+		/*var kimReq = http.request({
+			host: "www.kimonolabs.com",
+			port: 80,
+			path: "/api/5zeipr38?apikey="+process.env.kimonoKey,
+			method: "GET",
+			headers: {
+			  "Content-Type": "application/json"
+			}
+		}, function(kimRes) {
+			 var output = '';
+			 kimRes.setEncoding('utf8');
+
+			 kimRes.on('data', function (chunk) {
+				  output += chunk;
+			 });
+
+			 kimRes.on('end', function() {
+				  var obj = JSON.parse(output);
+				  if(kimRes.statusCode === 200) {
+						resources.updateAPOD(obj).then(function(){}, function() {
+							console.error(arguments);
+						});
+				  }
+			 });
+		});
+		kimReq.on('error', function(err) {
+			 //res.send('error: ' + err.message);
+		});
+		kimReq.end();*/
 		res.render('index');
 	}
 });
@@ -115,15 +145,27 @@ app.get('/explore/:filter?', function(req, res) {
 	}
 });
 app.get('/pic/:id', function(req, res) {
+<<<<<<< HEAD
 	if (req.session.auth){
 		db.asteroids.query.getPic(req.params.id).then(function(result) {
 			res.render('details', { picObject: result, username:req.session.user.username, authed:true});
+=======
+	var message = req.query.m;
+	if(message == "u"){
+		message = [];
+		message.title = "Success!";
+		message.message = "Your pic has been successfully uploaded.";
+	}
+	if(currentUser){
+		db.asteroids.query.getPic(req.params.id).then(function(result) {
+			res.render('details', { m:message, picObject: result, imgOwner:result.username, username:currentUser.attributes.username, authed:true});
+>>>>>>> dev
 		}, function() {
 			res.render('error', { error: '404' }); 	
 		});
 	} else {
 		db.asteroids.query.getPic(req.params.id).then(function(result) {
-			res.render('details', { picObject: result });
+			res.render('details', {  m:message, picObject:result, imgOwner:result.username });
 		}, function() { 
 			res.render('error', { error: '404' }); 	
 		});
@@ -131,11 +173,11 @@ app.get('/pic/:id', function(req, res) {
 });
 app.get('/user/:name', function(req, res) {
 	var query = new Parse.Query(Parse.User);
-	query.equalTo("username", req.params.name);  // find all the women
+	query.equalTo("username", req.params.name);
 	query.first({
 		success: function(user) {
-			// Do stuff
 			if (user !== undefined) {
+<<<<<<< HEAD
 				var imgQ = user.relation("uploads").query();
 				var image = {};
 				imgQ.find({
@@ -150,6 +192,17 @@ app.get('/user/:name', function(req, res) {
 				});
 				if (req.session.auth) {
 					res.render('user/profile', { profile_username:req.params.name, profile_image:user.get("profileImg").url(), profile_status:user.get("status"), username:req.session.user.username, authed:true});
+=======
+				var relation = user.relation("uploads");
+				relation.query().find({
+					success: function(uploads) {
+						// uploads contains the uploads of the user in param
+						console.log(uploads);
+					}
+				});
+				if (currentUser) {
+					res.render('user/profile', { profile_username:req.params.name, profile_image:user.get("profileImg").url(), profile_status:user.get("status"), username:currentUser.attributes.username, authed:true});
+>>>>>>> dev
 				} else {
 					res.render('user/profile', { profile_username:req.params.name, results:image ,profile_image:user.get("profileImg").url(), profile_status:user.get("status")});
 				}
@@ -165,9 +218,15 @@ app.get('/user/:name', function(req, res) {
 	
 });
 app.get('/upload', function(req, res) {
+<<<<<<< HEAD
 	// Code to authedorize
 	if (req.session.auth) {
 		res.render('user/upload', { username:req.session.user.username, authed:true});
+=======
+	// Code to auth
+	if (currentUser) {
+		res.render('user/upload', { username:currentUser.attributes.username, authed:true});
+>>>>>>> dev
 	} else {
 		res.redirect('/signin'+'?er=SignInRequired');
 	}
@@ -217,15 +276,34 @@ app.get('/signup', function(req, res) {
 	}
 });
 app.get('/account/settings', function(req, res) {
+<<<<<<< HEAD
 	// Code to authedorize
 	if (req.session.auth) {
 		res.render('account/settings', { username:req.session.user.username, email:req.session.user.email, status:req.session.user.status, profileImgSrc:req.session.user.profileImg.url, authed:true, secure:true});
+=======
+	// Code to auth
+	if (currentUser) {
+		res.render('account/settings', { username:currentUser.attributes.username, email:currentUser.attributes.email, status:currentUser.attributes.status, profileImgSrc:currentUser.get("profileImg").url(), authed:true, secure:true});
+>>>>>>> dev
 	} else {
 		res.redirect('/signin');
 	}
 });
+app.get('/password_reset', function(req, res) {
+	if (!currentUser) {
+		res.render('password_reset', { secure:true});
+	} else {
+		res.redirect('/account/settings');
+	}
+});
+app.get('/password_reset_request', function(req, res) {
+	if(req.query.email){
+		res.render('password_reset_request', { email : req.query.email, secure:true});
+	} else {
+		res.redirect('/');
+	}
+});
 app.get('/passwordchange_confirmation', function(req, res) {
-	// Code to authedorize
 	if (req.query.username) {
 		res.render('passwordchange_confirmation', { username:req.query.username, secure:true});
 	} else {
@@ -247,12 +325,8 @@ app.get('/email_confirmation', function(req, res) {
 	}
 });
 app.get('/invalid_link', function(req, res) {
-	// Code to authedorize
-	if (req.query.username) {
-		res.render('passwordchange_confirmation', { username:req.query.username, secure:true});
-	} else {
-		res.redirect('/');
-	}
+	// Code to auth
+	res.redirect('/404');
 });
 app.get('/*', function(req, res) {
 	res.render('error', { error: '404' });
@@ -260,14 +334,33 @@ app.get('/*', function(req, res) {
 
 // Post
 app.post('/kimono_spitzer', function(req, res) {
-	resources.updateKimono(req.body).then(function(){
+	resources.updateSpitzer(req.body).then(function(){
 		res.send(arguments);
 	}, function() {
 		console.error(arguments);
 		res.send(500, arguments);
 	});
 });
-
+app.post('/kimono_APOD', function(req, res) {
+	resources.updateAPOD(req.body).then(function(){
+		res.send(arguments);
+	}, function() {
+		console.error(arguments);
+		res.send(500, arguments);
+	});
+});
+app.post('/password_reset', function(req, res) {
+	Parse.User.requestPasswordReset(req.body.email.toLowerCase(), {
+	  success: function() {
+		 // Password reset request was sent successfully
+		 res.redirect("/password_reset_request?email="+req.body.email.toLowerCase());
+	  },
+	  error: function(error) {
+		 // Show the error message somewhere
+		 alert("Error: " + error.code + " " + error.message);
+	  }
+	});
+});
 app.post('/account/settings', function(req, res) {
 	var form = new multiparty.Form();
 	form.parse(req, function(err, fields, files) {
@@ -388,20 +481,26 @@ app.post('/upload', function(req, res) {
 	// Code to handle upload
 	var form = new multiparty.Form();
 	form.parse(req, function(err, fields, files) {
+<<<<<<< HEAD
 		var imagef = fs.readFile(files.image[0].path, function (err, data) {
 			if (err) throw err;
 			
 			db.asteroids.upload(files.image[0].originalFilename, [{
 				src: data,
+=======
+		var imagef = fs.createReadStream(files.image[0].path);
+		rackspaceIO.upload(imagef, files.image[0].originalFilename, function(err, result, url) {
+			db.asteroids.upload(fields.title[0], [{
+				src: url,
+>>>>>>> dev
 				contentType: files.image[0].headers["content-type"],
-				resolution: {},
-				isFile: true
+				resolution: {}
 			}], fields.description[0]).then(function (result) {
-				console.log(result);
+				res.redirect("/pic/"+result.id+"?m=u");
 			}, function (err) {
 				console.log(err);
+				res.send("Error: " + JSON.stringify(err), 500);
 			});
-			res.redirect("/upload");
 		});
 	});
 });

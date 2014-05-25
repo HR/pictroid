@@ -2,22 +2,49 @@ var db = require('./data');
 var http = require("http");
 var Flickr = require("flickrapi");
 var Parse = require("parse").Parse;
+var moment = require("moment");
 
-function updateDB(results) {
-    var uploaded = [];
-    for(var i = 0; i < results.length; i++) {
-        uploaded.push(db.asteroids.upload(results[i].title, results[i].src, results[i].desc).fail(function(err) {
-            if(err === "Image already exists") {
-                return Parse.Promise.as("Image already exists");
-            } else {
-                return err;
+function updateDB(results, api) {
+    var finished = [];
+    var burstFinished;
+    var prevFunc;
+    // Deal with request limit
+    for(var i = results.length; i > 0; i -= 10) {
+        burstFinished = new Parse.Promise();
+        (function(burstFinished, nextFunc, i) {
+            var currentFunc = function() {
+                if(nextFunc) {
+                    setTimeout(nextFunc, 1000);
+                }
+                console.log("uploading burst " + Math.ceil(i/10) + "/" + Math.ceil(results.length/10));
+                var uploaded = [];
+                var start = 0 > i - 10 ? 0 : i - 10;
+                for(var y = start; y < i; y++) {
+                    uploaded.push(db.asteroids.upload(results[y].title, results[y].src, results[y].desc, results[y].date, api).fail(function(err) {
+                        if(err === "Image already exists") {
+                            return Parse.Promise.as("Image already exists");
+                        } else {
+                            return err;
+                        }
+                    }));
+                }
+                Parse.Promise.when(uploaded).then(function () {
+                    burstFinished.resolve.apply(burstFinished, arguments);
+                }, function () {
+                    burstFinished.reject.apply(burstFinished, arguments);
+                });
+            };
+            if(i - 10 < 0) {
+                currentFunc();
             }
-        }));
+            prevFunc = currentFunc;
+        })(burstFinished, prevFunc, i);
+        finished.push(burstFinished);
     }
-    return Parse.Promise.when(uploaded)
+    return Parse.Promise.when(finished)
 }
 
-exports.updateKimono = function(obj) {
+exports.updateSpitzer = function(obj) {
     var results = obj.results
     var finalResults = [];
     var counter = 0;
@@ -46,7 +73,26 @@ exports.updateKimono = function(obj) {
             desc: results.collection3[i].text
         });
     }
-    return updateDB(finalResults);
+    return updateDB(finalResults, "spitzer");
+}
+
+exports.updateAPOD = function (obj) {
+    var results = obj.results.Apod_Detail;
+    var finalResults = [];
+    for(var i = 0; i < results.length; i++) {
+        if (results[i].Title !== undefined && results[i].Date !== undefined && results[i].Image.href !== undefined) {
+            finalResults.push({
+                title: results[i].Title,
+                src: [{
+                    src: results[i].Image.href,
+                    resolution: {}
+                }],
+                desc: results[i].Description.text,
+                date: moment(results[i].Date, "YYYY MMM DD").toDate()
+            });
+        }
+    }
+    return updateDB(finalResults, "APOD");
 }
 
 // flickr
@@ -108,7 +154,7 @@ flickrOAuth(function(err, flickr) {
                 desc: ""
             });
         }
-        updateDB(finalResults);
+        updateDB(finalResults, "flickr");
     });
 });
 
@@ -142,9 +188,7 @@ var req = http.request({
         }
     });
 });
-
 req.on('error', function(err) {
     //res.send('error: ' + err.message);
 });
-
 req.end();
