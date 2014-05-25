@@ -42,9 +42,9 @@ app.configure('development', function(){
   mhost = '127.0.0.1';
   mport = 27017;
   MongoClient.connect('mongodb://127.0.0.1:27017/user', function(err, db) {
-	if (err){
-		console.log(err);
-	}
+    if (err){
+    	console.log(err);
+    }
   });
   // mongoose.connect('mongodb://127.0.0.1:27017/db');
 });
@@ -145,18 +145,15 @@ app.get('/explore/:filter?', function(req, res) {
 	}
 });
 app.get('/pic/:id', function(req, res) {
-	if (req.session.auth){
-		db.asteroids.query.getPic(req.params.id).then(function(result) {
-			res.render('details', { picObject: result, username:req.session.user.username, authed:true});
 	var message = req.query.m;
 	if(message == "u"){
 		message = [];
 		message.title = "Success!";
 		message.message = "Your pic has been successfully uploaded.";
 	}
-	if(currentUser){
+	if(req.session.auth){
 		db.asteroids.query.getPic(req.params.id).then(function(result) {
-			res.render('details', { m:message, picObject: result, imgOwner:result.username, username:currentUser.attributes.username, authed:true});
+			res.render('details', { m:message, picObject: result, imgOwner:result.username, username:req.session.user.username, authed:true});
 		}, function() {
 			res.render('error', { error: '404' }); 	
 		});
@@ -186,8 +183,6 @@ app.get('/user/:name', function(req, res) {
 					  alert("Error: " + error.code + " " + error.message);
 				   }
 				});
-				if (req.session.auth) {
-					res.render('user/profile', { profile_username:req.params.name, profile_image:user.get("profileImg").url(), profile_status:user.get("status"), username:req.session.user.username, authed:true});
 				var relation = user.relation("uploads");
 				relation.query().find({
 					success: function(uploads) {
@@ -195,8 +190,8 @@ app.get('/user/:name', function(req, res) {
 						console.log(uploads);
 					}
 				});
-				if (currentUser) {
-					res.render('user/profile', { profile_username:req.params.name, profile_image:user.get("profileImg").url(), profile_status:user.get("status"), username:currentUser.attributes.username, authed:true});
+				if (req.session.auth) {
+					res.render('user/profile', { profile_username:req.params.name, profile_image:user.get("profileImg").url(), profile_status:user.get("status"), username:req.session.user.username, authed:true});
 				} else {
 					res.render('user/profile', { profile_username:req.params.name, results:image ,profile_image:user.get("profileImg").url(), profile_status:user.get("status")});
 				}
@@ -212,12 +207,9 @@ app.get('/user/:name', function(req, res) {
 	
 });
 app.get('/upload', function(req, res) {
-	// Code to authedorize
+	// Code to auth
 	if (req.session.auth) {
 		res.render('user/upload', { username:req.session.user.username, authed:true});
-	// Code to auth
-	if (currentUser) {
-		res.render('user/upload', { username:currentUser.attributes.username, authed:true});
 	} else {
 		res.redirect('/signin'+'?er=SignInRequired');
 	}
@@ -267,19 +259,15 @@ app.get('/signup', function(req, res) {
 	}
 });
 app.get('/account/settings', function(req, res) {
-	// Code to authedorize
+	// Code to auth
 	if (req.session.auth) {
 		res.render('account/settings', { username:req.session.user.username, email:req.session.user.email, status:req.session.user.status, profileImgSrc:req.session.user.profileImg.url, authed:true, secure:true});
-
-	// Code to auth
-	if (currentUser) {
-		res.render('account/settings', { username:currentUser.attributes.username, email:currentUser.attributes.email, status:currentUser.attributes.status, profileImgSrc:currentUser.get("profileImg").url(), authed:true, secure:true});
 	} else {
 		res.redirect('/signin');
 	}
 });
 app.get('/password_reset', function(req, res) {
-	if (!currentUser) {
+	if (!req.session.auth) {
 		res.render('password_reset', { secure:true});
 	} else {
 		res.redirect('/account/settings');
@@ -470,11 +458,6 @@ app.post('/upload', function(req, res) {
 	// Code to handle upload
 	var form = new multiparty.Form();
 	form.parse(req, function(err, fields, files) {
-		var imagef = fs.readFile(files.image[0].path, function (err, data) {
-			if (err) throw err;
-			
-			db.asteroids.upload(files.image[0].originalFilename, [{
-				src: data,
 		var imagef = fs.createReadStream(files.image[0].path);
 		rackspaceIO.upload(imagef, files.image[0].originalFilename, function(err, result, url) {
 			db.asteroids.upload(fields.title[0], [{
