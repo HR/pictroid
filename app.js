@@ -8,7 +8,8 @@ var express = require('express'),
 	http = require('http'),
 	mongo = require('mongodb'),
 	MongoClient = require('mongodb').MongoClient,
-	mongoose = require('mongoose'),
+	// mongoose = require('mongoose'),
+	MongoStore = require('connect-mongo')(express);
 	monk = require('monk'),
 	path = require('path'),
 	routes = require('./routes'),
@@ -28,21 +29,35 @@ var express = require('express'),
 // Parse initialization  
 var Parse = require('parse').Parse;
 Parse.initialize(process.env.parseID, process.env.parseJavascriptKey, process.env.parseMasterKey);
-var currentUser;
-var cache;
-var sid = uuid.v4();
+var currentUser,
+	cache,
+	sid = uuid.v4(),
+	mport,
+	mhost,
+	mdb;
 app.configure('development', function(){
   app.use(express.errorHandler({ dumpExceptions: true, showStack: true }));
-  // MongoClient.connect('mongodb://127.0.0.1:27017/db', function(err, db) {
-  //   if (err){
-  //   	console.log(err);
-  //   }
-  //  });
+  mdb = 'user';
+  mhost = '127.0.0.1';
+  mport = 27017;
+  MongoClient.connect('mongodb://127.0.0.1:27017/user', function(err, db) {
+    if (err){
+    	console.log(err);
+    }
+  });
   // mongoose.connect('mongodb://127.0.0.1:27017/db');
 });
 
 app.configure('production', function(){
 	app.use(express.errorHandler());
+	mdb = 'heroku_app23982462';
+	mhost = 'ds037508.mongolab.com';
+	mport = 37508;
+	MongoClient.connect('mmongodb://'+process.env.DbUser+':'+process.env.DbPass+'@ds037508.mongolab.com:'+mport+'/'+mdb, function(err, db) {
+		if (err){
+			console.log(err);
+		}
+	});
 });
 
 // all environments
@@ -61,6 +76,11 @@ app.use(helmet.cacheControl());
 app.use(express.cookieParser(sid));
 app.use(express.session({
 	secret: sid,
+	store: new MongoStore({
+		db: mdb,
+		host: mhost,
+		port: mport
+	}),
 	cookie: {
 		httpOnly: true, 
 		// secure: true,
