@@ -27,6 +27,7 @@
     "request": "*",
     "form-data": "~0.1.2",
     "sass": "*",
-    "pkgcloud": "~0.9.4"
+    "pkgcloud": "~0.9.4",
+    "universal-analytics": "*"
   }
 }

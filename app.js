@@ -8,7 +8,7 @@ var express = require('express'),
 	http = require('http'),
 	mongo = require('mongodb'),
 	MongoClient = require('mongodb').MongoClient,
-	// mongoose = require('mongoose'),
+	mongoose = require('mongoose'),
 	MongoStore = require('connect-mongo')(express);
 	monk = require('monk'),
 	path = require('path'),
@@ -25,41 +25,52 @@ var express = require('express'),
 	fs = require("fs"),
 	uuid = require('node-uuid'),
 	url = require('url'),
+	ua = require('universal-analytics'),
 	rackspaceIO = require('./scripts/rackspaceIO');
   
 // Parse initialization  
 var Parse = require('parse').Parse;
 Parse.initialize(process.env.parseID, process.env.parseJavascriptKey, process.env.parseMasterKey);
-var currentUser,
-	cache,
+var cache,
 	sid = uuid.v4(),
 	mport,
 	mhost,
-	mdb;
+	mdb,
+	visitor = ua(process.env.gTrackID, sid);
 app.configure('development', function(){
   app.use(express.errorHandler({ dumpExceptions: true, showStack: true }));
-  mdb = 'user';
+  env = false;
+  mdb = 'pics';
   mhost = '127.0.0.1';
   mport = 27017;
-  MongoClient.connect('mongodb://127.0.0.1:27017/user', function(err, db) {
+  MongoClient.connect('mongodb://127.0.0.1:27017/pics', function(err, db) {
     if (err){
     	console.log(err);
     }
   });
-  // mongoose.connect('mongodb://127.0.0.1:27017/db');
+  mongoose.connect('mongodb://127.0.0.1:27017/pics');
 });
 
 app.configure('production', function(){
 	app.use(express.errorHandler());
+	env = true;
 	mdb = 'heroku_app23982462';
 	mhost = 'ds037508.mongolab.com';
 	mport = 37508;
-	MongoClient.connect('mmongodb://'+process.env.DbUser+':'+process.env.DbPass+'@ds037508.mongolab.com:'+mport+'/'+mdb, function(err, db) {
+	URI = 'mmongodb://'+process.env.DbUser+':'+process.env.DbPass+'@ds037508.mongolab.com:'+mport+'/'+mdb;
+	MongoClient.connect(URI, function(err, db) {
 		if (err){
 			console.log(err);
 		}
 	});
+	mongoose.connect(URI);
 });
+
+var mdb = mongoose.connection;
+	mdb.on('error', console.error.bind(console, 'connection error:'));
+	mdb.once('open', function callback () {
+	  console.log("connected to mongoose");
+	});
 
 // all environments
 app.set('port', process.env.PORT || 3000);
@@ -84,7 +95,7 @@ app.use(express.session({
 	}),
 	cookie: {
 		httpOnly: true, 
-		// secure: true,
+		secure: env,
 		maxAge: 60000
 	}
 }));
@@ -101,7 +112,7 @@ if ('development' == app.get('env')) {
 
 // Get
 app.get('/', function(req, res) {
-	console.log(req.session);
+	visitor.pageview("/").send();
 	if (req.session.auth){
 		res.render('index', { title: 'Pictroid', username:req.session.user.username, authed:true});
 	} else {
@@ -238,7 +249,6 @@ app.get('/signin', function(req, res) {
 app.get('/signout', function(req, res) {
 	if (req.session.auth){
 		Parse.User.logOut();
-		currentUser = null;
 		req.session.destroy(function(){
 			req.session = null;
 			if (req.query.return_to) {
