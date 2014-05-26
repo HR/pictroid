@@ -59,7 +59,7 @@ app.configure('production', function(){
 	mdbName = 'heroku_app23982462';
 	mhost = 'ds037508.mongolab.com';
 	mport = 37508;
-	URI = 'mmongodb://'+process.env.DbUser+':'+process.env.DbPass+'@ds037508.mongolab.com:'+mport+'/'+mdbName;
+	URI = 'mongodb://'+process.env.DbUser+':'+process.env.DbPass+'@ds037508.mongolab.com:'+mport+'/'+mdbName;
 	// MongoClient.connect(URI, function(err, db) {
 	// 	if (err){
 	// 		console.log(err);
