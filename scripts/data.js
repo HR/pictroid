@@ -101,11 +101,30 @@ asteroids.upload = function(name, src, desc, date, api) {
 		});
 	});
 }
-
+asteroids.parseSyncViews = function(id, amount) {
+	var imgQuery = new Parse.Query(Image);
+	imgQuery.get(id).then(function(pic){
+		pic.increment("views", amount);
+		pic.save(null, {
+		  success: function(pic) {
+		    // Execute any logic that should take place after the object is saved.
+		    console.log('incremented views '+pic);
+		  },
+		  error: function(pic, error) {
+		    // Execute any logic that should take place if the save fails.
+		    // error is a Parse.Error with an error code and description.
+		    console.log('Failed to increment, with error code: ');
+		    for (var t in error) {
+		    	console.log(error[t]);
+		    };
+		  }
+		});
+	});
+}
 asteroids.query = {}
 asteroids.query.getPic = function(id){
-	var imgQuery = new Parse.Query(Image).include("owner");
-	var image = {};
+	var imgQuery = new Parse.Query(Image).include("owner"),
+		image = {};
 	return imgQuery.get(id).then(function(result){
 		// Add image table
 		image.image = result;
