@@ -56,15 +56,7 @@ app.configure('production', function(){
 	mhost = 'ds037508.mongolab.com';
 	mport = 37508;
 	URI = 'mongodb://'+process.env.DbUser+':'+process.env.DbPass+'@ds037508.mongolab.com:'+mport+'/'+mdbName;
-	// TO DO connect to heroku mongoDB
-	// mdb = mongojs(URI, ['pics']);
-
-	/* test if connection works 
-	mdb.pics.find().sort({picID:1}, function(err, docs) {
-		// docs is now a sorted array
-		if (err) { console.log(err)};
-		console.log(docs);
-	});*/
+	mdb = mongojs(URI, ['pics']);
 	// mongoose.connect(URI);
 });
 
@@ -93,7 +85,7 @@ app.use(express.session({
 
 	}),
 	cookie: {
-		httpOnly: env, 
+		httpOnly: (!env), 
 		secure: env,
 		maxAge: 60000
 	}
