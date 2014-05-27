@@ -188,7 +188,6 @@ asteroids.query.getLatest = function(width) {
 				fileQuery.lessThanOrEqualTo("width", width);
 				fileQuery.descending("width");
 				(function(image) {
-					console.log(views);
 					images.push(fileQuery.first().then(function(result){
 						if(!result) {
 							var fileQuery = image.relation("src").query();

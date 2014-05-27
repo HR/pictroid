@@ -39,6 +39,8 @@ var sid = uuid.v4(),
 	mhost,
 	mdbName,
 	visitor = ua(process.env.gTrackID, sid);
+
+//  Environment configs
 app.configure('development', function(){
 	app.use(express.errorHandler({ dumpExceptions: true, showStack: true }));
 	GLOBAL.mdb = mongojs.connect('localhost/cache', ['pics']);
@@ -76,6 +78,7 @@ app.use(helmet.cacheControl());
 app.use(express.cookieParser(sid));
 app.use(express.session({
 	secret: sid,
+	// TO DO change to use just "url" param to allow dev env.
 	store: new MongoStore({
 		db: mdbName,
 		host: mhost,
@@ -96,10 +99,6 @@ app.use(function (req, res, next) {
   res.locals.csrftoken = req.csrfToken();
   next();
 });
-// development only
-if ('development' == app.get('env')) {
-  app.use(express.errorHandler());
-}
 
 // Get
 app.get('/', function(req, res) {
