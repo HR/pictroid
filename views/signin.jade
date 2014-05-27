@@ -12,6 +12,7 @@ block content
 		img(src="/images/logo/icon.png", alt="Pictroid", height="75")
 		hr
 		input.form-control(type="hidden", name="_csrf", value="#{csrftoken}")
+		input.form-control(type="hidden", name="return_to", value="#{route}")
 		input.form-control(type="text", name="username", placeholder="Username")
 		input.form-control(type="password", name="password", placeholder="Password")
 		if error
@@ -35,7 +36,9 @@ block content
 					ermsg = "",
 					form = window.document.forms[0],
 					emsg = window.document.querySelectorAll(".emsg")[0],					
-					emul = window.document.querySelectorAll(".emul")[0];
+					emul = window.document.querySelectorAll(".emul")[0],
+					qstring = getParameterByName('return_to');
+					alert("qs: "+qstring);
 				if(!(/^[a-z0-9_-]{6,10}$/i).test(form.username.value)){
 					ermsg += errorLi("Invalid username, needs to be 6-14 alphanumeric and - _ characters");
 					valid = false;
@@ -47,6 +50,7 @@ block content
 				if (valid) {
 					emsg.style.display = "none";
 					return valid;
+					// $.post( "/signin", { 'return_to': qstring } );
 				} else {
 					emul.innerHTML = ermsg;
 					emsg.style.display = "block";

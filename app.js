@@ -1,9 +1,9 @@
 
 /**
- * Module dependencies.
+ * Module dependencies
+ * (C) by Codexa 2014
  */
 
-//var db =  monk('localhost:27017/test');
 var express = require('express'),
 	http = require('http'),
 	mongojs = require('mongojs'),
@@ -34,23 +34,19 @@ var Parse = require('parse').Parse;
 Parse.initialize(process.env.parseID, process.env.parseJavascriptKey, process.env.parseMasterKey);
 var sid = uuid.v4(),
 	mdb,
+	URI,
 	mport,
 	mhost,
 	mdbName,
 	visitor = ua(process.env.gTrackID, sid);
 app.configure('development', function(){
-  app.use(express.errorHandler({ dumpExceptions: true, showStack: true }));
-  mdb = mongojs.connect('localhost/cache', ['pics']);
-  env = false;
-  mdbName = 'cache';
-  mhost = '127.0.0.1';
-  mport = 27017;
-  // MongoClient.connect('mongodb://127.0.0.1:27017/cache', function(err, db) {
-  //   if (err){
-  //   	console.log(err);
-  //   }
-  // });
-  mongoose.connect('mongodb://127.0.0.1:27017/cache');
+	app.use(express.errorHandler({ dumpExceptions: true, showStack: true }));
+	mdb = mongojs.connect('localhost/cache', ['pics']);
+	env = false;
+	mdbName = 'cache';
+	mhost = '127.0.0.1';
+	mport = 27017;
+	mongoose.connect('mongodb://127.0.0.1:27017/cache');
 });
 
 app.configure('production', function(){
@@ -60,13 +56,16 @@ app.configure('production', function(){
 	mhost = 'ds037508.mongolab.com';
 	mport = 37508;
 	URI = 'mongodb://'+process.env.DbUser+':'+process.env.DbPass+'@ds037508.mongolab.com:'+mport+'/'+mdbName;
-	// MongoClient.connect(URI, function(err, db) {
-	// 	if (err){
-	// 		console.log(err);
-	// 	}
-	// });
-	mdb = mongojs.connect(URI, ['pics']);
-	mongoose.connect(URI);
+	// TO DO connect to heroku mongoDB
+	// mdb = mongojs(URI, ['pics']);
+
+	/* test if connection works 
+	mdb.pics.find().sort({picID:1}, function(err, docs) {
+		// docs is now a sorted array
+		if (err) { console.log(err)};
+		console.log(docs);
+	});*/
+	// mongoose.connect(URI);
 });
 
 // all environments
@@ -88,10 +87,13 @@ app.use(express.session({
 	store: new MongoStore({
 		db: mdbName,
 		host: mhost,
-		port: mport
+		port: mport,
+		username: process.env.DbUser,
+		password: process.env.DbPass
+
 	}),
 	cookie: {
-		httpOnly: true, 
+		httpOnly: env, 
 		secure: env,
 		maxAge: 60000
 	}
@@ -111,7 +113,7 @@ if ('development' == app.get('env')) {
 app.get('/', function(req, res) {
 	visitor.pageview("/").send();
 	if (req.session.auth){
-		res.render('index', { title: 'Pictroid', username:req.session.user.username, authed:true});
+		res.render('index', { title: 'Pictroid', username:req.session.user.username, authed:true, route:'/'});
 	} else {
 		/*var kimReq = http.request({
 			host: "www.kimonolabs.com",
@@ -142,14 +144,14 @@ app.get('/', function(req, res) {
 			 //res.send('error: ' + err.message);
 		});
 		kimReq.end();*/
-		res.render('index');
+		res.render('index', {route:'/'});
 	}
 });
 app.get('/explore/:filter?', function(req, res) {
 	if (req.session.auth){
-		res.render('explore', { filter: req.params.filter, username:req.session.user.username, authed:true});
+		res.render('explore', { filter: req.params.filter, username:req.session.user.username, authed:true, route:'/explore/'+req.params.filter});
 	} else {
-		res.render('explore', { filter: req.params.filter });
+		res.render('explore', { filter: req.params.filter, route:'/explore/'+req.params.filter});
 	}
 });
 app.get('/pic/:id', function(req, res) {
@@ -164,14 +166,14 @@ app.get('/pic/:id', function(req, res) {
 		if (!err) { 
 			if (count) {
 				mdb.pics.update({picID:req.params.id}, {$inc:{views:1}}, {multi:true}, function(err, val) {
-				    // the update is complete
-				    if (err) console.log("error incrementing: "+err)
-				    else console.log("view count incremented "+val);
+					// the update is complete
+					if (err) console.log("error incrementing: "+err)
+					else console.log("view count incremented "+val);
 				});
 			} else {
 				mdb.pics.insert({picID:req.params.id, views:1}, function(err, val){
 					if (err) console.log("error creating: "+err)
-				    else console.log("view count created " + val);
+					else console.log("view count created " + val);
 				});
 			}
 		} else { 
@@ -182,9 +184,9 @@ app.get('/pic/:id', function(req, res) {
 		db.asteroids.query.getPic(req.params.id).then(function(result) {
 			mdb.pics.findOne({picID:req.params.id}, function(err, pic) {
 				if (!err) {
-					res.render('details', { m:message, picObject: result, imgOwner:result.username, username:req.session.user.username, views:pic.views, authed:true});
+					res.render('details', { m:message, picObject: result, imgOwner:result.username, username:req.session.user.username, views:pic.views, authed:true, route:'/pic/'+req.params.id});
 				} else {
-					res.render('details', {  m:message, picObject:result, imgOwner:result.username});
+					res.render('details', {  m:message, picObject:result, imgOwner:result.username, username:req.session.user.username, authed:true, route:'/pic/'+req.params.id});
 					console.log("error retrieving view count: "+err);
 				}
 			});
@@ -195,9 +197,9 @@ app.get('/pic/:id', function(req, res) {
 		db.asteroids.query.getPic(req.params.id).then(function(result) {
 			mdb.pics.findOne({picID:req.params.id}, function(err, pic) {
 				if (!err) {
-					res.render('details', {  m:message, picObject:result, imgOwner:result.username, views:pic.views});
+					res.render('details', {  m:message, picObject:result, imgOwner:result.username, views:pic.views, route:'/pic/'+req.params.id});
 				} else {
-					res.render('details', {  m:message, picObject:result, imgOwner:result.username});
+					res.render('details', {  m:message, picObject:result, imgOwner:result.username, route:'/pic/'+req.params.id});
 					console.log("error retrieving view count: "+err);
 				}
 			});
@@ -232,9 +234,9 @@ app.get('/user/:name', function(req, res) {
 					}
 				});
 				if (req.session.auth) {
-					res.render('user/profile', { profile_username:req.params.name, profile_image:user.get("profileImg").url(), profile_status:user.get("status"), username:req.session.user.username, authed:true});
+					res.render('user/profile', { profile_username:req.params.name, profile_image:user.get("profileImg").url(), profile_status:user.get("status"), username:req.session.user.username, authed:true, route:'/user/'+req.params.name});
 				} else {
-					res.render('user/profile', { profile_username:req.params.name, results:image ,profile_image:user.get("profileImg").url(), profile_status:user.get("status")});
+					res.render('user/profile', { profile_username:req.params.name, results:image ,profile_image:user.get("profileImg").url(), profile_status:user.get("status"), route:'/user/'+req.params.name});
 				}
 			} else {
 				res.render('error', { error: '404', secure:true});
@@ -259,20 +261,21 @@ app.get('/about', function(req, res) {
 	console.log(req.session);
 	if (req.session.auth){
 
-		res.render('about', { username:req.session.user.username, authed:true});
+		res.render('about', { username:req.session.user.username, authed:true, route:'/about'});
 	} else {
-		res.render('about');
+		res.render('about', { route:'/about'});
 	}
 });
 app.get('/signin', function(req, res) {
 	if (!req.session.auth){
 		if (req.query.er === "SignInRequired") {
 			res.render('signin', { error : "You have to be signed in to access the page", secure:true});
+		} else if (req.query.return_to) {
+			res.render('signin', { route:req.query.return_to, secure:true});
 		} else {
 			res.render('signin');
 		}
 	} else {
-
 		res.redirect('/');
 	}
 });
@@ -474,12 +477,21 @@ app.post('/signin', function(req, res) {
 									// or in this case the entire user object
 									req.session.user = Parse.User.current();
 									req.session.auth = true;
-									res.redirect('/');
+									console.log(req.query.return_to);
+									if (req.body.return_to) {
+										res.redirect(req.body.return_to);
+									} else {
+										res.redirect('/');
+									}
 								});
 							},
 								function(error) {
 								console.log('error', error);
-								res.render('signin', { error : error.message, secure:true});
+								if (req.body.return_to) {
+									res.render('signin', { error : error.message, secure:true, route:req.body.return_to});
+								} else {
+									res.render('signin', { error : error.message, secure:true});
+								}
 							}
 						);
 					}
