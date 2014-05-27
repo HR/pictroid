@@ -53,7 +53,7 @@ app.configure('development', function(){
 
 app.configure('production', function(){
 	app.use(express.errorHandler());
-	env = true;
+	env = false;
 	mdbName = 'heroku_app23982462';
 	mhost = 'ds037508.mongolab.com';
 	mport = 37508;
@@ -102,7 +102,6 @@ app.use(function (req, res, next) {
 
 // Get
 app.get('/', function(req, res) {
-	visitor.pageview("/").send();
 	if (req.session.auth){
 		res.render('index', { title: 'Pictroid', username:req.session.user.username, authed:true, route:'/'});
 	} else {
