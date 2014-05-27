@@ -188,6 +188,9 @@ app.get('/pic/:id', function(req, res) {
 	} else {
 		db.asteroids.query.getPic(req.params.id).then(function(result) {
 			mdb.pics.findOne({picID:req.params.id}, function(err, pic) {
+				if (pic.views%15 === 0) {
+					db.asteroids.parseSyncViews(req.params.id, 15);
+				}
 				if (!err) {
 					res.render('details', {  m:message, picObject:result, imgOwner:result.username, views:pic.views, route:'/pic/'+req.params.id});
 				} else {
