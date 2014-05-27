@@ -1,14 +1,14 @@
-var Parse = require('parse').Parse;
-var Image = Parse.Object.extend("Image");
-var ImageSrc = Parse.Object.extend("ImageSrc");
-
+var Parse = require('parse').Parse,
+	Image = Parse.Object.extend("Image"),
+	ImageSrc = Parse.Object.extend("ImageSrc"),
+	asteroids = {};
 Parse.initialize(process.env.parseID, process.env.parseJavascriptKey, process.env.parseMasterKey);
 
 /**
  * asteroid image data manipulation
  * @namespace asteroids
 */
-var asteroids = {};
+
 
 /**
  * upload an image
@@ -147,16 +147,38 @@ asteroids.query.getUser = function(username){
 		console.log(result);
 	});
 }
+
+asteroids.query.getPicViews = function(id) {
+	mdb.pics.findOne({picID:id}, function(err, pic) {
+		if (!err && pic !== null) {
+			return pic.views;
+		} else if(pic === null) {
+			// TO DO (future) GET from Parse if there are views for pic
+			mdb.pics.insert({picID:id, views:1}, function(err, val){
+				if (err) console.log("error creating: "+err)
+				else console.log("view count created " + val);
+				return val.views;
+			});
+		} else {
+			console.log("error retrieving view count: "+err);
+			return ;
+		}
+	});
+}
+
 asteroids.query.getLatest = function(width) {
 	var imgQuery = new Parse.Query(Image).include("owner");
 	imgQuery.descending("createdAt");
 	return imgQuery.find().then(function(results){
-		var fileQuery;
-		var images = [];
+		var fileQuery,
+			images = [];
 		for (var i = 0; i < results.length; i++) {
 			(function() {
-				var owner = results[i].get("owner");
-				var imgOwner;
+				var owner = results[i].get("owner"),
+					picID = results[i].id,
+					// needs to be synchronous to allow time for it to finish
+					views = asteroids.query.getPicViews(results[i].id),
+					imgOwner;
 				if (owner) {
 					imgOwner = owner.get('username');
 				} else {
@@ -166,6 +188,7 @@ asteroids.query.getLatest = function(width) {
 				fileQuery.lessThanOrEqualTo("width", width);
 				fileQuery.descending("width");
 				(function(image) {
+					console.log(views);
 					images.push(fileQuery.first().then(function(result){
 						if(!result) {
 							var fileQuery = image.relation("src").query();
@@ -177,6 +200,7 @@ asteroids.query.getLatest = function(width) {
 						return {
 							image: image,
 							src: result,
+							views: views,
 							username: imgOwner
 						}
 					}));
