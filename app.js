@@ -27,18 +27,14 @@ var express = require('express'),
 	uuid = require('node-uuid'),
 	url = require('url'),
 	ua = require('universal-analytics'),
-	rackspaceIO = require('./scripts/rackspaceIO');
-  
-// Parse initialization  
-var Parse = require('parse').Parse;
+	rackspaceIO = require('./scripts/rackspaceIO'),
+	Parse = require('parse').Parse;
+
+// Setup vars
+var sid = uuid.v4(), mdb, URI, mport, mhost, mdbName;
+	// visitor = ua(process.env.gTrackID, sid);
+// Parse initialization
 Parse.initialize(process.env.parseID, process.env.parseJavascriptKey, process.env.parseMasterKey);
-var sid = uuid.v4(),
-	mdb,
-	URI,
-	mport,
-	mhost,
-	mdbName,
-	visitor = ua(process.env.gTrackID, sid);
 
 //  Environment configs
 app.configure('development', function(){
@@ -92,7 +88,7 @@ app.use(express.session({
 	cookie: {
 		httpOnly: (!env), 
 		secure: env,
-		maxAge: 60000
+		maxAge: 7200000 // 2 hours
 	}
 }));
 app.use(app.router);

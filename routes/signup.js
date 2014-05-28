@@ -22,4 +22,4 @@ var Parse = require('parse').Parse;
 				window.document.getElementById('emsg').innerHTML=error.message;
 			}
 		}
-	});
+});
