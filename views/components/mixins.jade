@@ -20,8 +20,8 @@ mixin feed()
 						li(class="user")
 							a(href="/user/"+val.username)= val.username
 						li(class="views")
-							if(views)
-								#{views}
+							if(val.views)
+								#{val.views}
 							else 
 								| 0
 						li(class="comments")
