@@ -1,0 +1,4 @@
+echo "Installing dependencies..."
+npm install
+echo "Running server..."
+foreman start -f Procfile_dev --env=app.env

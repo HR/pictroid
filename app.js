@@ -60,6 +60,7 @@ app.configure('production', function(){
 });
 
 exports.mdb = mdb;
+global.mdb = mdb;
 
 // all environments
 app.set('port', process.env.PORT || 3000);
@@ -100,11 +101,11 @@ app.use(function (req, res, next) {
 });
 
 // Get
-if(senv) {
+/*if(senv) {
 	app.get('*',function(req,res){  
     	res.redirect('https://pictroid.herokuapp.com'+req.url)
 	});
-}
+}*/
 
 app.get('/', function(req, res) {
 	if (req.session.auth){
@@ -177,7 +178,7 @@ app.get('/pic/:id', function(req, res) {
 	});
 	if(req.session.auth){
 		db.asteroids.query.getPic(req.params.id).then(function(result) {
-			mdb.pics.findOne({picID:req.params.id}, function(err, pic) {
+			asteroids.query.getViews({picID:req.params.id}, function(err, pic) {
 				if (!err) {
 					res.render('details', { m:message, picObject: result, imgOwner:result.username, username:req.session.user.username, views:pic.views, authed:true, route:'/pic/'+req.params.id});
 				} else {
@@ -190,7 +191,7 @@ app.get('/pic/:id', function(req, res) {
 		});
 	} else {
 		db.asteroids.query.getPic(req.params.id).then(function(result) {
-			mdb.pics.findOne({picID:req.params.id}, function(err, pic) {
+			asteroids.query.getViews({picID:req.params.id}, function(err, pic) {
 				if (pic.views%15 === 0) {
 					db.asteroids.parseSyncViews(req.params.id, 15);
 				}
