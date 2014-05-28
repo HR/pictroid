@@ -611,8 +611,18 @@ footer .footer-logo {
 	font-size: 20px;
 }
 
+.image-container {
+	position: relative;
+}
+
 .image-image {
 	width: 100%;
+}
+
+.image-share {
+	position: absolute;
+	bottom: 10px;
+	right: 10px;
 }
 
 .image-stats {
@@ -638,15 +648,6 @@ footer .footer-logo {
 
 .image-social div + div {
 	margin-left: 15px;
-}
-
-.image-share {
-	height: auto;
-	float: right;
-	position: relative;
-	width: auto;
-	margin-left: 12px;
-	display: inline-block;
 }
 
 .image-details {
