@@ -26,11 +26,6 @@ mixin feed()
 								| 0
 						li(class="comments")
 							a(href="/pic/"+val.image.id+"#disqus_thread", data-disqus-identifier=val.image.id) 0
-							//
-								if(comments)
-									#{comments}
-								else
-									| 0
 				.text
 					h4=val.image.get("name")
 					p=val.image.get("description").substr(0, 150)

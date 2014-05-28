@@ -780,6 +780,10 @@ li.comments {
 	background-image: url(../images/svg/comments.svg);
 }
 
+li.comments a {
+	color: inherit;	
+}
+
 @media all and (max-width: 800px) {
 	.feed-item {
    		width: 100%;
