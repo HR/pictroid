@@ -1,7 +1,9 @@
 var Parse = require('parse').Parse,
 	Image = Parse.Object.extend("Image"),
 	ImageSrc = Parse.Object.extend("ImageSrc"),
-	asteroids = {};
+	asteroids = {},
+	mdb = require('../app').mdb;
+	console.log(mdb);
 Parse.initialize(process.env.parseID, process.env.parseJavascriptKey, process.env.parseMasterKey);
 
 /**
@@ -177,7 +179,7 @@ asteroids.query.getLatest = function(width) {
 				var owner = results[i].get("owner"),
 					picID = results[i].id,
 					// needs to be synchronous to allow time for it to finish
-					views = asteroids.query.getPicViews(results[i].id),
+					//views = asteroids.query.getPicViews(results[i].id),
 					imgOwner;
 				if (owner) {
 					imgOwner = owner.get('username');
@@ -199,7 +201,7 @@ asteroids.query.getLatest = function(width) {
 						return {
 							image: image,
 							src: result,
-							views: views,
+							// views: views,
 							username: imgOwner
 						}
 					}));

@@ -43,7 +43,7 @@ var sid = uuid.v4(),
 //  Environment configs
 app.configure('development', function(){
 	app.use(express.errorHandler({ dumpExceptions: true, showStack: true }));
-	GLOBAL.mdb = mongojs.connect('localhost/cache', ['pics']);
+	mdb = mongojs.connect('localhost/cache', ['pics']);
 	env = false;
 	mdbName = 'cache';
 	mhost = '127.0.0.1';
@@ -58,9 +58,11 @@ app.configure('production', function(){
 	mhost = 'ds037508.mongolab.com';
 	mport = 37508;
 	URI = 'mongodb://'+process.env.DbUser+':'+process.env.DbPass+'@ds037508.mongolab.com:'+mport+'/'+mdbName;
-	GLOBAL.mdb = mongojs(URI, ['pics']);
+	mdb = mongojs(URI, ['pics']);
 	// mongoose.connect(URI);
 });
+
+exports.mdb = mdb;
 
 // all environments
 app.set('port', process.env.PORT || 3000);
