@@ -39,14 +39,14 @@ div.navbar.navbar-default(role='navigation', class=headerClasses)
 							li
 								a(href='/account/settings') Settings
 							li
-							if (route)
-								a(href='/signout?return_to=#{route}') Sign Out
-							else
-								a(href='/signout') Sign Out
+								if (route)
+									a(href='/signout?return_to=#{route}') Sign Out
+								else
+									a(href='/signout') Sign Out
 				else
 					li
-					if (route)
-						a.btn.clear(href="/signin?return_to=#{route}") Sign In
-					else
-						a.btn.clear(href="/signin") Sign In
+						if (route)
+							a.btn.clear(href="/signin?return_to=#{route}") Sign In
+						else
+							a.btn.clear(href="/signin") Sign In
 .navbar-fix
