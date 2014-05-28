@@ -50,6 +50,7 @@ app.configure('development', function(){
 app.configure('production', function(){
 	app.use(express.errorHandler());
 	env = false;
+	senv = true;
 	mdbName = 'heroku_app23982462';
 	mhost = 'ds037508.mongolab.com';
 	mport = 37508;
@@ -99,6 +100,12 @@ app.use(function (req, res, next) {
 });
 
 // Get
+if(senv) {
+	app.get('*',function(req,res){  
+    	res.redirect('https://pictroid.herokuapp.com'+req.url)
+	});
+}
+
 app.get('/', function(req, res) {
 	if (req.session.auth){
 		res.render('index', { title: 'Pictroid', username:req.session.user.username, authed:true, route:'/'});
