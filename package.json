@@ -4,7 +4,9 @@
   "version": "0.0.1",
   "private": true,
   "scripts": {
-    "start": "node app.js"
+    "start": "node app.js",
+    "dev":"nodemon app.js",
+    "test": "make test"
   },
   "dependencies": {
     "base64-js": "*",
@@ -30,5 +32,8 @@
     "pkgcloud": "~0.9.4",
     "universal-analytics": "*",
     "mongojs": "*"
+  }, 
+  "devDependencies": {
+    "mocha": "0.3.x"
   }
 }

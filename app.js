@@ -27,21 +27,19 @@ var express = require('express'),
 	uuid = require('node-uuid'),
 	url = require('url'),
 	ua = require('universal-analytics'),
-	rackspaceIO = require('./scripts/rackspaceIO');
-  
-// Parse initialization  
-var Parse = require('parse').Parse;
+	rackspaceIO = require('./scripts/rackspaceIO'),
+	Parse = require('parse').Parse;
+
+// Setup vars
+var sid = uuid.v4(), mdb, URI, mport, mhost, mdbName;
+	// visitor = ua(process.env.gTrackID, sid);
+// Parse initialization
 Parse.initialize(process.env.parseID, process.env.parseJavascriptKey, process.env.parseMasterKey);
-var sid = uuid.v4(),
-	mdb,
-	URI,
-	mport,
-	mhost,
-	mdbName,
-	visitor = ua(process.env.gTrackID, sid);
+
+//  Environment configs
 app.configure('development', function(){
 	app.use(express.errorHandler({ dumpExceptions: true, showStack: true }));
-	GLOBAL.mdb = mongojs.connect('localhost/cache', ['pics']);
+	mdb = mongojs.connect('localhost/cache', ['pics']);
 	env = false;
 	mdbName = 'cache';
 	mhost = '127.0.0.1';
@@ -51,14 +49,16 @@ app.configure('development', function(){
 
 app.configure('production', function(){
 	app.use(express.errorHandler());
-	env = true;
+	env = false;
 	mdbName = 'heroku_app23982462';
 	mhost = 'ds037508.mongolab.com';
 	mport = 37508;
 	URI = 'mongodb://'+process.env.DbUser+':'+process.env.DbPass+'@ds037508.mongolab.com:'+mport+'/'+mdbName;
-	GLOBAL.mdb = mongojs(URI, ['pics']);
+	mdb = mongojs(URI, ['pics']);
 	// mongoose.connect(URI);
 });
+
+exports.mdb = mdb;
 
 // all environments
 app.set('port', process.env.PORT || 3000);
@@ -76,6 +76,7 @@ app.use(helmet.cacheControl());
 app.use(express.cookieParser(sid));
 app.use(express.session({
 	secret: sid,
+	// TO DO change to use just "url" param to allow dev env.
 	store: new MongoStore({
 		db: mdbName,
 		host: mhost,
@@ -87,7 +88,7 @@ app.use(express.session({
 	cookie: {
 		httpOnly: (!env), 
 		secure: env,
-		maxAge: 60000
+		maxAge: 7200000 // 2 hours
 	}
 }));
 app.use(app.router);
@@ -96,14 +97,9 @@ app.use(function (req, res, next) {
   res.locals.csrftoken = req.csrfToken();
   next();
 });
-// development only
-if ('development' == app.get('env')) {
-  app.use(express.errorHandler());
-}
 
 // Get
 app.get('/', function(req, res) {
-	visitor.pageview("/").send();
 	if (req.session.auth){
 		res.render('index', { title: 'Pictroid', username:req.session.user.username, authed:true, route:'/'});
 	} else {
