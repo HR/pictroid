@@ -141,6 +141,17 @@ asteroids.query.getPic = function(id){
 		return image;
 	});
 }
+
+asteroids.query.getViews = function(id, callback) {	
+	global.mdb.pics.findOne(id, function(err, pic) {
+		if (callback) {
+			callback(err, pic);
+		} else {
+			return [err, pic];
+		}
+	});
+}
+
 asteroids.query.getUser = function(username){
 	var userQuery = new Parse.Query(Parse.User);
 	return userQuer.get(username).then(function(result){
@@ -166,6 +177,9 @@ asteroids.query.getLatest = function(width) {
 				asteroids.query.getViews(results[i].id, function(e,p) {
 					if (!e) {
 						views = p.views;
+						console.log("getViews success: "+p.views);
+					} else {
+						console.log("getViews error: "+e);
 					}
 				});
 				fileQuery = results[i].relation("src").query();
@@ -191,15 +205,6 @@ asteroids.query.getLatest = function(width) {
 			})(results[i]);
 		};
 		return Parse.Promise.when(images);
-	});
-}
-asteroids.query.getViews = function(id, callback) {	
-	global.mdb.pics.findOne(id, function(err, pic) {
-		if (callback) {
-			callback(err, pic);
-		} else {
-			return [err, pic];
-		}
 	});
 }
 

@@ -178,7 +178,7 @@ app.get('/pic/:id', function(req, res) {
 	});
 	if(req.session.auth){
 		db.asteroids.query.getPic(req.params.id).then(function(result) {
-			asteroids.query.getViews({picID:req.params.id}, function(err, pic) {
+			db.asteroids.query.getViews({picID:req.params.id}, function(err, pic) {
 				if (!err) {
 					res.render('details', { m:message, picObject: result, imgOwner:result.username, username:req.session.user.username, views:pic.views, authed:true, route:'/pic/'+req.params.id});
 				} else {
@@ -191,10 +191,11 @@ app.get('/pic/:id', function(req, res) {
 		});
 	} else {
 		db.asteroids.query.getPic(req.params.id).then(function(result) {
-			asteroids.query.getViews({picID:req.params.id}, function(err, pic) {
-				if (pic.views%15 === 0) {
-					db.asteroids.parseSyncViews(req.params.id, 15);
-				}
+			db.asteroids.query.getViews({picID:req.params.id}, function(err, pic) {
+				// Sync Pic views with Parse
+				// if (pic.views%15 === 0) {
+				// 	db.asteroids.parseSyncViews(req.params.id, 15);
+				// }
 				if (!err) {
 					res.render('details', {  m:message, picObject:result, imgOwner:result.username, views:pic.views, route:'/pic/'+req.params.id});
 				} else {
