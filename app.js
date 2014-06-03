@@ -50,7 +50,6 @@ app.configure('development', function(){
 app.configure('production', function(){
 	app.use(express.errorHandler());
 	env = false;
-	senv = true;
 	mdbName = 'heroku_app23982462';
 	mhost = 'ds037508.mongolab.com';
 	mport = 37508;
@@ -100,15 +99,15 @@ app.use(function (req, res, next) {
 });
 
 // Get
-/*if(senv) {
-	app.get('*',function(req,res){  
-    	res.redirect('https://pictroid.herokuapp.com'+req.url)
-	});
-}*/
+// app.get('*',function(req,res){  
+// 	if (!env) {
+// 		// res.redirect('https://pictroid.herokuapp.com'+req.url)
+// 		res.redirect('http://localhost:3000'+req.url);
+// 	}
+// });
 
 app.get('/', function(req, res) {
 	if (req.session.auth){
-		console.log(req.url);
 		res.render('index', { title: 'Pictroid', username:req.session.user.username, authed:true, route:'/'});
 	} else {
 		/*var kimReq = http.request({
@@ -143,6 +142,15 @@ app.get('/', function(req, res) {
 		res.render('index', {route:'/'});
 	}
 });
+
+app.get('/explore/categories', function(req, res) {
+	if (req.session.auth){
+		res.render('categories', { filter: req.params.filter, username:req.session.user.username, authed:true, route:'/explore/'+req.params.filter});
+	} else {
+		res.render('categories', { route:req.url});
+	}
+});
+
 app.get('/explore/:filter?', function(req, res) {
 	if (req.session.auth){
 		res.render('explore', { filter: req.params.filter, username:req.session.user.username, authed:true, route:'/explore/'+req.params.filter});
@@ -150,6 +158,8 @@ app.get('/explore/:filter?', function(req, res) {
 		res.render('explore', { filter: req.params.filter, route:'/explore/'+req.params.filter});
 	}
 });
+
+// Profile page
 app.get('/pic/:id', function(req, res) {
 	var message = req.query.m,
 		views;
