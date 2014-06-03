@@ -625,6 +625,10 @@ footer .footer-logo {
 	right: 10px;
 }
 
+.image-share .a2a_default_style .a2a_svg {
+	border-radius: 4px;	
+}
+
 .image-stats {
 	padding: 10px 15px;
 }

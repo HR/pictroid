@@ -50,6 +50,7 @@ app.configure('development', function(){
 app.configure('production', function(){
 	app.use(express.errorHandler());
 	env = false;
+	senv = true;
 	mdbName = 'heroku_app23982462';
 	mhost = 'ds037508.mongolab.com';
 	mport = 37508;
@@ -58,7 +59,7 @@ app.configure('production', function(){
 	// mongoose.connect(URI);
 });
 
-exports.mdb = mdb;
+global.mdb = mdb;
 
 // all environments
 app.set('port', process.env.PORT || 3000);
@@ -99,6 +100,12 @@ app.use(function (req, res, next) {
 });
 
 // Get
+/*if(senv) {
+	app.get('*',function(req,res){  
+    	res.redirect('https://pictroid.herokuapp.com'+req.url)
+	});
+}*/
+
 app.get('/', function(req, res) {
 	if (req.session.auth){
 		res.render('index', { title: 'Pictroid', username:req.session.user.username, authed:true, route:'/'});
@@ -170,7 +177,7 @@ app.get('/pic/:id', function(req, res) {
 	});
 	if(req.session.auth){
 		db.asteroids.query.getPic(req.params.id).then(function(result) {
-			mdb.pics.findOne({picID:req.params.id}, function(err, pic) {
+			db.asteroids.query.getViews({picID:req.params.id}, function(err, pic) {
 				if (!err) {
 					res.render('details', { m:message, picObject: result, imgOwner:result.username, username:req.session.user.username, views:pic.views, authed:true, route:'/pic/'+req.params.id});
 				} else {
@@ -183,10 +190,11 @@ app.get('/pic/:id', function(req, res) {
 		});
 	} else {
 		db.asteroids.query.getPic(req.params.id).then(function(result) {
-			mdb.pics.findOne({picID:req.params.id}, function(err, pic) {
-				if (pic.views%15 === 0) {
-					db.asteroids.parseSyncViews(req.params.id, 15);
-				}
+			db.asteroids.query.getViews({picID:req.params.id}, function(err, pic) {
+				// Sync Pic views with Parse
+				// if (pic.views%15 === 0) {
+				// 	db.asteroids.parseSyncViews(req.params.id, 15);
+				// }
 				if (!err) {
 					res.render('details', {  m:message, picObject:result, imgOwner:result.username, views:pic.views, route:'/pic/'+req.params.id});
 				} else {
@@ -208,27 +216,25 @@ app.get('/user/:name', function(req, res) {
 				var imgQ = user.relation("uploads").query();
 				var image = {};
 				imgQ.find({
-				   success : function (result) {
+					success : function (result) {
+						user.picsCount = result.length;
 						for (var i = 0; i < result.length; i++) {
 							result[i];
+							user.picsTotalCount += result[i].get("views") || 0;
 						}
-				   },
-				   error : function(error) {
-					  alert("Error: " + error.code + " " + error.message);
-				   }
-				});
-				var relation = user.relation("uploads");
-				relation.query().find({
-					success: function(uploads) {
-						// uploads contains the uploads of the user in param
-						console.log(uploads);
+						console.log(user.picsTotalCount);
+						return;
+					},
+					error : function(error) {
+						alert("Error: " + error.code + " " + error.message);
+					}
+				}).then(function (pics) {
+					if (req.session.auth) {
+						res.render('user/profile', { profile_username:req.params.name, profile_picsCount:user.picsCount, profile_picsTotalCount:user.picsTotalCount, profile_image:user.get("profileImg").url(), profile_status:user.get("status"), username:req.session.user.username, authed:true, route:'/user/'+req.params.name});
+					} else {
+						res.render('user/profile', { profile_username:req.params.name, profile_picsCount:user.picsCount, profile_picsTotalCount:user.picsTotalCount, results:image ,profile_image:user.get("profileImg").url(), profile_status:user.get("status"), route:'/user/'+req.params.name});
 					}
 				});
-				if (req.session.auth) {
-					res.render('user/profile', { profile_username:req.params.name, profile_image:user.get("profileImg").url(), profile_status:user.get("status"), username:req.session.user.username, authed:true, route:'/user/'+req.params.name});
-				} else {
-					res.render('user/profile', { profile_username:req.params.name, results:image ,profile_image:user.get("profileImg").url(), profile_status:user.get("status"), route:'/user/'+req.params.name});
-				}
 			} else {
 				res.render('error', { error: '404', secure:true});
 			}

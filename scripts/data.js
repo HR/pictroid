@@ -1,16 +1,13 @@
-var Parse = require('parse').Parse,
-	Image = Parse.Object.extend("Image"),
-	ImageSrc = Parse.Object.extend("ImageSrc"),
-	asteroids = {},
-	mdb = require('../app').mdb;
-	console.log(mdb);
-Parse.initialize(process.env.parseID, process.env.parseJavascriptKey, process.env.parseMasterKey);
-
 /**
  * asteroid image data manipulation
  * @namespace asteroids
 */
+var asteroids = {},
+	Parse = require('parse').Parse,
+	Image = Parse.Object.extend("Image"),
+	ImageSrc = Parse.Object.extend("ImageSrc");
 
+Parse.initialize(process.env.parseID, process.env.parseJavascriptKey, process.env.parseMasterKey);
 
 /**
  * upload an image
@@ -53,8 +50,8 @@ asteroids.upload = function(name, src, desc, date, api) {
 
 		var finished = [];
 		for(var i = 0; i < src.length; i++) {
-			var srcReady;
-			var imgSrc = new ImageSrc();
+			var srcReady,
+				imgSrc = new ImageSrc();
 			imgSrc.set("width", src[i].resolution.width);
 			imgSrc.set("height", src[i].resolution.height);
 			imgSrc.set("size", src[i].resolution.size);
@@ -143,49 +140,48 @@ asteroids.query.getPic = function(id){
 		return image;
 	});
 }
-asteroids.query.getUser = function(username){
-	var userQuery = new Parse.Query(Parse.User);
-	return userQuer.get(username).then(function(result){
-		console.log(result);
-	});
-}
 
-asteroids.query.getPicViews = function(id) {
-	mdb.pics.findOne({picID:id}, function(err, pic) {
-		if (!err && pic !== null) {
-			return pic.views;
-		} else if(pic === null) {
-			// TO DO (future) GET from Parse if there are views for pic
-			mdb.pics.insert({picID:id, views:1}, function(err, val){
-				if (err) console.log("error creating: "+err)
-				else console.log("view count created " + val);
-				return val.views;
-			});
+asteroids.query.getViews = function(id, callback) {	
+	global.mdb.pics.findOne(id, function(err, pic) {
+		if (callback) {
+			callback(err, pic);
 		} else {
-			console.log("error retrieving view count: "+err);
-			return ;
+			return [err, pic];
 		}
 	});
 }
 
+asteroids.query.getUser = function(username){
+	var userQuery = new Parse.Query(Parse.User);
+	return userQuery.get(username).then(function(result){
+		console.log(result);
+	});
+}
 asteroids.query.getLatest = function(width) {
 	var imgQuery = new Parse.Query(Image).include("owner");
 	imgQuery.descending("createdAt");
+	imgQuery.limit(15);
 	return imgQuery.find().then(function(results){
 		var fileQuery,
 			images = [];
 		for (var i = 0; i < results.length; i++) {
 			(function() {
 				var owner = results[i].get("owner"),
-					picID = results[i].id,
-					// needs to be synchronous to allow time for it to finish
-					//views = asteroids.query.getPicViews(results[i].id),
-					imgOwner;
+					imgOwner,
+					views;
 				if (owner) {
 					imgOwner = owner.get('username');
 				} else {
 					imgOwner = 'pictroid';
 				}
+				asteroids.query.getViews(results[i].id, function(e,p) {
+					if (!e) {
+						views = p.views;
+						console.log("getViews success: "+p.views);
+					} else {
+						console.log("getViews error: "+e);
+					}
+				});
 				fileQuery = results[i].relation("src").query();
 				fileQuery.lessThanOrEqualTo("width", width);
 				fileQuery.descending("width");
@@ -201,8 +197,8 @@ asteroids.query.getLatest = function(width) {
 						return {
 							image: image,
 							src: result,
-							// views: views,
-							username: imgOwner
+							username: imgOwner,
+							views: views
 						}
 					}));
 				})(results[i]);

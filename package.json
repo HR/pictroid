@@ -24,6 +24,7 @@
     "multiparty": "*",
     "newrelic": "*",
     "node-uuid": "*",
+    "nodemon": "*",
     "parse": "*",
     "redis": "*",
     "request": "*",
