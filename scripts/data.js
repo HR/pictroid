@@ -1,14 +1,13 @@
-var Parse = require('parse').Parse;
-var Image = Parse.Object.extend("Image");
-var ImageSrc = Parse.Object.extend("ImageSrc");
-
-Parse.initialize(process.env.parseID, process.env.parseJavascriptKey, process.env.parseMasterKey);
-
 /**
  * asteroid image data manipulation
  * @namespace asteroids
 */
-var asteroids = {};
+var asteroids = {},
+	Parse = require('parse').Parse,
+	Image = Parse.Object.extend("Image"),
+	ImageSrc = Parse.Object.extend("ImageSrc");
+
+Parse.initialize(process.env.parseID, process.env.parseJavascriptKey, process.env.parseMasterKey);
 
 /**
  * upload an image
@@ -51,8 +50,8 @@ asteroids.upload = function(name, src, desc, date, api) {
 
 		var finished = [];
 		for(var i = 0; i < src.length; i++) {
-			var srcReady;
-			var imgSrc = new ImageSrc();
+			var srcReady,
+				imgSrc = new ImageSrc();
 			imgSrc.set("width", src[i].resolution.width);
 			imgSrc.set("height", src[i].resolution.height);
 			imgSrc.set("size", src[i].resolution.size);
@@ -154,7 +153,7 @@ asteroids.query.getViews = function(id, callback) {
 
 asteroids.query.getUser = function(username){
 	var userQuery = new Parse.Query(Parse.User);
-	return userQuer.get(username).then(function(result){
+	return userQuery.get(username).then(function(result){
 		console.log(result);
 	});
 }
@@ -163,18 +162,18 @@ asteroids.query.getLatest = function(width) {
 	imgQuery.descending("createdAt");
 	imgQuery.limit(15);
 	return imgQuery.find().then(function(results){
-		var fileQuery;
-		var images = [];
+		var fileQuery,
+			images = [];
 		for (var i = 0; i < results.length; i++) {
 			(function() {
-				var owner = results[i].get("owner");
-				var imgOwner;
+				var owner = results[i].get("owner"),
+					imgOwner,
+					views;
 				if (owner) {
 					imgOwner = owner.get('username');
 				} else {
 					imgOwner = 'pictroid';
 				}
-				var views;
 				asteroids.query.getViews(results[i].id, function(e,p) {
 					if (!e) {
 						views = p.views;

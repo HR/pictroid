@@ -59,7 +59,6 @@ app.configure('production', function(){
 	// mongoose.connect(URI);
 });
 
-exports.mdb = mdb;
 global.mdb = mdb;
 
 // all environments
@@ -217,27 +216,25 @@ app.get('/user/:name', function(req, res) {
 				var imgQ = user.relation("uploads").query();
 				var image = {};
 				imgQ.find({
-				   success : function (result) {
+					success : function (result) {
+						user.picsCount = result.length;
 						for (var i = 0; i < result.length; i++) {
 							result[i];
+							user.picsTotalCount += result[i].get("views") || 0;
 						}
-				   },
-				   error : function(error) {
-					  alert("Error: " + error.code + " " + error.message);
-				   }
-				});
-				var relation = user.relation("uploads");
-				relation.query().find({
-					success: function(uploads) {
-						// uploads contains the uploads of the user in param
-						console.log(uploads);
+						console.log(user.picsTotalCount);
+						return;
+					},
+					error : function(error) {
+						alert("Error: " + error.code + " " + error.message);
+					}
+				}).then(function (pics) {
+					if (req.session.auth) {
+						res.render('user/profile', { profile_username:req.params.name, profile_picsCount:user.picsCount, profile_picsTotalCount:user.picsTotalCount, profile_image:user.get("profileImg").url(), profile_status:user.get("status"), username:req.session.user.username, authed:true, route:'/user/'+req.params.name});
+					} else {
+						res.render('user/profile', { profile_username:req.params.name, profile_picsCount:user.picsCount, profile_picsTotalCount:user.picsTotalCount, results:image ,profile_image:user.get("profileImg").url(), profile_status:user.get("status"), route:'/user/'+req.params.name});
 					}
 				});
-				if (req.session.auth) {
-					res.render('user/profile', { profile_username:req.params.name, profile_image:user.get("profileImg").url(), profile_status:user.get("status"), username:req.session.user.username, authed:true, route:'/user/'+req.params.name});
-				} else {
-					res.render('user/profile', { profile_username:req.params.name, results:image ,profile_image:user.get("profileImg").url(), profile_status:user.get("status"), route:'/user/'+req.params.name});
-				}
 			} else {
 				res.render('error', { error: '404', secure:true});
 			}
