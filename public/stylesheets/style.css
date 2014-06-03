@@ -92,9 +92,9 @@ a:hover {
 	font-weight: 400;
 }
 
-@media (max-width: 1550px) {
+@media (min-width: 1550px) {
 	.background-wallpaper {
-		background-size: cover;
+		background-size: cover !important;
 	}
 }
 

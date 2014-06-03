@@ -108,6 +108,7 @@ app.use(function (req, res, next) {
 
 app.get('/', function(req, res) {
 	if (req.session.auth){
+		console.log(req.url);
 		res.render('index', { title: 'Pictroid', username:req.session.user.username, authed:true, route:'/'});
 	} else {
 		/*var kimReq = http.request({
