@@ -161,6 +161,7 @@ asteroids.query.getUser = function(username){
 asteroids.query.getLatest = function(width) {
 	var imgQuery = new Parse.Query(Image).include("owner");
 	imgQuery.descending("createdAt");
+	imgQuery.limit(15);
 	return imgQuery.find().then(function(results){
 		var fileQuery;
 		var images = [];
