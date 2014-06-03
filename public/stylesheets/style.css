@@ -62,7 +62,7 @@ a:hover {
 .background-wallpaper {
 	background-image: url(/images/wallpapers/default.jpg);
 	background-repeat: no-repeat;
-	background-size: cover;
+	background-size: inherit;
 	background-attachment: fixed;
 	background-position: top center;
 	background-color: #000000;
@@ -90,6 +90,12 @@ a:hover {
 	font-size: 18px;
 	margin: 0 0 5px 0;
 	font-weight: 400;
+}
+
+@media (max-width: 1550px) {
+	.background-wallpaper {
+		background-size: cover;
+	}
 }
 
 /* Transparent */
