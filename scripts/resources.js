@@ -96,7 +96,7 @@ exports.updateAPOD = function (obj) {
 }
 
 // flickr
-function flickrOAuth(callback) {
+/*function flickrOAuth(callback) {
     Flickr.authenticate({
         api_key: process.env.flickrKey,
         secret: process.env.flickrSecret,
@@ -156,7 +156,7 @@ flickrOAuth(function(err, flickr) {
         }
         updateDB(finalResults, "flickr");
     });
-});
+});*/
 
 // kimono
 var req = http.request({

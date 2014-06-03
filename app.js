@@ -87,7 +87,7 @@ app.use(express.session({
 
 	}),
 	cookie: {
-		httpOnly: (!env), 
+		httpOnly: (!env),
 		secure: env,
 		maxAge: 7200000 // 2 hours
 	}
