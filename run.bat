@@ -1,11 +1,11 @@
 @echo off
 FOR /F %%A IN (app.env) DO set %%A
-@echo on
 if not exist data mkdir data
 start cmd /k mongod --dbpath "data"
 IF /I "%1"=="" GOTO DEFAULT 
 IF /I "%1"=="-p" GOTO PROD
 IF /I "%1"=="-d" GOTO DEV
+@echo on
 :DEFAULT
 GOTO DEV
 :PROD

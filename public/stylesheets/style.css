@@ -62,7 +62,7 @@ a:hover {
 .background-wallpaper {
 	background-image: url(/images/wallpapers/default.jpg);
 	background-repeat: no-repeat;
-	background-size: cover;
+	background-size: inherit;
 	background-attachment: fixed;
 	background-position: top center;
 	background-color: #000000;
@@ -90,6 +90,12 @@ a:hover {
 	font-size: 18px;
 	margin: 0 0 5px 0;
 	font-weight: 400;
+}
+
+@media (min-width: 1550px) {
+	.background-wallpaper {
+		background-size: cover !important;
+	}
 }
 
 /* Transparent */
@@ -292,7 +298,7 @@ a:hover {
 
 .page hr {
 	border-color: #B7B7B7;
-	margin: 10px 0;
+	margin: 0px;
 }
 
 /* Jumbotron */
@@ -726,6 +732,7 @@ footer .footer-logo {
 }
 
 .feed hr {
+	clear: both;
 	margin-top: 2px;
 	height: 2px;
 	border: 0; 
@@ -814,8 +821,22 @@ li.comments a {
 	color: #a67c52;
 }
 
+.col-md-5 h4 {
+	display: block;
+	font-size: 1rem;
+}
+
+.col-md-5 h4 a {
+	text-decoration: none;
+	color: #666;
+}
+
+.col-md-5 h4 > a:hover {
+	color: #a67c52 !important;
+}
 
 .container hr {
+	clear: both;
 	margin-top: 2px;
 	height: 2px;
     border: 0; 

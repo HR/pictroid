@@ -50,7 +50,6 @@ app.configure('development', function(){
 app.configure('production', function(){
 	app.use(express.errorHandler());
 	env = false;
-	senv = true;
 	mdbName = 'heroku_app23982462';
 	mhost = 'ds037508.mongolab.com';
 	mport = 37508;
@@ -100,15 +99,16 @@ app.use(function (req, res, next) {
 });
 
 // Get
-/*if(senv) {
-	app.get('*',function(req,res){  
-    	res.redirect('https://pictroid.herokuapp.com'+req.url)
-	});
-}*/
+// app.get('*',function(req,res){  
+// 	if (!env) {
+// 		// res.redirect('https://pictroid.herokuapp.com'+req.url)
+// 		res.redirect('http://localhost:3000'+req.url);
+// 	}
+// });
 
 app.get('/', function(req, res) {
 	if (req.session.auth){
-		res.render('index', { title: 'Pictroid', username:req.session.user.username, authed:true, route:'/'});
+		res.render('index', { title: 'Pictroid', username:req.session.user.username, authed:true, route:req.url});
 	} else {
 		/*var kimReq = http.request({
 			host: "www.kimonolabs.com",
@@ -139,16 +139,36 @@ app.get('/', function(req, res) {
 			 //res.send('error: ' + err.message);
 		});
 		kimReq.end();*/
-		res.render('index', {route:'/'});
+		res.render('index', {route:req.url});
 	}
 });
+
+// categories
+app.get('/explore/categories', function(req, res) {
+	if (req.session.auth){
+		res.render('categories', {username:req.session.user.username, authed:true, route:req.url});
+	} else {
+		res.render('categories', { route:req.url});
+	}
+});
+
+app.get('/explore/category/:field?', function(req, res) {
+	if (req.session.auth){
+		res.render('category', {username:req.session.user.username, authed:true, route:req.url});
+	} else {
+		res.render('category', {route:req.url});
+	}
+});
+
 app.get('/explore/:filter?', function(req, res) {
 	if (req.session.auth){
-		res.render('explore', { filter: req.params.filter, username:req.session.user.username, authed:true, route:'/explore/'+req.params.filter});
+		res.render('explore', { filter: req.params.filter, username:req.session.user.username, authed:true, route:req.url});
 	} else {
-		res.render('explore', { filter: req.params.filter, route:'/explore/'+req.params.filter});
+		res.render('explore', { filter: req.params.filter, route:req.url});
 	}
 });
+
+// Profile page
 app.get('/pic/:id', function(req, res) {
 	var message = req.query.m,
 		views;
@@ -179,9 +199,9 @@ app.get('/pic/:id', function(req, res) {
 		db.asteroids.query.getPic(req.params.id).then(function(result) {
 			db.asteroids.query.getViews({picID:req.params.id}, function(err, pic) {
 				if (!err) {
-					res.render('details', { m:message, picObject: result, imgOwner:result.username, username:req.session.user.username, views:pic.views, authed:true, route:'/pic/'+req.params.id});
+					res.render('details', { m:message, picObject: result, imgOwner:result.username, username:req.session.user.username, views:pic.views, authed:true, route:req.url});
 				} else {
-					res.render('details', {  m:message, picObject:result, imgOwner:result.username, username:req.session.user.username, authed:true, route:'/pic/'+req.params.id});
+					res.render('details', {  m:message, picObject:result, imgOwner:result.username, username:req.session.user.username, authed:true, route:req.url});
 					console.log("error retrieving view count: "+err);
 				}
 			});
@@ -196,9 +216,9 @@ app.get('/pic/:id', function(req, res) {
 				// 	db.asteroids.parseSyncViews(req.params.id, 15);
 				// }
 				if (!err) {
-					res.render('details', {  m:message, picObject:result, imgOwner:result.username, views:pic.views, route:'/pic/'+req.params.id});
+					res.render('details', {  m:message, picObject:result, imgOwner:result.username, views:pic.views, route:req.url});
 				} else {
-					res.render('details', {  m:message, picObject:result, imgOwner:result.username, route:'/pic/'+req.params.id});
+					res.render('details', {  m:message, picObject:result, imgOwner:result.username, route:req.url});
 					console.log("error retrieving view count: "+err);
 				}
 			});
@@ -230,9 +250,9 @@ app.get('/user/:name', function(req, res) {
 					}
 				}).then(function (pics) {
 					if (req.session.auth) {
-						res.render('user/profile', { profile_username:req.params.name, profile_picsCount:user.picsCount, profile_picsTotalCount:user.picsTotalCount, profile_image:user.get("profileImg").url(), profile_status:user.get("status"), username:req.session.user.username, authed:true, route:'/user/'+req.params.name});
+						res.render('user/profile', { profile_username:req.params.name, profile_picsCount:user.picsCount, profile_picsTotalCount:user.picsTotalCount, profile_image:user.get("profileImg").url(), profile_status:user.get("status"), username:req.session.user.username, authed:true, route:req.url});
 					} else {
-						res.render('user/profile', { profile_username:req.params.name, profile_picsCount:user.picsCount, profile_picsTotalCount:user.picsTotalCount, results:image ,profile_image:user.get("profileImg").url(), profile_status:user.get("status"), route:'/user/'+req.params.name});
+						res.render('user/profile', { profile_username:req.params.name, profile_picsCount:user.picsCount, profile_picsTotalCount:user.picsTotalCount, results:image ,profile_image:user.get("profileImg").url(), profile_status:user.get("status"), route:req.url});
 					}
 				});
 			} else {
@@ -258,9 +278,9 @@ app.get('/about', function(req, res) {
 	console.log(req.session);
 	if (req.session.auth){
 
-		res.render('about', { username:req.session.user.username, authed:true, route:'/about'});
+		res.render('about', { username:req.session.user.username, authed:true, route:req.url});
 	} else {
-		res.render('about', { route:'/about'});
+		res.render('about', { route:req.url});
 	}
 });
 app.get('/signin', function(req, res) {

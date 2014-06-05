@@ -1,0 +1,56 @@
+extends layout
+
+block head
+	title Categories | Pictroid
+	
+block variables
+	- var headerClasses = 'navbar-absolute'
+
+block content
+	+chickenLittle()
+	.page
+		br
+		.container
+			h3
+				a(href="/explore/categories").active Categories
+			hr
+			.col-md-5
+				h4
+					a(href="/explore/popular") Popular
+				h4
+					a(href="/explore/rated") Highest Rated
+				h4
+					a(href="/explore/latest") Latest
+				h4
+					a(href="/explore/category/solarsystem") Solar System
+				h4
+					a(href="/explore/category/exoplanets") Exoplanets
+			.col-md-5
+				h4
+					a(href="/explore/category/stars") Stars
+				h4
+					a(href="/explore/category/starclusters") Star Clusters
+				h4
+					a(href="/explore/category/nebulae") Nebulae
+				h4
+					a(href="/explore/category/galaxies") Galaxies
+				h4
+					a(href="/explore/category/quasars") Black Holes and Quasars
+			hr
+			+feed()
+	script.
+		window.onload = function() {
+			var current = '#{filter}',
+				a = $('h3 > a');
+			
+			if(current === "popular") {
+				a[0].className = "active";
+				a[1].className = a[2].className = "";
+			} else if(current === "rated") {
+				a[1].className = "active";
+				a[0].className = a[2].className = "";
+			} else if(current === "latest") {
+				a[2].className = "active";
+				a[0].className = a[1].className = "";
+			}
+		};
