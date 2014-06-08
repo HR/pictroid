@@ -2,11 +2,20 @@
   "name": "Pictroid",
   "description": "The open-source NEO (Near Earth Objects) sharing system.",
   "version": "0.0.1",
-  "private": true,
+  "private": true
+,  "main": "server.js",
   "scripts": {
-    "start": "node app.js",
+    "start": "node server.js",
     "dev":"nodemon app.js",
     "test": "make test"
+  },
+  "engines": {
+    "node": ">= 0.6.0",
+    "npm": ">= 1.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/codexa/pictroid"
   },
   "dependencies": {
     "base64-js": "*",
