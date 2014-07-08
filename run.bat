@@ -12,8 +12,8 @@ GOTO DEV
 echo "Production mode"
 SET NODE_ENV=production
 start cmd /k mongo ds037508.mongolab.com:37508/heroku_app23982462 -u %DbUser% -p %DbPass%
-nodemon app.js
+nodemon server.js
 :DEV
 SET NODE_ENV=development
 start cmd /k mongo cache
-nodemon app.js
+nodemon server.js
