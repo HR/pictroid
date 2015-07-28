@@ -23,6 +23,37 @@ Parse.initialize(process.env.parseID, process.env.parseJavascriptKey, process.en
  * @param {Number} src.resolution.size The size of the image in kilobytes
  * @param {String} desc A description of the image
 */
+
+/*var kimReq = http.request({
+	host: "www.kimonolabs.com",
+	port: 80,
+	path: "/api/5zeipr38?apikey="+process.env.kimonoKey,
+	method: "GET",
+	headers: {
+	  "Content-Type": "application/json"
+	}
+}, function(kimRes) {
+	 var output = '';
+	 kimRes.setEncoding('utf8');
+
+	 kimRes.on('data', function (chunk) {
+		  output += chunk;
+	 });
+
+	kimRes.on('end', function() {
+		var obj = JSON.parse(output);
+		if(kimRes.statusCode === 200) {
+			resources.updateAPOD(obj).then(function(){}, function() {
+				console.error(arguments);
+			});
+		}
+	 });
+});
+kimReq.on('error', function(err) {
+	 //res.send('error: ' + err.message);
+});
+kimReq.end();*/
+
 asteroids.upload = function(name, src, desc, date, api) {
 	var imgQuery = new Parse.Query(Image);
 	imgQuery.equalTo("name", name);
@@ -97,27 +128,33 @@ asteroids.upload = function(name, src, desc, date, api) {
 			}
 		}).then(function(user) {
 			return image;
-		});
+		})
 	});
 }
+
+
 asteroids.parseSyncViews = function(id, amount) {
 	var imgQuery = new Parse.Query(Image);
-	imgQuery.get(id).then(function(pic){
-		pic.increment("views", amount);
-		pic.save(null, {
-		  success: function(pic) {
-		    // Execute any logic that should take place after the object is saved.
-		    console.log('incremented views '+pic);
-		  },
-		  error: function(pic, error) {
-		    // Execute any logic that should take place if the save fails.
-		    // error is a Parse.Error with an error code and description.
-		    console.log('Failed to increment, with error code: ');
-		    for (var t in error) {
-		    	console.log(error[t]);
-		    };
-		  }
-		});
+	imgQuery.equalTo("objectId", id);
+	imgQuery.first({
+		success: function(pic) {
+			pic.increment("views", amount);
+			pic.save(null, {
+				success: function(pic) {
+					// Execute any logic that should take place after the object is saved.
+					console.log('incremented views '+pic);
+				},
+				error: function(pic, error) {
+					// Execute any logic that should take place if the save fails.
+					// error is a Parse.Error with an error code and description.
+					console.log("Failed to increment: " + error.code + " " + error.message);
+				}
+			});
+			// Execute any logic that should take place after the object is saved.
+		},
+		error: function(error) {
+			console.log("Error: " + error.code + " " + error.message);
+		}
 	});
 }
 asteroids.query = {}
@@ -133,6 +170,8 @@ asteroids.query.getPic = function(id){
 		} else {
 			image.username = 'pictroid';
 		}
+
+		asteroids.parseSyncViews(id, 15);
 		// Get src
 		return result.relation("src").query().first();
 	}).then(function(src){

@@ -31,7 +31,7 @@ var express = require('express'),
 	Parse = require('parse').Parse;
 
 // Setup vars
-var sid = uuid.v4(), mdb, URI, mport, mhost, mdbName;
+var sid = uuid.v4(), mdb, URI;
 	// visitor = ua(process.env.gTrackID, sid);
 // Parse initialization
 Parse.initialize(process.env.parseID, process.env.parseJavascriptKey, process.env.parseMasterKey);
@@ -50,10 +50,7 @@ app.configure('development', function(){
 app.configure('production', function(){
 	app.use(express.errorHandler());
 	env = false;
-	mdbName = 'heroku_app23982462';
-	mhost = 'ds037508.mongolab.com';
-	mport = 37508;
-	URI = 'mongodb://'+process.env.DbUser+':'+process.env.DbPass+'@ds037508.mongolab.com:'+mport+'/'+mdbName;
+	URI = process.env.OPENSHIFT_MONGODB_DB_URL+process.env.DbName;
 	mdb = mongojs(URI, ['pics']);
 	// mongoose.connect(URI);
 });
@@ -61,7 +58,7 @@ app.configure('production', function(){
 global.mdb = mdb;
 
 // all environments
-app.set('port', process.env.PORT || 3000);
+app.set('port', process.env.OPENSHIFT_NODEJS_PORT || 8080);
 app.use(express.static(path.join(__dirname, 'public')));
 app.set('view engine', 'jade');
 app.use(express.logger('dev'));
@@ -78,11 +75,11 @@ app.use(express.session({
 	secret: sid,
 	// TO DO change to use just "url" param to allow dev env.
 	store: new MongoStore({
-		db: mdbName,
-		host: mhost,
-		port: mport,
-		username: process.env.DbUser,
-		password: process.env.DbPass
+		db: process.env.DbName,
+		host: process.env.OPENSHIFT_MONGODB_DB_HOST,
+		port: process.env.OPENSHIFT_MONGODB_DB_PORT,
+		username: process.env.OPENSHIFT_MONGODB_DB_USERNAME,
+		password: process.env.OPENSHIFT_MONGODB__DB_PASSWORD
 
 	}),
 	cookie: {
@@ -110,35 +107,6 @@ app.get('/', function(req, res) {
 	if (req.session.auth){
 		res.render('index', { title: 'Pictroid', username:req.session.user.username, authed:true, route:req.url});
 	} else {
-		/*var kimReq = http.request({
-			host: "www.kimonolabs.com",
-			port: 80,
-			path: "/api/5zeipr38?apikey="+process.env.kimonoKey,
-			method: "GET",
-			headers: {
-			  "Content-Type": "application/json"
-			}
-		}, function(kimRes) {
-			 var output = '';
-			 kimRes.setEncoding('utf8');
-
-			 kimRes.on('data', function (chunk) {
-				  output += chunk;
-			 });
-
-			 kimRes.on('end', function() {
-				  var obj = JSON.parse(output);
-				  if(kimRes.statusCode === 200) {
-						resources.updateAPOD(obj).then(function(){}, function() {
-							console.error(arguments);
-						});
-				  }
-			 });
-		});
-		kimReq.on('error', function(err) {
-			 //res.send('error: ' + err.message);
-		});
-		kimReq.end();*/
 		res.render('index', {route:req.url});
 	}
 });
@@ -154,9 +122,9 @@ app.get('/explore/categories', function(req, res) {
 
 app.get('/explore/category/:field?', function(req, res) {
 	if (req.session.auth){
-		res.render('category', {username:req.session.user.username, authed:true, route:req.url});
+		res.render('category', {field:req.params.field, username:req.session.user.username, authed:true, route:req.url});
 	} else {
-		res.render('category', {route:req.url});
+		res.render('category', {field:req.params.field, route:req.url});
 	}
 });
 
@@ -213,10 +181,11 @@ app.get('/pic/:id', function(req, res) {
 			db.asteroids.query.getViews({picID:req.params.id}, function(err, pic) {
 				// Sync Pic views with Parse
 				// if (pic.views%15 === 0) {
-				// 	db.asteroids.parseSyncViews(req.params.id, 15);
+				// db.asteroids.parseSyncViews(pic, 15);
 				// }
 				if (!err) {
 					res.render('details', {  m:message, picObject:result, imgOwner:result.username, views:pic.views, route:req.url});
+					return pic;
 				} else {
 					res.render('details', {  m:message, picObject:result, imgOwner:result.username, route:req.url});
 					console.log("error retrieving view count: "+err);

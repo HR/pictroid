@@ -1,0 +1,21 @@
+extends layout
+
+block head
+	title Categories | Pictroid
+	
+extends layout
+	- var title = field.replace(/-/g, ' ')
+block head
+	title #{title} | Pictroid
+
+block variables
+	- var headerClasses = 'navbar-absolute'
+
+block content
+	+chickenLittle()
+	.page
+		br
+		.container
+			h3
+				a(href="/explore/category/#{title}").active= title
+			hr
