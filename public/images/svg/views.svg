@@ -1,8 +1,1 @@
-<?xml version="1.0" encoding="utf-8"?>
-	<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
-		<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="16" height="16" viewBox="0 0 16 16">
-			<rect width="100%" height="100%" fill="none" />
-			<g fill="#666" transform="scale(0.015625 0.015625)">
-				<path d="M512 192c-282.784 0-512 320-512 320s229.216 320 512 320 512-320 512-320-229.216-320-512-320zM512 704c-106.016 0-192-85.984-192-192s85.984-192 192-192 192 85.984 192 192-85.984 192-192 192zM512 384c-70.688 0-128 57.312-128 128s57.312 128 128 128 128-57.312 128-128-57.312-128-128-128z" />
-			</g>
-		</svg>
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="16" height="16" version="1.1" viewBox="0 0 16 16"><rect width="100%" height="100%" fill="none"/><g fill="#666"><path d="M512 192c-282.784 0-512 320-512 320s229.216 320 512 320 512-320 512-320-229.216-320-512-320zM512 704c-106.016 0-192-85.984-192-192s85.984-192 192-192 192 85.984 192 192-85.984 192-192 192zM512 384c-70.688 0-128 57.312-128 128s57.312 128 128 128 128-57.312 128-128-57.312-128-128-128z" transform="scale(0.015625 0.015625)"/></g></svg>
